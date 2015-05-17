@@ -1,0 +1,451 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>修复 IntelliJ IDEA 14 的字体渲染 | James Pan&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="潘家邦">
+    
+    <meta name="description" content="背景
+我现在使用 IntelliJ IDEA 在 Mac 下进行 Java 开发。之前一直都是从官网下载的 IDEA，用的 14.0，今天突然想换成使用 Homebrew Cask 来管理。于是我就用 brew cask 安装了一个 14.0.2。
+疑团
+安装完成之后运行，感觉界面怪怪的，和之前从官">
+    
+    
+    
+    
+    <link rel="alternate" href="/blog/atom.xml" title="James Pan&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/blog/img/favicon.png">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/apple_icon.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/apple_icon.jpg">
+    
+    <link rel="stylesheet" href="/blog/css/style.css" type="text/css">
+
+
+    <style type="text/css">
+    @media only print
+    {
+      .print-invisible * { display: none !important; }
+      body > header { display: none !important; }
+      body { color: inherit;}
+      /*body:after { content: "Don't waste paper!"; }*/
+    }
+    </style>
+
+</head>
+
+  <body>
+    <header>
+      <div class="print-invisible">
+		
+			<div id="imglogo">
+				<a href="/blog/"><img src="/blog/img/apple_icon.jpg" alt="James Pan&#39;s Blog" title="James Pan&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="James Pan&#39;s Blog">James Pan&#39;s Blog</a></h1>
+				<h2 class="blog-motto">代码猴子，计算机科学爱好者</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/blog/">Home</a></li>
+					
+						<li><a href="/blog/timeline">Timeline</a></li>
+					
+						<li><a href="/blog/archives">Archives</a></li>
+					
+						<li><a href="/blog/resume">Resume</a></li>
+					
+						<li><a href="/blog/about">About</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com.hk/search" method="get" accept-charset="utf-8" target="_blank">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:www.jamespan.me/blog/">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2015/01/16/font-of-intellij/" title="修复 IntelliJ IDEA 14 的字体渲染" itemprop="url">修复 IntelliJ IDEA 14 的字体渲染</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://www.jamespan.me/blog/" title="潘家邦">潘家邦</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-01-16T12:39:24.000Z" itemprop="datePublished">Jan 16 2015</time>
+    Updated:<time datetime="2015-03-13T15:47:50.000Z" itemprop="dateModified">Mar 13 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#疑团"><span class="toc-number">2.</span> <span class="toc-text">疑团</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#尝试"><span class="toc-number">3.</span> <span class="toc-text">尝试</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解决"><span class="toc-number">4.</span> <span class="toc-text">解决</span></a></li></ol>
+		</div>
+		
+		<h1 id="背景">背景</h1>
+<p>我现在使用 <a href="https://www.jetbrains.com/idea/" target="_blank" rel="external">IntelliJ IDEA</a> 在 Mac 下进行 Java 开发。之前一直都是从官网下载的 IDEA，用的 14.0，今天突然想换成使用 <a href="http://caskroom.io/" target="_blank" rel="external">Homebrew Cask</a> 来管理。于是我就用 <code>brew cask</code> 安装了一个 14.0.2。</p>
+<h1 id="疑团">疑团</h1>
+<p>安装完成之后运行，感觉界面怪怪的，和之前从官网下载的不一样。</p>
+<p>仔细一看，是字体渲染的问题。联想起之前在 Stack Overflow 看到过<a href="http://stackoverflow.com/questions/15181079/apple-retina-display-support-in-java-jdk-1-7-for-awt-swing" target="_blank" rel="external">讨论</a>说 Mac 下只有 Apple 维护的 <a href="http://support.apple.com/kb/DL1572" target="_blank" rel="external">JDK 6</a> 才能比较好的在 Retina 分辨率下渲染程序界面。其实我之前从官网下载的 IDEA 用的就是 Apple 的 JDK 6，界面渲染的好好的，为什么从 Cask 下载的 IDEA 出了渲染问题？</p>
+<h1 id="尝试">尝试</h1>
+<p>一定是我打开的方式不对。先看看 Cask 版 IDEA 运行时用的哪个 JDK 。打开 About IntelliJ IDEA 瞅瞅，果然都是 JDK 7 惹的祸。</p>
+<p><img src="/blog/images/font-of-intellij/20150115-235153.png" alt="IDEA with JDK 7"></p>
+<p>那么问题来了，为什么官网的 IDEA 用的是 JDK 6，从 Cask 下载的用的却是 JDK 7 ？明明 Cask 也是从官网下载的。</p>
+<p>于是我打算对比两个版本的 IDEA 的 plist 文件。plist 文件可以认为是 OS X 下 GUI 程序的参数配置，相当于 CLI 程序的配置文件，比如 bash 的 .bashrc，zsh 的 .zshrc。</p>
+<h1 id="解决">解决</h1>
+<p>这两个版本之间的 plist 文件差异好大，但是我发现了一个值得注意的地方。</p>
+<p>14.0 版本中，<code>JVMVersion</code> 这个键，对应的值为 <code>1.6*</code>，到了14.0.2 版本中，却变成了 <code>1.6+</code>。</p>
+<p>莫非这就是问题的关键？修改试试。</p>
+<p>修改之后启动 IDEA，看起来问题解决了！</p>
+<p><img src="/blog/images/font-of-intellij/20150116-000727.png" alt="IDEA with JDK 6"></p>
+<p>打开代码一看，字体渲染又和之前的一样，萌！萌！哒！</p>
+
+		
+<div align="center" style="background:#e6e6e6"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="知识共享授权条款" style="border-width:0" src="/blog/images/i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><a href="/blog/2015/01/16/font-of-intellij/">本著作</a>由<a xmlns:cc="http://creativecommons.org/ns#" href="/blog/about/" property="cc:attributionName" rel="cc:attributionURL">潘家邦</a>制作，以<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享 姓名标示-相同方式分享 4.0 国际 授权条款</a>释出。</div>
+
+
+		<div class="print-invisible">
+		
+<script type="text/javascript" id="wumiiRelatedItems"></script>
+
+<script type="text/javascript">
+    var wumiiPermaLink = "http://www.jamespan.me/blog/2015/01/16/font-of-intellij/";
+    var wumiiTitle = "修复 IntelliJ IDEA 14 的字体渲染";
+    
+    	
+    	var wumiiTags = "Tool,OS X"; //请用代码生成文章标签，以英文逗号分隔，如："标签1,标签2"
+    
+    
+    	
+    	var wumiiCategories = ["Work"]; //请用代码生成文章分类，分类名放在 JSONArray 中，如: ["分类1", "分类2"]
+    
+    var wumiiSitePrefix = "http://www.jamespan.me/blog/";
+    var wumiiParams = "&num=5&mode=2&pf=JAVASCRIPT";
+    </script>
+
+    <script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+    <a href="http://www.wumii.com/widget/relatedItems" style="border:0;">
+    	<img src="http://static.wumii.cn/images/pixel.png" alt="无觅关联推荐，快速提升流量" style="border:0;padding:0;margin:0;" />
+    </a>
+
+
+		</div>
+	</div>
+		<footer class="article-footer clearfix print-invisible">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/blog/tags/Tool/">Tool</a><a href="/blog/tags/OS-X/">OS X</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/blog/categories/Work/">Work</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://www.jamespan.me/blog/2015/01/16/font-of-intellij/" data-title="修复 IntelliJ IDEA 14 的字体渲染 | James Pan&#39;s Blog" data-tsina="3877948399" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix print-invisible">
+ 
+ <div class="prev" >
+ <a href="/blog/2015/01/19/timestamp-the-light-app/" title="Timestamp - 一个关于时间戳的轻应用">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Timestamp - 一个关于时间戳的轻应用</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/blog/2015/01/13/presentation-with-revealjs/"  title="用 reveal.js 做演示">
+ <strong>NEXT:</strong><br/> 
+ <span>用 reveal.js 做演示
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment print-invisible">
+	<div class="ds-thread" data-thread-key="/blog/2015/01/16/font-of-intellij/" data-title="修复 IntelliJ IDEA 14 的字体渲染"></div>
+</section>
+
+
+</div>  
+      <div class="openaside print-invisible"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#疑团"><span class="toc-number">2.</span> <span class="toc-text">疑团</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#尝试"><span class="toc-number">3.</span> <span class="toc-text">尝试</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解决"><span class="toc-number">4.</span> <span class="toc-text">解决</span></a></li></ol>
+  </div>
+
+<div id="asidepart" class="print-invisible">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="tagslist">
+	<p class="asidetitle">Advertisement</p>
+		<ul>
+			<li>
+				<p><a href="mailto:jiabang.pjb@alibaba-inc.com">阿里集团-菜鸟网络面向社会招聘资深工程师、技术专家，有意者邮件发送简历至本人邮箱，长期有效</a></p>
+			</li>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">Tag Cloud</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/blog/tags/Cache/" style="font-size: 10.00px;">Cache</a><a href="/blog/tags/Concurrency/" style="font-size: 10.00px;">Concurrency</a><a href="/blog/tags/Data-Structure/" style="font-size: 10.00px;">Data Structure</a><a href="/blog/tags/Emacs/" style="font-size: 10.00px;">Emacs</a><a href="/blog/tags/Entertainment/" style="font-size: 10.00px;">Entertainment</a><a href="/blog/tags/Exercise/" style="font-size: 10.00px;">Exercise</a><a href="/blog/tags/Guava/" style="font-size: 16.67px;">Guava</a><a href="/blog/tags/Java/" style="font-size: 18.33px;">Java</a><a href="/blog/tags/JavaScript/" style="font-size: 15.00px;">JavaScript</a><a href="/blog/tags/Mac/" style="font-size: 11.67px;">Mac</a><a href="/blog/tags/MySQL/" style="font-size: 11.67px;">MySQL</a><a href="/blog/tags/OJ/" style="font-size: 10.00px;">OJ</a><a href="/blog/tags/OS-X/" style="font-size: 13.33px;">OS X</a><a href="/blog/tags/Python/" style="font-size: 10.00px;">Python</a><a href="/blog/tags/Reading/" style="font-size: 10.00px;">Reading</a><a href="/blog/tags/Sketch/" style="font-size: 13.33px;">Sketch</a><a href="/blog/tags/Tool/" style="font-size: 20.00px;">Tool</a>
+    </div>
+  </div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/blog/categories/Life/" title="Life">Life<sup>7</sup></a></li>
+		
+			<li><a href="/blog/categories/Study/" title="Study">Study<sup>16</sup></a></li>
+		
+			<li><a href="/blog/categories/Work/" title="Work">Work<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://www.jamespan.me/blog/" target="_blank" title="James Pan's Blog">The Blog</a></li>
+      <li><a href="http://jamespan.github.io/blog/" target="_blank" title="James Pan's Blog">The Blog via Github</a></li>
+      <li><a href="http://panjiabang.gitcafe.io/blog/" target="_blank" title="James Pan's Blog">The Blog via GitCafe</a></li>
+      <li><a href="http://ifeve.com" target="_blank" title="并发编程网">并发编程网</a></li>
+      <li><a href="http://blog.sina.com.cn/ld2254432" target="_blank" title="刘典的博客">刘典的博客</a></li>
+      <li><a href="http://news.dbanotes.net/news" target="_blank" title="Startup News">Startup News</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/blog/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer class="print-invisible"><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 情不知所起，一往而深， <br/>
+			再而衰，三而竭</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/3877948399" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/JamesPan" target="_blank" title="github"></a>
+		
+		
+		
+        <a href="https://www.linkedin.com/pub/jiabang-pan" target="_blank" title="linkedin"></a>
+        
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://www.jamespan.me" target="_blank" title="潘家邦">潘家邦</a>
+		 
+Analyse with <script src="http://s23.cnzz.com/z_stat.php?id=1000543904&web_id=1000543904" language="JavaScript"></script>
+
+		</p>
+
+</div>
+</footer>
+    <!--<script src="/blog/js/jquery-2.1.0.min.js"></script>-->
+<script src="http://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+$("span.heimu").attr("title", "你知道的太多了")
+</script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h1'),
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(h.length<=1){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"jamespanblog"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<script async defer src="https://hypothes.is/embed.js"></script>
+
+
+  <!-- mathjax config similar to math.stackexchange -->
+
+
+</body>
+</html>

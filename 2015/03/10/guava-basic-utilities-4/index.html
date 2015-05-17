@@ -1,0 +1,591 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Guava 是个风火轮之基础工具(4) | James Pan&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="潘家邦">
+    
+    <meta name="description" content="前言
+Guava 是 Java 开发者的好朋友。虽然我在开发中使用 Guava 很长时间了，Guava API 的身影遍及我写的生产代码的每个角落，但是我用到的功能只是 Guava 的功能集中一个少的可怜的真子集，更别说我一直没有时间认真的去挖掘 Guava 的功能，没有时间去学习 Guava 的实">
+    
+    
+    
+    
+    <link rel="alternate" href="/blog/atom.xml" title="James Pan&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/blog/img/favicon.png">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/apple_icon.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/apple_icon.jpg">
+    
+    <link rel="stylesheet" href="/blog/css/style.css" type="text/css">
+
+
+    <style type="text/css">
+    @media only print
+    {
+      .print-invisible * { display: none !important; }
+      body > header { display: none !important; }
+      body { color: inherit;}
+      /*body:after { content: "Don't waste paper!"; }*/
+    }
+    </style>
+
+</head>
+
+  <body>
+    <header>
+      <div class="print-invisible">
+		
+			<div id="imglogo">
+				<a href="/blog/"><img src="/blog/img/apple_icon.jpg" alt="James Pan&#39;s Blog" title="James Pan&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="James Pan&#39;s Blog">James Pan&#39;s Blog</a></h1>
+				<h2 class="blog-motto">代码猴子，计算机科学爱好者</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/blog/">Home</a></li>
+					
+						<li><a href="/blog/timeline">Timeline</a></li>
+					
+						<li><a href="/blog/archives">Archives</a></li>
+					
+						<li><a href="/blog/resume">Resume</a></li>
+					
+						<li><a href="/blog/about">About</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com.hk/search" method="get" accept-charset="utf-8" target="_blank">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:www.jamespan.me/blog/">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2015/03/10/guava-basic-utilities-4/" title="Guava 是个风火轮之基础工具(4)" itemprop="url">Guava 是个风火轮之基础工具(4)</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://www.jamespan.me/blog/" title="潘家邦">潘家邦</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-03-10T00:20:32.000Z" itemprop="datePublished">Mar 10 2015</time>
+    Updated:<time datetime="2015-03-09T16:23:43.000Z" itemprop="dateModified">Mar 10 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Preconditions"><span class="toc-number">2.</span> <span class="toc-text">Preconditions</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析"><span class="toc-number">2.1.</span> <span class="toc-text">源码分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Objects"><span class="toc-number">3.</span> <span class="toc-text">Objects</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析-1"><span class="toc-number">3.1.</span> <span class="toc-text">源码分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MoreObjects"><span class="toc-number">4.</span> <span class="toc-text">MoreObjects</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析-2"><span class="toc-number">4.1.</span> <span class="toc-text">源码分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ComparisonChain"><span class="toc-number">5.</span> <span class="toc-text">ComparisonChain</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析-3"><span class="toc-number">5.1.</span> <span class="toc-text">源码分析</span></a></li></ol></li></ol>
+		</div>
+		
+		<h1 id="前言">前言</h1>
+<p>Guava 是 Java 开发者的好朋友。虽然我在开发中使用 Guava 很长时间了，Guava API 的身影遍及我写的生产代码的每个角落，但是我用到的功能只是 Guava 的功能集中一个少的可怜的真子集，更别说我一直没有时间认真的去挖掘 Guava 的功能，没有时间去学习 Guava 的实现。直到最近，我开始阅读 <em><a href="http://book.douban.com/subject/25710862/" target="_blank" rel="external">Getting Started with Google Guava</a></em>，感觉有必要将我学习和使用 Guava 的一些东西记录下来。</p>
+<h1 id="Preconditions">Preconditions</h1>
+<p>Precondition 是先决条件的意思，也叫前置条件，可以人为是使函数正常执行的参数需要满足的条件。在 Preconditions 这个静态工厂中，Guava 为我们提供了一系列的静态方法，用于帮助我们在函数执行的开始检查参数，函数执行的过程中检查状态等等。</p>
+<pre><code class="java">Preconditions.checkArgument(5 &lt; 3);//IllegalArgumentException
+Preconditions.checkState(5 &lt; 3);//IllegalStateException
+Preconditions.checkNotNull(null);//NullPointerException
+Preconditions.checkElementIndex(4, 4);//IndexOutOfBoundsException
+Preconditions.checkPositionIndex(5, 4);//IndexOutOfBoundsException
+</code></pre>
+<h2 id="源码分析">源码分析</h2>
+<p>源码来自 Guava 18.0。Preconditions 类代码约 440 行，大部分是 JavaDoc 和函数重载，那些真正干活的代码大部分也是先 if 然后 throw 的模式。</p>
+<pre><code class="java">public static void checkArgument(boolean expression) {
+  if (!expression) {
+    throw new IllegalArgumentException();
+  }
+}
+</code></pre>
+<p>大约在 255 行处有<a href="https://github.com/google/guava/blob/v18.0/guava/src/com/google/common/base/Preconditions.java#L255-L279" target="_blank" rel="external">一大段的注释</a>，讲了一个有趣的事情。</p>
+<p>大概从 2009 年开始，由于 Hotspot 虚拟机优化器的一个 bug，对于抛异常的代码，直接在初始化异常时传入字符串常量反而导致效率低下，效率远远不如在初始化前调用一个类型是 String 的函数来获取字符串，而且这个性能差距不是 10% 或者 20%，而是可怕的 2 倍到 8 倍。于是我们看到的 JDK 类库的抛异常代码，就从</p>
+<pre><code class="java">if (guardExpression) {
+   throw new BadException(messageExpression);
+}
+</code></pre>
+<p>变成了下面这样。</p>
+<pre><code class="java">if (guardExpression) {
+   throw new BadException(badMsg(...));
+}
+</code></pre>
+<h1 id="Objects">Objects</h1>
+<p>我们在定义一个类的时候，免不了会去覆盖 toString 方法；如果要把这个类的对象放到 HashMap 中，还得去覆盖 hashCode 方法；如果对象之间需要比较大小，那么还得实现 Comparable 接口的 compareTo 方法。</p>
+<p>Guava 为我们提供了方便的实现这些方法的工具。虽然优秀的 IDE 比如 IntelliJ IDEA 能够自动帮我们生成 toString 和 hashCode，但是依赖代码生成器始终不是一个科学的开发方式。</p>
+<p>需要说明的一点是，Objects 类中用于帮助实现 toString 方法的内部类 ToStringHelper，已经被标记为过时，在 Guava 18.0 中迁移到 MoreObjects 中了，而用于帮助实现 compareTo 的则是 ComparisonChain 类，稍后会解读这个类的用法和代码。</p>
+<p>现在的 Objects 中硕果仅存的两个函数，分别是 Objects#equal 和 Objects#hashCode，分别用于判断两个对象是否相等，和生成对象的 hashCode。</p>
+<pre><code class="java">Objects.equal(new Object(), new Object());//false
+Objects.hashCode(&quot;&quot;, new Object());//340664367
+</code></pre>
+<h2 id="源码分析-1">源码分析</h2>
+<p>源码来自 Guava 18.0。Objects 类代码约 320 行，刨除过时代码之后，也没剩几行了。</p>
+<p>硕果仅存的两个函数，实现比想象中还简单。</p>
+<pre><code class="java">public static boolean equal(@Nullable Object a, @Nullable Object b) {
+  return a == b || (a != null &amp;&amp; a.equals(b));
+}
+
+public static int hashCode(@Nullable Object... objects) {
+  return Arrays.hashCode(objects);
+}
+</code></pre>
+<p>我好奇的跟到 Arrays#hashCode 里面看了看，发现这段计算 hashCode 的代码，和 String 类里面的算法几乎一样，31 据说是一个经验值，反正无论如何必须是个质数。</p>
+<pre><code class="java">public static int hashCode(Object a[]) {
+    if (a == null)
+        return 0;
+    int result = 1;
+    for (Object element : a)
+        result = 31 * result + (element == null ? 0 : element.hashCode());
+    return result;
+}
+</code></pre>
+<h1 id="MoreObjects">MoreObjects</h1>
+<p>MoreObjects 是从 18.0 版本开始出现的一个新类，从 Objects 中分裂出来的，主要剥离了内部类 ToStringHelper 以及一系列的包装函数。</p>
+<p>至于那个顺便一起迁移过来的 MoreObjects#firstNonNull 函数，功能和实现都过分简单，这里就不展开了，有兴趣的可以查看<a href="https://github.com/google/guava/blob/v18.0/guava/src/com/google/common/base/MoreObjects.java#L51-L53" target="_blank" rel="external">源码</a>。</p>
+<p>下面是 ToStringHelper 的简单用法，通过调用 ToStringHelper#omitNullValues 来配置 ToStringHelper 使得生成的字符串中不含 null 值。</p>
+<pre><code class="java">public class Player {
+    private String name = &quot;Underwood&quot;;
+    private String sex;
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).omitNullValues()
+                .add(&quot;name&quot;, name)
+                .add(&quot;sex&quot;, sex)
+                .toString();//Player{name=Underwood}
+    }
+}
+</code></pre>
+<h2 id="源码分析-2">源码分析</h2>
+<p>源码来自 Guava 18.0。MoreObjects 类代码约 390 行，甚至比 Objects 还要多。其中 ToStringHelper 代码约 240 行，这里我们主要看看 ToStringHelper 的实现。</p>
+<p>从 ToStringHelper 的属性可以看出，它内部维护着一个链表。</p>
+<pre><code class="java">public static final class ToStringHelper {
+  private final String className;
+  private ValueHolder holderHead = new ValueHolder();
+  private ValueHolder holderTail = holderHead;
+  private boolean omitNullValues = false;
+  //some codes
+  private static final class ValueHolder {
+    String name;
+    Object value;
+    ValueHolder next;
+  }
+}
+</code></pre>
+<p>为了保持插入结点后链表结点顺序和代码调用的顺序一致，ToStringHelper 还额外维护了一个尾指针，在链表尾插入新结点。</p>
+<pre><code class="java">private ValueHolder addHolder() {
+  ValueHolder valueHolder = new ValueHolder();
+  holderTail = holderTail.next = valueHolder;
+  return valueHolder;
+}
+private ToStringHelper addHolder(String name, @Nullable Object value) {
+  ValueHolder valueHolder = addHolder();
+  valueHolder.value = value;
+  valueHolder.name = checkNotNull(name);
+  return this;
+}
+</code></pre>
+<p>最后的最后，ToStringHelper#toString 就是遍历对象内部维护的链表，拼接字符串了。说道字符串拼接，之前在<a href="/blog/2015/02/08/guava-basic-utilities-1/#追加拼接结果">Guava 是个风火轮之基础工具(1)</a>中，我们看到 Joiner 使用 if 和 while 来实现了比较优雅的分隔符拼接，避免了在末尾插入分隔符的尴尬。在这里，Guava 的作者展示了另一个技巧，用更少的代码实现同样的效果。</p>
+<pre><code class="java">@Override public String toString() {
+  // create a copy to keep it consistent in case value changes
+  boolean omitNullValuesSnapshot = omitNullValues;
+  String nextSeparator = &quot;&quot;;
+  StringBuilder builder = new StringBuilder(32).append(className)
+      .append(&#39;{&#39;);
+  for (ValueHolder valueHolder = holderHead.next; valueHolder != null;
+      valueHolder = valueHolder.next) {
+    if (!omitNullValuesSnapshot || valueHolder.value != null) {
+      builder.append(nextSeparator);
+      nextSeparator = &quot;, &quot;;
+      if (valueHolder.name != null) {
+        builder.append(valueHolder.name).append(&#39;=&#39;);
+      }
+      builder.append(valueHolder.value);
+    }
+  }
+  return builder.append(&#39;}&#39;).toString();
+}
+</code></pre>
+<p>一开始的时候，先把分隔符置为空字符串，完成分隔符拼接之后，将分隔符置为逗号，这样就实现了从第二个元素开始，每个元素前面拼接分隔符的效果。这样子就不用去判断当前元素是不是第一个元素，代价仅仅是每次循环多出一次冗余的赋值，完全可以忽略不计。</p>
+<h1 id="ComparisonChain">ComparisonChain</h1>
+<p>ComparisonChain 可以帮助我们优雅地实现具有短回路功能链式比较，然后我们可以借助 ComparisonChain 来实现 compareTo 方法。先看看这个类的用法。</p>
+<pre><code class="java">public class Player implements Comparable&lt;Player&gt; {
+    private String name = &quot;Underwood&quot;;
+    private String sex;
+    public int compareTo(Player that) {
+        return ComparisonChain.start()
+                .compare(this.name, that.name)
+                .compare(this.sex, that.sex)
+                .result();
+    }
+}
+</code></pre>
+<p>美中不足的是，比较链的参数，基本不能有空指针，不然当场就 NPE 了。虽然我们可以通过自定义比较器去兼容空指针，但是这样一来代码就变得一点都不优雅了。</p>
+<h2 id="源码分析-3">源码分析</h2>
+<p>带着对 ComparisonChain 空指针处理不力的不满，我们来看看它的实现，如果可能就动手实现我们需要的特性。</p>
+<p>源码来自 Guava 18.0。ComparisonChain 类代码约 220 行，大部分是注释和 ComparisonChain#compare 函数的各种重载。看到 ComparisonChain 是一个抽象类，各种 ComparisonChain#compare 都是虚函数，返回结果的 ComparisonChain#result 也是虚函数，我以为有希望继承它然后做些改造。不过看到代码里那个私有的构造函数之后，我打消了继承它的念头。</p>
+<p>ComparisonChain 内部维护着 3 个 ComparisonChain 类型的变量，ACTIVE、LESS、GREATER，容易知道这代表着链式比较的状态，ACTIVE 还需要继续比较，其他两个则是已经知道最终结果了。</p>
+<p>LESS 和 GREATER 状态其实是 InactiveComparisonChain 类的对象，这个类内部有一个属性维护比较链的结果，然后各种 compare 函数都是直接返回 this 指针，着就是所谓的短回路了，能够避免调用被比较对象的 compareTo 函数。</p>
+<pre><code class="java">private static final class InactiveComparisonChain extends ComparisonChain {
+  final int result;
+  InactiveComparisonChain(int result) { this.result = result; }
+  @Override public ComparisonChain compare(int left, int right) { return this; }
+  //other compare functions
+  @Override public int result() { return result; }
+}
+</code></pre>
+<p>最后，我对 ComparisonChain 稍作改动，增强了它对空指针的容忍，可以通过 ComparisonChain#nullValueLess 来设置 null 字段在比较的时候小于非 null 字段，访问 <a href="https://gist.github.com/JamesPan/f2d5b6dfd5fc71bef644" target="_blank" rel="external">Gist</a> 查看代码片段。</p>
+<!-- <script src="https://gist.github.com/JamesPan/f2d5b6dfd5fc71bef644.js"></script> -->
+
+
+		
+<div align="center" style="background:#e6e6e6"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="知识共享授权条款" style="border-width:0" src="/blog/images/i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><a href="/blog/2015/03/10/guava-basic-utilities-4/">本著作</a>由<a xmlns:cc="http://creativecommons.org/ns#" href="/blog/about/" property="cc:attributionName" rel="cc:attributionURL">潘家邦</a>制作，以<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享 姓名标示-相同方式分享 4.0 国际 授权条款</a>释出。</div>
+
+
+		<div class="print-invisible">
+		
+<script type="text/javascript" id="wumiiRelatedItems"></script>
+
+<script type="text/javascript">
+    var wumiiPermaLink = "http://www.jamespan.me/blog/2015/03/10/guava-basic-utilities-4/";
+    var wumiiTitle = "Guava 是个风火轮之基础工具(4)";
+    
+    	
+    	var wumiiTags = "Java,Guava"; //请用代码生成文章标签，以英文逗号分隔，如："标签1,标签2"
+    
+    
+    	
+    	var wumiiCategories = ["Study"]; //请用代码生成文章分类，分类名放在 JSONArray 中，如: ["分类1", "分类2"]
+    
+    var wumiiSitePrefix = "http://www.jamespan.me/blog/";
+    var wumiiParams = "&num=5&mode=2&pf=JAVASCRIPT";
+    </script>
+
+    <script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+    <a href="http://www.wumii.com/widget/relatedItems" style="border:0;">
+    	<img src="http://static.wumii.cn/images/pixel.png" alt="无觅关联推荐，快速提升流量" style="border:0;padding:0;margin:0;" />
+    </a>
+
+
+		</div>
+	</div>
+		<footer class="article-footer clearfix print-invisible">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/blog/tags/Java/">Java</a><a href="/blog/tags/Guava/">Guava</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/blog/categories/Study/">Study</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://www.jamespan.me/blog/2015/03/10/guava-basic-utilities-4/" data-title="Guava 是个风火轮之基础工具(4) | James Pan&#39;s Blog" data-tsina="3877948399" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix print-invisible">
+ 
+ <div class="prev" >
+ <a href="/blog/2015/03/16/annotate-the-web-with-hypothesis/" title="用 Hypothes.is 为你喜欢的文字添加评论">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  用 Hypothes.is 为你喜欢的文字添加评论</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/blog/2015/03/01/guava-basic-utilities-3/"  title="Guava 是个风火轮之基础工具(3)">
+ <strong>NEXT:</strong><br/> 
+ <span>Guava 是个风火轮之基础工具(3)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment print-invisible">
+	<div class="ds-thread" data-thread-key="/blog/2015/03/10/guava-basic-utilities-4/" data-title="Guava 是个风火轮之基础工具(4)"></div>
+</section>
+
+
+</div>  
+      <div class="openaside print-invisible"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Preconditions"><span class="toc-number">2.</span> <span class="toc-text">Preconditions</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析"><span class="toc-number">2.1.</span> <span class="toc-text">源码分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Objects"><span class="toc-number">3.</span> <span class="toc-text">Objects</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析-1"><span class="toc-number">3.1.</span> <span class="toc-text">源码分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MoreObjects"><span class="toc-number">4.</span> <span class="toc-text">MoreObjects</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析-2"><span class="toc-number">4.1.</span> <span class="toc-text">源码分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ComparisonChain"><span class="toc-number">5.</span> <span class="toc-text">ComparisonChain</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析-3"><span class="toc-number">5.1.</span> <span class="toc-text">源码分析</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart" class="print-invisible">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="tagslist">
+	<p class="asidetitle">Advertisement</p>
+		<ul>
+			<li>
+				<p><a href="mailto:jiabang.pjb@alibaba-inc.com">阿里集团-菜鸟网络面向社会招聘资深工程师、技术专家，有意者邮件发送简历至本人邮箱，长期有效</a></p>
+			</li>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">Tag Cloud</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/blog/tags/Cache/" style="font-size: 10.00px;">Cache</a><a href="/blog/tags/Concurrency/" style="font-size: 10.00px;">Concurrency</a><a href="/blog/tags/Data-Structure/" style="font-size: 10.00px;">Data Structure</a><a href="/blog/tags/Emacs/" style="font-size: 10.00px;">Emacs</a><a href="/blog/tags/Entertainment/" style="font-size: 10.00px;">Entertainment</a><a href="/blog/tags/Exercise/" style="font-size: 10.00px;">Exercise</a><a href="/blog/tags/Guava/" style="font-size: 16.67px;">Guava</a><a href="/blog/tags/Java/" style="font-size: 18.33px;">Java</a><a href="/blog/tags/JavaScript/" style="font-size: 15.00px;">JavaScript</a><a href="/blog/tags/Mac/" style="font-size: 11.67px;">Mac</a><a href="/blog/tags/MySQL/" style="font-size: 11.67px;">MySQL</a><a href="/blog/tags/OJ/" style="font-size: 10.00px;">OJ</a><a href="/blog/tags/OS-X/" style="font-size: 13.33px;">OS X</a><a href="/blog/tags/Python/" style="font-size: 10.00px;">Python</a><a href="/blog/tags/Reading/" style="font-size: 10.00px;">Reading</a><a href="/blog/tags/Sketch/" style="font-size: 13.33px;">Sketch</a><a href="/blog/tags/Tool/" style="font-size: 20.00px;">Tool</a>
+    </div>
+  </div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/blog/categories/Life/" title="Life">Life<sup>7</sup></a></li>
+		
+			<li><a href="/blog/categories/Study/" title="Study">Study<sup>16</sup></a></li>
+		
+			<li><a href="/blog/categories/Work/" title="Work">Work<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://www.jamespan.me/blog/" target="_blank" title="James Pan's Blog">The Blog</a></li>
+      <li><a href="http://jamespan.github.io/blog/" target="_blank" title="James Pan's Blog">The Blog via Github</a></li>
+      <li><a href="http://panjiabang.gitcafe.io/blog/" target="_blank" title="James Pan's Blog">The Blog via GitCafe</a></li>
+      <li><a href="http://ifeve.com" target="_blank" title="并发编程网">并发编程网</a></li>
+      <li><a href="http://blog.sina.com.cn/ld2254432" target="_blank" title="刘典的博客">刘典的博客</a></li>
+      <li><a href="http://news.dbanotes.net/news" target="_blank" title="Startup News">Startup News</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/blog/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer class="print-invisible"><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 情不知所起，一往而深， <br/>
+			再而衰，三而竭</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/3877948399" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/JamesPan" target="_blank" title="github"></a>
+		
+		
+		
+        <a href="https://www.linkedin.com/pub/jiabang-pan" target="_blank" title="linkedin"></a>
+        
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://www.jamespan.me" target="_blank" title="潘家邦">潘家邦</a>
+		 
+Analyse with <script src="http://s23.cnzz.com/z_stat.php?id=1000543904&web_id=1000543904" language="JavaScript"></script>
+
+		</p>
+
+</div>
+</footer>
+    <!--<script src="/blog/js/jquery-2.1.0.min.js"></script>-->
+<script src="http://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+$("span.heimu").attr("title", "你知道的太多了")
+</script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script src="http://cdn.bootcss.com/highlight.js/8.4/highlight.min.js"></script>
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/8.4/styles/github.min.css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h1'),
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(h.length<=1){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"jamespanblog"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<script async defer src="https://hypothes.is/embed.js"></script>
+
+
+  <!-- mathjax config similar to math.stackexchange -->
+
+
+</body>
+</html>

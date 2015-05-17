@@ -1,0 +1,504 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Emacs 归来记 | James Pan&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="潘家邦">
+    
+    <meta name="description" content="归去来兮，田园将芜胡不归？
+
+背景
+从一开始我就知道，有一个编辑器，被称为神的编辑器，另一个编辑器，被称为编辑器之神。那是大一的时候，我刚开始系统的学习计算机科学，需要一个趁手的编辑器。
+最开始的尝试，是从 Vim 开始的。图书馆里我借到一本叫《学习vi和Vim编辑器》的书，开始了蹒跚学步。后来，我">
+    
+    
+    
+    
+    <link rel="alternate" href="/blog/atom.xml" title="James Pan&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/blog/img/favicon.png">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/apple_icon.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/apple_icon.jpg">
+    
+    <link rel="stylesheet" href="/blog/css/style.css" type="text/css">
+
+
+    <style type="text/css">
+    @media only print
+    {
+      .print-invisible * { display: none !important; }
+      body > header { display: none !important; }
+      body { color: inherit;}
+      /*body:after { content: "Don't waste paper!"; }*/
+    }
+    </style>
+
+</head>
+
+  <body>
+    <header>
+      <div class="print-invisible">
+		
+			<div id="imglogo">
+				<a href="/blog/"><img src="/blog/img/apple_icon.jpg" alt="James Pan&#39;s Blog" title="James Pan&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="James Pan&#39;s Blog">James Pan&#39;s Blog</a></h1>
+				<h2 class="blog-motto">代码猴子，计算机科学爱好者</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/blog/">Home</a></li>
+					
+						<li><a href="/blog/timeline">Timeline</a></li>
+					
+						<li><a href="/blog/archives">Archives</a></li>
+					
+						<li><a href="/blog/resume">Resume</a></li>
+					
+						<li><a href="/blog/about">About</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com.hk/search" method="get" accept-charset="utf-8" target="_blank">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:www.jamespan.me/blog/">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2015/04/05/the-return-of-the-emacs/" title="Emacs 归来记" itemprop="url">Emacs 归来记</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://www.jamespan.me/blog/" title="潘家邦">潘家邦</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-04-04T18:08:47.000Z" itemprop="datePublished">Apr 5 2015</time>
+    Updated:<time datetime="2015-04-05T05:23:41.000Z" itemprop="dateModified">Apr 5 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#疏远"><span class="toc-number">2.</span> <span class="toc-text">疏远</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#思念"><span class="toc-number">3.</span> <span class="toc-text">思念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#契机"><span class="toc-number">4.</span> <span class="toc-text">契机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#调教"><span class="toc-number">5.</span> <span class="toc-text">调教</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置"><span class="toc-number">6.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#插件"><span class="toc-number">7.</span> <span class="toc-text">插件</span></a></li></ol>
+		</div>
+		
+		<blockquote>
+<p>归去来兮，田园将芜胡不归？</p>
+</blockquote>
+<h1 id="背景">背景</h1>
+<p>从一开始我就知道，有一个编辑器，被称为神的编辑器，另一个编辑器，被称为编辑器之神。那是大一的时候，我刚开始系统的学习计算机科学，需要一个趁手的编辑器。</p>
+<p>最开始的尝试，是从 Vim 开始的。图书馆里我借到一本叫《学习vi和Vim编辑器》的书，开始了蹒跚学步。后来，我发现我始终无法领会 Vim 的精髓，编辑速度没能得到很大的提升。</p>
+<p>大三的时候，我看了大名鼎鼎的《计算机程序的构造和解释》，从此加入了括号神教。于是，我的编辑器也从 Vim 变成了 Emacs。</p>
+<p>那是第一次，我发现我可以用我熟悉的语言，去自定义我的编辑器。如此多的插件，都用 lisp 实现，整个编辑器，简直就是括号神教教众的游乐场。</p>
+<p>毕业的时候，我的论文，以及论文中实验用的程序，都是在 Emacs 下编辑的。那时候，Emacs 24 刚发布不久，我还停留在 23 版本上。</p>
+<h1 id="疏远">疏远</h1>
+<p>后来，我工作了。不再有大把的时间让我用我喜欢的语言，做我喜欢的研究。</p>
+<p>每天每天都在 IDE 的帮助下和大把大把的 Java 代码死磕，从 eclipse 到 IDEA。日常使用的文本编辑器也从 Emacs 变成了 Sublime Text为主，其他 OS X 上的编辑器为辅，再也没有 Emacs 什么事情。</p>
+<p>再后来，Emacs 被我卸载了。</p>
+<h1 id="思念">思念</h1>
+<p>那是一段与时间赛跑的日子，为了成长努力工作，为了更快的成长拼命的加班。</p>
+<p>我渐渐感觉自己迷失在了日复一日的工作里，晚上回家越来越晚，早上起床越来越晚。虽然技术进步很快，比我之前在学校里自己钻研快得多，但是我总觉得，似乎在什么地方，我的生活少了些东西。</p>
+<p>为了把工作中、业余时学习的东西记录下来，我开始记笔记。为了在网络空间中留下自己的痕迹，我重新开始写博客，认真写博客。</p>
+<p>于是我的业余生活中，出现了大量的文本编辑的需求。为了找到一个同时具备文档管理、样式编辑、LaTeX 公式支持、只读模式等等功能的编辑器，我可谓煞费苦心，购买各种 App 的钱就花了不少，前后尝试了 Ulysses、TextNut 等等多款文档管理工具，最后停留在了 Notebooks 这个应用上。</p>
+<p>即便我对 Notebooks 做了不少自定义，实现了我想要的所有功能，但是我还是不太满意。</p>
+<p>这些工具，没法刺激我的创造欲望。就是这样，这些工具虽然堆砌了各种功能，但是它的核心功能——文本编辑，无法让我满意。</p>
+<p>曾经沧海难为水，除却巫山不是云。我十分的怀念当年用 Emacs 写文章写代码的惬意，对这些不成器的应用内编辑器，我想说一句，开源的 Emacs，比你们不知道高到哪里去，我和他谈笑风生！</p>
+<h1 id="契机">契机</h1>
+<p>虽然我对其他编辑器有着诸多不满，但是我还在欺骗自己，让自己将就用着。毕竟我好歹也是大半年没有用 Emacs 了，不知道还有没有时间重新捡起来。</p>
+<p>就在不久前，一篇叫《<a href="http://blog.binchen.org/posts/yi-nian-cheng-wei-emacs-gao-shou-xiang-shen-yi-yang-shi-yong-bian-ji-qi.html" target="_blank" rel="external">一年成为Emacs高手</a>》的文章彻底激起了我重新用起 Emacs 的欲望和信心。</p>
+<p>我不能再欺骗自己了，我就是喜欢用 Emacs 写东西的感觉！看完文章当晚，我就把 Emacs 装上了。</p>
+<h1 id="调教">调教</h1>
+<p>意料之中的是，我当年的配置文件，依旧完整的躺在家目录里。出乎意料的是，这份犹如工程代码一般的配置，无法正确加载。</p>
+<p>仔细一想，当年我用的 Emacs 是 23，如今我安装的是 24，配置有些许不兼容也是正常的罢。</p>
+<p>也许是受那篇文章的影响，我决定抛弃之前亲自维护的配置工程，然后选择一个干净的配置作为起点，重新来过。事实将会证明，这是一个正确无比的决定。</p>
+<p>从 <a href="https://github.com/eschulte/emacs24-starter-kit" target="_blank" rel="external">eschulte/emacs24-starter-kit</a> fork 出一份配置之后，我开始阅读这份配置的<a href="http://eschulte.github.io/emacs24-starter-kit/" target="_blank" rel="external">文档</a>。</p>
+<p>让我感到惊奇的是，在这份配置中，我们可以像写文档一样去写配置。我们把配置写在 Org 文档中，可以用 Org-mode 提供的标记符去标记文档格式，然后把 elisp 代码写在代码块中。emacs 启动时会解析这些 Org 文档，把其中的 elisp 代码析出为 lisp 代码文件并加载。</p>
+<p>这份配置还提供了一种将用户配置和默认配置隔离的方法。文档中有一段文字和代码隐晦地给出了相应方法。</p>
+<p><img src="/blog/images/the-return-of-the-emacs/EmacsStarterKit.png" alt="Emacs Starter Kit"></p>
+<p>看出来了吗？我们可以根据系统名称做出针对不同操作系统的配置，也可以根据用户登录名做出针对不同用户的配置，这样我们在自定义编辑器行为的时候就不用去修改默认配置，同时我们需要关心和备份的配置文件就只有用户配置和系统配置了。</p>
+<p>这种自定义配置的方式，比起我之前那个维护得像代码工程一样的配置，以及被我这一行那一行修改了的各种插件，简直领先一个时代。</p>
+<p>大约花了 2 个小时，我就把 Emacs 调教的十分顺手了。当然需求是不断增加的，我在日常使用的过程中也会根据需要安装新的插件，增加新的配置，让 Emacs 配置和我一起成长。</p>
+<h1 id="配置">配置</h1>
+<p>我们喜欢把 Emacs 配置成那种带有“启动自检”的模式，在启动过程中，如果发现有插件没有安装，就会自己联网安装。这样假如我们换了一台电脑，只需要把用户配置文件复制一份，Emacs 就会在第一次启动的时候把自己配置好，不需要我们操心太多。</p>
+<p>Emacs Starter Kit 提供了一个函数 starter-kit-install-if-needed，用来帮助我们检查一个或多个指定插件是否正确安装。</p>
+<pre><code class="lisp">(defun starter-kit-install-if-needed (&amp;rest packages)
+  &quot;Install PACKAGES using ELPA if they are not loadable or installed locally.&quot;
+  (when packages
+    (unless package-archive-contents
+      (package-refresh-contents))
+    (dolist (package packages)
+      (unless (or (starter-kit-loadable-p package)
+                  (package-installed-p package))
+        (package-install package)))))
+</code></pre>
+<p>我没有像许多 Emacser 一样使用 Evil 来模拟 Vim，也许是因为我始终没真正学会 Vim 的缘故。</p>
+<h1 id="插件">插件</h1>
+<p>照例在最后推荐几个有趣的小插件，正是这些插件给我带来了绝妙的编辑体验，让我对 Emacs 念念不忘。</p>
+<ol>
+<li><p>highlight-tail </p>
+<p>这个插件可以用渐变的颜色去高亮最近修改的文本，很酷的感觉。就是这个插件极大的刺激了我的创作欲望，让我不停的写啊写啊。</p>
+<p>我把高亮的颜色配置成了红色，适合黑底白字的主题。关于这插件的更多内容可以参考《<a href="http://emacser.com/highlight-tail.htm" target="_blank" rel="external">用性感的尾巴highlight-tail标记最近的修改</a>》。</p>
+</li>
+<li><p>smartparens</p>
+<p>这个插件能够自动补全成对的符号，比如括号、引号之类的。</p>
+</li>
+<li><p>markdown-mode</p>
+<p>对于重度的 markdown 控，这个主模式必不可少，除了能够提供语法高亮，还有各种快捷键。大学的时候有一段时间我是使用 Org-mode 来写文档的，如今已经很少用了。</p>
+</li>
+<li><p>darkroom</p>
+<p>传说中的沉浸模式，绝妙的文档编辑体验！就像 OS X 上许多主打沉浸模式的 Markdown 编辑器一样，它把文本区域收敛到窗口的中间，让你专注于文字创作。</p>
+<p><img src="/blog/images/the-return-of-the-emacs/darkroom.png" alt="Darkroom"></p>
+<p>对于我这种有多个显示器的家伙，自然是把 Emacs 全屏之后放在正中央的屏幕上，旁边两个屏幕用来放置浏览器和代码之类的窗口。</p>
+</li>
+</ol>
+
+		
+<div align="center" style="background:#e6e6e6"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="知识共享授权条款" style="border-width:0" src="/blog/images/i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><a href="/blog/2015/04/05/the-return-of-the-emacs/">本著作</a>由<a xmlns:cc="http://creativecommons.org/ns#" href="/blog/about/" property="cc:attributionName" rel="cc:attributionURL">潘家邦</a>制作，以<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享 姓名标示-相同方式分享 4.0 国际 授权条款</a>释出。</div>
+
+
+		<div class="print-invisible">
+		
+<script type="text/javascript" id="wumiiRelatedItems"></script>
+
+<script type="text/javascript">
+    var wumiiPermaLink = "http://www.jamespan.me/blog/2015/04/05/the-return-of-the-emacs/";
+    var wumiiTitle = "Emacs 归来记";
+    
+    	
+    	var wumiiTags = "Emacs"; //请用代码生成文章标签，以英文逗号分隔，如："标签1,标签2"
+    
+    
+    	
+    	var wumiiCategories = ["Study"]; //请用代码生成文章分类，分类名放在 JSONArray 中，如: ["分类1", "分类2"]
+    
+    var wumiiSitePrefix = "http://www.jamespan.me/blog/";
+    var wumiiParams = "&num=5&mode=2&pf=JAVASCRIPT";
+    </script>
+
+    <script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+    <a href="http://www.wumii.com/widget/relatedItems" style="border:0;">
+    	<img src="http://static.wumii.cn/images/pixel.png" alt="无觅关联推荐，快速提升流量" style="border:0;padding:0;margin:0;" />
+    </a>
+
+
+		</div>
+	</div>
+		<footer class="article-footer clearfix print-invisible">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/blog/tags/Emacs/">Emacs</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/blog/categories/Study/">Study</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://www.jamespan.me/blog/2015/04/05/the-return-of-the-emacs/" data-title="Emacs 归来记 | James Pan&#39;s Blog" data-tsina="3877948399" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix print-invisible">
+ 
+ <div class="prev" >
+ <a href="/blog/2015/04/06/seven-concurrency-models-threads-and-lock/" title="七周七并发模型之线程与锁">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  七周七并发模型之线程与锁</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/blog/2015/04/03/a-repair-of-the-retina/"  title="Macbook Pro 换屏记">
+ <strong>NEXT:</strong><br/> 
+ <span>Macbook Pro 换屏记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment print-invisible">
+	<div class="ds-thread" data-thread-key="/blog/2015/04/05/the-return-of-the-emacs/" data-title="Emacs 归来记"></div>
+</section>
+
+
+</div>  
+      <div class="openaside print-invisible"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#疏远"><span class="toc-number">2.</span> <span class="toc-text">疏远</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#思念"><span class="toc-number">3.</span> <span class="toc-text">思念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#契机"><span class="toc-number">4.</span> <span class="toc-text">契机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#调教"><span class="toc-number">5.</span> <span class="toc-text">调教</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置"><span class="toc-number">6.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#插件"><span class="toc-number">7.</span> <span class="toc-text">插件</span></a></li></ol>
+  </div>
+
+<div id="asidepart" class="print-invisible">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="tagslist">
+	<p class="asidetitle">Advertisement</p>
+		<ul>
+			<li>
+				<p><a href="mailto:jiabang.pjb@alibaba-inc.com">阿里集团-菜鸟网络面向社会招聘资深工程师、技术专家，有意者邮件发送简历至本人邮箱，长期有效</a></p>
+			</li>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">Tag Cloud</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/blog/tags/Cache/" style="font-size: 10.00px;">Cache</a><a href="/blog/tags/Concurrency/" style="font-size: 10.00px;">Concurrency</a><a href="/blog/tags/Data-Structure/" style="font-size: 10.00px;">Data Structure</a><a href="/blog/tags/Emacs/" style="font-size: 10.00px;">Emacs</a><a href="/blog/tags/Entertainment/" style="font-size: 10.00px;">Entertainment</a><a href="/blog/tags/Exercise/" style="font-size: 10.00px;">Exercise</a><a href="/blog/tags/Guava/" style="font-size: 16.67px;">Guava</a><a href="/blog/tags/Java/" style="font-size: 18.33px;">Java</a><a href="/blog/tags/JavaScript/" style="font-size: 15.00px;">JavaScript</a><a href="/blog/tags/Mac/" style="font-size: 11.67px;">Mac</a><a href="/blog/tags/MySQL/" style="font-size: 11.67px;">MySQL</a><a href="/blog/tags/OJ/" style="font-size: 10.00px;">OJ</a><a href="/blog/tags/OS-X/" style="font-size: 13.33px;">OS X</a><a href="/blog/tags/Python/" style="font-size: 10.00px;">Python</a><a href="/blog/tags/Reading/" style="font-size: 10.00px;">Reading</a><a href="/blog/tags/Sketch/" style="font-size: 13.33px;">Sketch</a><a href="/blog/tags/Tool/" style="font-size: 20.00px;">Tool</a>
+    </div>
+  </div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/blog/categories/Life/" title="Life">Life<sup>7</sup></a></li>
+		
+			<li><a href="/blog/categories/Study/" title="Study">Study<sup>16</sup></a></li>
+		
+			<li><a href="/blog/categories/Work/" title="Work">Work<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://www.jamespan.me/blog/" target="_blank" title="James Pan's Blog">The Blog</a></li>
+      <li><a href="http://jamespan.github.io/blog/" target="_blank" title="James Pan's Blog">The Blog via Github</a></li>
+      <li><a href="http://panjiabang.gitcafe.io/blog/" target="_blank" title="James Pan's Blog">The Blog via GitCafe</a></li>
+      <li><a href="http://ifeve.com" target="_blank" title="并发编程网">并发编程网</a></li>
+      <li><a href="http://blog.sina.com.cn/ld2254432" target="_blank" title="刘典的博客">刘典的博客</a></li>
+      <li><a href="http://news.dbanotes.net/news" target="_blank" title="Startup News">Startup News</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/blog/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer class="print-invisible"><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 情不知所起，一往而深， <br/>
+			再而衰，三而竭</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/3877948399" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/JamesPan" target="_blank" title="github"></a>
+		
+		
+		
+        <a href="https://www.linkedin.com/pub/jiabang-pan" target="_blank" title="linkedin"></a>
+        
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://www.jamespan.me" target="_blank" title="潘家邦">潘家邦</a>
+		 
+Analyse with <script src="http://s23.cnzz.com/z_stat.php?id=1000543904&web_id=1000543904" language="JavaScript"></script>
+
+		</p>
+
+</div>
+</footer>
+    <!--<script src="/blog/js/jquery-2.1.0.min.js"></script>-->
+<script src="http://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+$("span.heimu").attr("title", "你知道的太多了")
+</script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h1'),
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(h.length<=1){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"jamespanblog"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<script async defer src="https://hypothes.is/embed.js"></script>
+
+
+  <!-- mathjax config similar to math.stackexchange -->
+
+
+</body>
+</html>

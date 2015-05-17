@@ -1,0 +1,1932 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[James Pan's Blog]]></title>
+  <subtitle><![CDATA[代码猴子，计算机科学爱好者]]></subtitle>
+  <link href="/blog/atom.xml" rel="self"/>
+  <link href="http://www.jamespan.me/blog//"/>
+  <updated>2015-04-05T15:55:20.713Z</updated>
+  <id>http://www.jamespan.me/blog//</id>
+  
+  <author>
+    <name><![CDATA[潘家邦]]></name>
+    <email><![CDATA[panjiabang@gmail.com]]></email>
+  </author>
+  
+  <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[七周七并发模型之线程与锁]]></title>
+    <link href="http://www.jamespan.me/blog/2015/04/06/seven-concurrency-models-threads-and-lock/"/>
+    <id>http://www.jamespan.me/blog/2015/04/06/seven-concurrency-models-threads-and-lock/</id>
+    <published>2015-04-05T23:52:07.000Z</published>
+    <updated>2015-04-05T15:55:16.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p>最近我在读 <em><a href="http://book.douban.com/subject/25736606/" target="_blank" rel="external">Seven Concurrency Models in Seven Weeks</a></em>，这本书使用不同的语言介绍不同的并发模型，深入浅出，让我获益匪浅。</p>
+<p>这本书让人有一种 Talk is cheap, show me the code 的感觉。作者不会巴拉巴拉讲一大堆理论，而是先放出一段代码，然后引导读者去分析代码里面的问题，然后作出改进，然后在分析还有什么问题。这种风格适合那些真正要写代码的读者。</p>
+<p>这本书的中文译本《<a href="http://book.douban.com/subject/26337939/" target="_blank" rel="external">七周七并发模型</a>》于 2015 年的愚人节上架，<a href="http://www.amazon.cn/dp/B00V4B2KEI/" target="_blank" rel="external">亚马逊</a>等多家在线商城有售。感谢黄炎先生的翻译工作，让更多国内同行能够接触到这本书。</p>
+<h1 id="线程与锁">线程与锁</h1>
+<p>线程与锁是本书在第一周介绍的内容。作者将线程-锁编程模型比作福特T型轿车，虽然它能把你带到目的地，但这是一种上古时期的技术，难以驾驭，和其他新技术相比，显得更加危险和不可靠。</p>
+<p>然而，线程-锁编程模型在大多数时候依然是开发并发程序的首选，也是其他许许多多并发模型的基础。即使我们不打算直接使用它，也得知晓其中原理。</p>
+<p>作者以 Java 语言为载体，为我们介绍了线程与锁的工作方式，原理性的知识适用于其他所有支持线程和锁的语言。</p>
+<h1 id="脑图">脑图</h1>
+<p><img src="/blog/images/seven-concurrency-models/threads-and-lock.png" alt="线程与锁"></p>
+]]></content>
+    
+    
+      <category term="Concurrency" scheme="http://www.jamespan.me/blog/tags/Concurrency/"/>
+    
+      <category term="Java" scheme="http://www.jamespan.me/blog/tags/Java/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Emacs 归来记]]></title>
+    <link href="http://www.jamespan.me/blog/2015/04/05/the-return-of-the-emacs/"/>
+    <id>http://www.jamespan.me/blog/2015/04/05/the-return-of-the-emacs/</id>
+    <published>2015-04-04T18:08:47.000Z</published>
+    <updated>2015-04-05T05:23:41.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>归去来兮，田园将芜胡不归？</p>
+</blockquote>
+<h1 id="背景">背景</h1>
+<p>从一开始我就知道，有一个编辑器，被称为神的编辑器，另一个编辑器，被称为编辑器之神。那是大一的时候，我刚开始系统的学习计算机科学，需要一个趁手的编辑器。</p>
+<p>最开始的尝试，是从 Vim 开始的。图书馆里我借到一本叫《学习vi和Vim编辑器》的书，开始了蹒跚学步。后来，我发现我始终无法领会 Vim 的精髓，编辑速度没能得到很大的提升。</p>
+<p>大三的时候，我看了大名鼎鼎的《计算机程序的构造和解释》，从此加入了括号神教。于是，我的编辑器也从 Vim 变成了 Emacs。</p>
+<p>那是第一次，我发现我可以用我熟悉的语言，去自定义我的编辑器。如此多的插件，都用 lisp 实现，整个编辑器，简直就是括号神教教众的游乐场。</p>
+<p>毕业的时候，我的论文，以及论文中实验用的程序，都是在 Emacs 下编辑的。那时候，Emacs 24 刚发布不久，我还停留在 23 版本上。</p>
+<h1 id="疏远">疏远</h1>
+<p>后来，我工作了。不再有大把的时间让我用我喜欢的语言，做我喜欢的研究。</p>
+<p>每天每天都在 IDE 的帮助下和大把大把的 Java 代码死磕，从 eclipse 到 IDEA。日常使用的文本编辑器也从 Emacs 变成了 Sublime Text为主，其他 OS X 上的编辑器为辅，再也没有 Emacs 什么事情。</p>
+<p>再后来，Emacs 被我卸载了。</p>
+<h1 id="思念">思念</h1>
+<p>那是一段与时间赛跑的日子，为了成长努力工作，为了更快的成长拼命的加班。</p>
+<p>我渐渐感觉自己迷失在了日复一日的工作里，晚上回家越来越晚，早上起床越来越晚。虽然技术进步很快，比我之前在学校里自己钻研快得多，但是我总觉得，似乎在什么地方，我的生活少了些东西。</p>
+<p>为了把工作中、业余时学习的东西记录下来，我开始记笔记。为了在网络空间中留下自己的痕迹，我重新开始写博客，认真写博客。</p>
+<p>于是我的业余生活中，出现了大量的文本编辑的需求。为了找到一个同时具备文档管理、样式编辑、LaTeX 公式支持、只读模式等等功能的编辑器，我可谓煞费苦心，购买各种 App 的钱就花了不少，前后尝试了 Ulysses、TextNut 等等多款文档管理工具，最后停留在了 Notebooks 这个应用上。</p>
+<p>即便我对 Notebooks 做了不少自定义，实现了我想要的所有功能，但是我还是不太满意。</p>
+<p>这些工具，没法刺激我的创造欲望。就是这样，这些工具虽然堆砌了各种功能，但是它的核心功能——文本编辑，无法让我满意。</p>
+<p>曾经沧海难为水，除却巫山不是云。我十分的怀念当年用 Emacs 写文章写代码的惬意，对这些不成器的应用内编辑器，我想说一句，开源的 Emacs，比你们不知道高到哪里去，我和他谈笑风生！</p>
+<h1 id="契机">契机</h1>
+<p>虽然我对其他编辑器有着诸多不满，但是我还在欺骗自己，让自己将就用着。毕竟我好歹也是大半年没有用 Emacs 了，不知道还有没有时间重新捡起来。</p>
+<p>就在不久前，一篇叫《<a href="http://blog.binchen.org/posts/yi-nian-cheng-wei-emacs-gao-shou-xiang-shen-yi-yang-shi-yong-bian-ji-qi.html" target="_blank" rel="external">一年成为Emacs高手</a>》的文章彻底激起了我重新用起 Emacs 的欲望和信心。</p>
+<p>我不能再欺骗自己了，我就是喜欢用 Emacs 写东西的感觉！看完文章当晚，我就把 Emacs 装上了。</p>
+<h1 id="调教">调教</h1>
+<p>意料之中的是，我当年的配置文件，依旧完整的躺在家目录里。出乎意料的是，这份犹如工程代码一般的配置，无法正确加载。</p>
+<p>仔细一想，当年我用的 Emacs 是 23，如今我安装的是 24，配置有些许不兼容也是正常的罢。</p>
+<p>也许是受那篇文章的影响，我决定抛弃之前亲自维护的配置工程，然后选择一个干净的配置作为起点，重新来过。事实将会证明，这是一个正确无比的决定。</p>
+<p>从 <a href="https://github.com/eschulte/emacs24-starter-kit" target="_blank" rel="external">eschulte/emacs24-starter-kit</a> fork 出一份配置之后，我开始阅读这份配置的<a href="http://eschulte.github.io/emacs24-starter-kit/" target="_blank" rel="external">文档</a>。</p>
+<p>让我感到惊奇的是，在这份配置中，我们可以像写文档一样去写配置。我们把配置写在 Org 文档中，可以用 Org-mode 提供的标记符去标记文档格式，然后把 elisp 代码写在代码块中。emacs 启动时会解析这些 Org 文档，把其中的 elisp 代码析出为 lisp 代码文件并加载。</p>
+<p>这份配置还提供了一种将用户配置和默认配置隔离的方法。文档中有一段文字和代码隐晦地给出了相应方法。</p>
+<p><img src="/blog/images/the-return-of-the-emacs/EmacsStarterKit.png" alt="Emacs Starter Kit"></p>
+<p>看出来了吗？我们可以根据系统名称做出针对不同操作系统的配置，也可以根据用户登录名做出针对不同用户的配置，这样我们在自定义编辑器行为的时候就不用去修改默认配置，同时我们需要关心和备份的配置文件就只有用户配置和系统配置了。</p>
+<p>这种自定义配置的方式，比起我之前那个维护得像代码工程一样的配置，以及被我这一行那一行修改了的各种插件，简直领先一个时代。</p>
+<p>大约花了 2 个小时，我就把 Emacs 调教的十分顺手了。当然需求是不断增加的，我在日常使用的过程中也会根据需要安装新的插件，增加新的配置，让 Emacs 配置和我一起成长。</p>
+<h1 id="配置">配置</h1>
+<p>我们喜欢把 Emacs 配置成那种带有“启动自检”的模式，在启动过程中，如果发现有插件没有安装，就会自己联网安装。这样假如我们换了一台电脑，只需要把用户配置文件复制一份，Emacs 就会在第一次启动的时候把自己配置好，不需要我们操心太多。</p>
+<p>Emacs Starter Kit 提供了一个函数 starter-kit-install-if-needed，用来帮助我们检查一个或多个指定插件是否正确安装。</p>
+<pre><code class="lisp">(defun starter-kit-install-if-needed (&amp;rest packages)
+  &quot;Install PACKAGES using ELPA if they are not loadable or installed locally.&quot;
+  (when packages
+    (unless package-archive-contents
+      (package-refresh-contents))
+    (dolist (package packages)
+      (unless (or (starter-kit-loadable-p package)
+                  (package-installed-p package))
+        (package-install package)))))
+</code></pre>
+<p>我没有像许多 Emacser 一样使用 Evil 来模拟 Vim，也许是因为我始终没真正学会 Vim 的缘故。</p>
+<h1 id="插件">插件</h1>
+<p>照例在最后推荐几个有趣的小插件，正是这些插件给我带来了绝妙的编辑体验，让我对 Emacs 念念不忘。</p>
+<ol>
+<li><p>highlight-tail </p>
+<p>这个插件可以用渐变的颜色去高亮最近修改的文本，很酷的感觉。就是这个插件极大的刺激了我的创作欲望，让我不停的写啊写啊。</p>
+<p>我把高亮的颜色配置成了红色，适合黑底白字的主题。关于这插件的更多内容可以参考《<a href="http://emacser.com/highlight-tail.htm" target="_blank" rel="external">用性感的尾巴highlight-tail标记最近的修改</a>》。</p>
+</li>
+<li><p>smartparens</p>
+<p>这个插件能够自动补全成对的符号，比如括号、引号之类的。</p>
+</li>
+<li><p>markdown-mode</p>
+<p>对于重度的 markdown 控，这个主模式必不可少，除了能够提供语法高亮，还有各种快捷键。大学的时候有一段时间我是使用 Org-mode 来写文档的，如今已经很少用了。</p>
+</li>
+<li><p>darkroom</p>
+<p>传说中的沉浸模式，绝妙的文档编辑体验！就像 OS X 上许多主打沉浸模式的 Markdown 编辑器一样，它把文本区域收敛到窗口的中间，让你专注于文字创作。</p>
+<p><img src="/blog/images/the-return-of-the-emacs/darkroom.png" alt="Darkroom"></p>
+<p>对于我这种有多个显示器的家伙，自然是把 Emacs 全屏之后放在正中央的屏幕上，旁边两个屏幕用来放置浏览器和代码之类的窗口。</p>
+</li>
+</ol>
+]]></content>
+    
+    
+      <category term="Emacs" scheme="http://www.jamespan.me/blog/tags/Emacs/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Macbook Pro 换屏记]]></title>
+    <link href="http://www.jamespan.me/blog/2015/04/03/a-repair-of-the-retina/"/>
+    <id>http://www.jamespan.me/blog/2015/04/03/a-repair-of-the-retina/</id>
+    <published>2015-04-03T00:57:38.000Z</published>
+    <updated>2015-04-02T17:00:02.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="背景">背景</h1>
+<p>2015 年 4 月 2 日，这是一个值得纪念的日子，好消息坏消息都在这天到来。好消息是什么这里就不说了，坏消息倒是让人痛彻心扉：陪伴我将近一年的 Macbook Pro 的屏幕，被我弄坏了。</p>
+<p>事情是这样的，下午到了团队周会的时间，我收拾电脑准备起身去会议室，顺手把电脑一合，然后就感到有东西把屏幕卡住了。当时我就感觉要坏事，赶紧把屏幕拉开，点亮之后发现，大约有四分之一的屏幕黑了，液晶流出来了。</p>
+<p>至于罪魁祸首，竟然是陪伴了我 3 年的雷蛇鼠标。闭合屏幕的时候，鼠标的 USB 头卡在了机身和屏幕中间，直接就把屏幕压裂了。</p>
+<p>事已至此，一番大出血是免不了的，接下来就是怎么出血的问题了。</p>
+<h1 id="寻觅">寻觅</h1>
+<p>电脑是肯定要修的，屏幕右侧四分之一屏幕黑了，看不到时间，看不到电量，屏幕分辨率直接缩水。虽然说可以外接显示器然后合上屏幕，把 Macbook 当主机来使用，但是我在家里没有显示器，在公司也不可能带着个显示器到处跑。</p>
+<p>肉身开着周会，脑袋里却满满都是我那可怜的电脑。</p>
+<p>一番 Google 之后，我在知乎还有其他一些地方找到了一些有着和我一样悲惨经历的同志。他们有的去 Apple Store 找售后，有的去苹果维修点，还有的在淘宝买配件然后自己动手丰衣足食。</p>
+<p>一开始我在 58 同城找到了杭州的几个号称能维修苹果电脑的店，基本上都在教工路的百脑汇附近。打电话过去报上机器型号，结果都是修不了。看来 58 上面的信息还是不靠谱。</p>
+<p>于是我打电话给杭州新开张的 Apple Store，咨询了维修的相关事宜。技术支持跟我说售后维修需要在网上预约天才吧什么的，顿时感觉好麻烦。</p>
+<p>继续 Google 之后发现一个叫“<a href="http://www.applesv.com" target="_blank" rel="external">杭州苹果维修</a>”的地方。看到网站上面有一个“杭州龙山计算机技术服务有限公司”我就打电话过去咨询。</p>
+<p>大概 7:35 的时候，我发了型号过去，然后他们开始查能不能修。也不知道他们是怎么查的，一个多小时后我看他们没回信，发个短信过去问，结果是还在查。</p>
+<p>查一个型号能不能修，需要查这么久吗？总感觉不靠谱的样子，还是看看官方的维修渠道吧。</p>
+<p>我开始搜寻 Apple Store 维修相关的资料，然后在一个知乎问题下面找到了我想要的预约经验。</p>
+<p>夜已深，我决定第二天先预约 Apple Store 的天才吧试试看。</p>
+<h1 id="预约">预约</h1>
+<p>知乎上说，Apple Store 每天 8:30 开始在网上放预约号。晚上我也没睡好，凌晨 4 点就醒了，然后迷迷糊糊赖床辗转反侧到 8 点，爬起来洗澡之后开始抱着电脑，用着残缺的屏幕开始了预约。</p>
+<p>这时昨天那个查了很久都没查出结果的哥们来电话，跟我说可以修，报价 ￥2200。于是我问他们的修复方式，得知他们不是整个更换上盖，而是用所谓的高端机器替换屏幕，需要两天时间，我犹豫了。这个修复时间我没法接受，两天没有电脑的日子，多么可怕。我说我接受不了两天的修复，可以接受更换上盖，需要更短的修复时间。那哥们说他去问问工程师最快修复需要多少时间，然后就没有然后了。</p>
+<p>于是我开始专心刷预约。出乎意料的是，8:30 到了，预约界面还是显示的没有可预约时间。继续刷新，8:45 了，还是没有。无奈之下出门去了公司。</p>
+<p>到了工位是刚过九点，再次尝试预约，终于见到了不一样的页面。页面引导我用手机往一个号码上面发信息，换取一个可以用来预约时间的唯一码。这时候 iMessage 的文本转发功能就派上用场了，直接从 Macbook 上面发短信，复制粘贴的事情。</p>
+<p>接下来就是漫长的等待，过了半小时，才收到 Apple 回复的唯一码。等待回复的时间里，我和一个可爱测试妹纸完成了两个系统之间的联调。</p>
+<p>收到唯一码之后，我立刻预约了下午 5:15 的天才吧。</p>
+<h1 id="涣散">涣散</h1>
+<p>不知道是什么原因，整个上午、中午、下午我都非常不在状态，代码写不出来，文档写不出来，整个人心不在焉的。下午 4 点的时候匆匆发了周报就出门打车直奔西湖苹果零售店。</p>
+<p>我不喜欢这个状态的我，很不喜欢。我感觉我都不认识这样的自己，精力没法集中，漫无目的的打开各种网页然后又关上，文档想来想去无从下手，试图写代码却又被莫名其妙的连接数据库超时虐的体无完肤。</p>
+<h1 id="出血">出血</h1>
+<p>路上真的花了一个小时，进入 Apple Store 之后，小小震撼了一下，有种乡下人进城的感觉，到处都是玻璃，仿若水晶宫，连楼梯台阶都是玻璃。</p>
+<p>说明预约之后，一楼的工作人员让我上二楼。经过一番问询和等候，开始有工作人员一对一的服务。我向这位“天才”展示了机器的惨状，表明了我希望当场得到修复的意愿之后，他开始在 iPad 上查询库存是否有合适的屏幕等等。</p>
+<p>一开始“天才”表示当场修好有难度，现在时间比较晚之类的，后来他去后台问了工程师，回来跟我说大约耗时 3 个小时，我可以先去吃饭什么的。</p>
+<p>最终的报价是 ￥6271.02，里面有 900+ 的税，还有 250+ 的劳务费。这个价格，买个肾 6 也差不多了罢。</p>
+<p>晚饭在附近找了个星巴克，点了拿铁和三明治，拿了几本杂志，准备在里面消磨几个小时的光阴。</p>
+<p>不知道有多久，没有这么的感到轻松。坐在咖啡馆里，看看杂志，翻翻小说，居然也能让我感到莫名的淡淡的快乐，甚至希望时间就此停滞。想必是毕业之后，我对自己 push 太紧，除了工作，便是学习，几乎没有放松的时候。</p>
+<p>大约过了一个半小时，接到来自 Apple Store 的电话，询问我的开机密码，说是要做全面检查，然后说大概半小时之后就能取回电脑。当时我也没多想，直接就给了，现在想想还是后怕，周末需要找时间对系统做个检查，免得里面被放了奇怪的东西都不知道。</p>
+<p>半小时后，我如约回到零售店，却被告知“工程师还在检测”。最后还是等到了 8:00 才拿到电脑，果然是 3 个小时。</p>
+<p>开机之后发现时间被置成了 2015 年 1 月 1 日，然后一些还在试用期的软件直接就用不了。这个倒是个奇怪的地方，为什么换个上盖，都会把时间给重置了？</p>
+<h1 id="归途">归途</h1>
+<p>外面下起了倾盆大雨。根据天气预报，未来 10 天都会下雨。</p>
+<p>在西湖零售店门口，我用快的叫了一辆出租车，花了一个多小时才回到公司。</p>
+<h1 id="教训">教训</h1>
+<p>这次算是一次血的教训，我已经为此付出了不菲的代价，希望和我一样拥有 Macbook 的朋友，不要步我的后尘，一定要小心呵护你们的爱机。</p>
+<h2 id="关于外设">关于外设</h2>
+<p>常在河边走，哪有不湿鞋。喜欢用各种外设的朋友们，一定要留心外设的接口，以免这些接口把机器弄伤。尽可能用蓝牙链接外设，如果不行就尽量用无线的，至少在移动的时候不必插拔接口，这样就少了出事的可能。</p>
+<h2 id="关于设备">关于设备</h2>
+<p>苹果的设备确实能给用户带来绝佳的体验和生产力的飞跃，但是在购买苹果设备之前，需要确保自己的经济状况不会被突如其来的设备损坏维修拖垮。</p>
+<p>用苹果的产品就像吸毒，一旦体会到和甩其他产品几条街的体验，和奇迹般的生产力增长，你就很难再去接受普通的设备，很难接受生产力的严重下滑。一旦设备出现损坏，要么维修，要么买新的，基本上没有其他出路。</p>
+<h2 id="关于钱">关于钱</h2>
+<p>也许是我一毕业就有还算不错的薪资，也许是我处于一人吃饱全家不饿的阶段，我花钱花的比较凶，六千多块，这么一合一裂，就扔出去了。但是要说不心痛那是骗人。下个月开始好好存钱罢。</p>
+<p>建议学生党除非家庭富裕，否则不要强撑着买苹果设备，就怕买得起修不起。已经工作的朋友，如果到了攒钱买车买房的阶段，苹果设备尽量不要顶配，免得省吃俭用存下来的钱，一不小心就飞走了，中配的设备无论在维修还是其他方面都比顶配便宜不少。</p>
+]]></content>
+    
+    
+      <category term="Mac" scheme="http://www.jamespan.me/blog/tags/Mac/"/>
+    
+      <category term="Life" scheme="http://www.jamespan.me/blog/categories/Life/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Guava 是个风火轮之函数式编程(2)]]></title>
+    <link href="http://www.jamespan.me/blog/2015/03/30/guava-functional-programing-2/"/>
+    <id>http://www.jamespan.me/blog/2015/03/30/guava-functional-programing-2/</id>
+    <published>2015-03-29T20:25:06.000Z</published>
+    <updated>2015-03-29T12:50:35.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p><a href="http://en.wikipedia.org/wiki/Functional_programming" target="_blank" rel="external">函数式编程</a>是一种历久弥新的编程范式，比起<a href="http://en.wikipedia.org/wiki/Imperative_programming" target="_blank" rel="external">命令式编程</a>，它更加关注程序的执行结果而不是执行过程。Guava 做了一些很棒的工作，搭建了在 Java 中模拟函数式编程的基础设施，让我们不用多费手脚就能享受部分函数式编程带来的便利。</p>
+<p>Java 始终是一个面向对象（命令式）的语言，在我们使用函数式编程这种黑魔法之前，需要确认：同样的功能，使用函数式编程来实现，能否在<strong>健壮性</strong>和<strong>可维护性</strong>上，超过使用面向对象（命令式）编程的实现？</p>
+<h2 id="Predicate">Predicate</h2>
+<p>Predicate 接口是我们第二个介绍的 Guava 函数式编程基础设施。</p>
+<p>下面这段代码是去掉注释之后的 Predicate 接口。</p>
+<pre><code class="java">@GwtCompatible
+public interface Predicate&lt;T&gt; {
+  boolean apply(@Nullable T input);
+  @Override
+  boolean equals(@Nullable Object object);
+}
+</code></pre>
+<p>它看起来就是一个简化版本的 Function，除了指定返回值的类型为 boolean 之外，没有其他的差别了。</p>
+<p>下面我们定义一个简单的谓词函数，判断一个字符串的长度是否小于10。</p>
+<pre><code class="java">Predicate&lt;String&gt; lengthLessThen10 = new Predicate&lt;String&gt;() {
+    public boolean apply(String input) {
+        return input.length() &lt; 10;
+    }
+};
+lengthLessThen10.apply(&quot;lessThen10&quot;);//false
+</code></pre>
+<p>这里我们实例化了一个谓词仿函数，能且只能判断一个字符串的长度是否小于 10。假如我们希望得到更加通用的代码，能够根据不同的参数得到判断字符串长度小于不同长度的谓词，我们就需要用到函数式编程中一种称为“柯里化”的技术。</p>
+<pre><code class="java">Function&lt;Integer, Predicate&lt;String&gt;&gt; lengthLessThen = new Function&lt;Integer, Predicate&lt;String&gt;&gt;() {
+    public Predicate&lt;String&gt; apply(final Integer input) {
+        return new Predicate&lt;String&gt;() {
+            public boolean apply(String str) {
+                return str.length() &lt; input;
+            }
+        };
+    }
+};
+lengthLessThen.apply(10).apply(&quot;lessThen10&quot;);//false
+</code></pre>
+<p>首先，我们定义了一个 Function，接受 Integer 类型的参数，返回 Predicate 实例；在实例化 Predicate 的时候，我们访问了匿名类外部的变量，也即 Function 实例的 apply 方法的参数，由于 Java 语言的限制，匿名类内部用到的外部变量必须声明为 final。</p>
+<h2 id="Predicates">Predicates</h2>
+<p>Predicates 是 Guava 中与 Predicate 接口配套使用的工具类，提供了一些非常有用的工具类，比如使用 and 和 or 组合多个谓词，还有 not 将谓词的条件取反。和 Functions 比较类似的是，Predicates 提供了一个 compose 方法，用于组合 Function 和 Predicate。</p>
+<p>Predicates 是一个方法工厂，返回各种各样的 Predicate 实例。</p>
+<p><img src="/blog/images/guava-functional-programing/predicates1.png" alt=""></p>
+<p>Predicates#alwaysTrue 返回一个永真谓词，Predicates#alwaysFalse 返回一个永假谓词。</p>
+<p>Predicates#isNull 返回的谓词在参数为 null 时为真，Predicates#notNull 则返回与之相反的谓词。</p>
+<p>Predicates#equalTo 返回一个谓词，当谓词参数与 Predicates#equalTo 的参数在逻辑上等价时为真。</p>
+<p>Predicates#instanceOf 返回一个谓词，当谓词参数是 Predicates#instanceOf 的参数的实例时为真。</p>
+<p>Predicates#assignableFrom 返回一个谓词，当谓词参数表示的类和 Predicates#assignableFrom 的参数表示的类，有着相同或者超类、接口关系的时候为真。</p>
+<p>Predicates#in 返回一个谓词，当谓词参数在 Predicates#in 的参数表示的集合中时为真。</p>
+<p>Predicates#contains 返回一个谓词，当谓词参数表示的字符串中包含 Predicates#contains 的参数所表示的正则模式时为真。Predicates#containsPattern 的功能与之类似。</p>
+<p>我们可以看到，除了最先介绍的 4 个工厂函数，其余工厂函数返回的谓词，都和工厂函数的参数有着紧密的绑定关系，类似于我们在介绍 Predicate 时提到的闭包。然而 Guava 在实现中为了给用户更好的体验，没有直接使用闭包，而是使用了许多的内部类来支撑这些工厂函数，具体细节我们在源码分析部分展开。</p>
+<p>接下来是谓词之间的与或非运算，还有和函数组合称为新的谓词。</p>
+<p>Predicates#not 返回一个取反之后的谓词，Predicates#and 返回两个或多个谓词做与运算之后的谓词，Predicates#or 返回两个或多个谓词做或运算之后的谓词，Predicates#compose 将参数中的 Function 的返回值作为另一个参数谓词的参数，返回新的谓词。</p>
+<h3 id="源码分析">源码分析</h3>
+<p>我们先看看支撑了 Predicates#alwaysTrue 等 4 个谓词工厂函数的内部类，ObjectPredicate。</p>
+<pre><code class="java">enum ObjectPredicate implements Predicate&lt;Object&gt; {
+  /** @see Predicates#alwaysTrue() */
+  ALWAYS_TRUE {
+    @Override public boolean apply(@Nullable Object o) { return true; }
+    @Override public String toString() { return &quot;Predicates.alwaysTrue()&quot;; }
+  },
+  /** @see Predicates#alwaysFalse() */
+  ALWAYS_FALSE {
+    @Override public boolean apply(@Nullable Object o) { return false; }
+    @Override public String toString() { return &quot;Predicates.alwaysFalse()&quot;; }
+  },
+  /** @see Predicates#isNull() */
+  IS_NULL {
+    @Override public boolean apply(@Nullable Object o) { return o == null; }
+    @Override public String toString() { return &quot;Predicates.isNull()&quot;; }
+  },
+  /** @see Predicates#notNull() */
+  NOT_NULL {
+    @Override public boolean apply(@Nullable Object o) { return o != null; }
+    @Override public String toString() { return &quot;Predicates.notNull()&quot;; }
+  };
+
+  @SuppressWarnings(&quot;unchecked&quot;) // safe contravariant cast
+  &lt;T&gt; Predicate&lt;T&gt; withNarrowedType() { return (Predicate&lt;T&gt;) this; }
+}
+</code></pre>
+<p>这些谓词的构造过程无需来自工厂函数的参数，因此全都用枚举类构造成了单例，类似的手法在 Functions 类中也使用过。</p>
+<p>这里比较有意思的代码是 withNarrowedType 函数。结合 Predicates#alwaysTrue 我们就容易明白这段代码的用途。</p>
+<pre><code class="java">public static &lt;T&gt; Predicate&lt;T&gt; alwaysTrue() {
+  return ObjectPredicate.ALWAYS_TRUE.withNarrowedType();
+}
+</code></pre>
+<p>工厂函数返回的 Predicate 支持泛型，然而 ObjectPredicate 内部的单例却是 Predicate 接口的 Object 类型实现。这段代码其实就是把泛型参数为 Object 的 ObjectPredicate 实例，强制转换为用户指定的泛型参数的谓词。</p>
+<p>下面我们以支撑 Predicates#or 功能的内部类 OrPredicate 为例，分析类似功能的实现。</p>
+<pre><code class="java">private static class OrPredicate&lt;T&gt; implements Predicate&lt;T&gt;, Serializable {
+  private final List&lt;? extends Predicate&lt;? super T&gt;&gt; components;
+
+  private OrPredicate(List&lt;? extends Predicate&lt;? super T&gt;&gt; components) {
+    this.components = components;
+  }
+  @Override
+  public boolean apply(@Nullable T t) {
+    // Avoid using the Iterator to avoid generating garbage (issue 820).
+    for (int i = 0; i &lt; components.size(); i++) {
+      if (components.get(i).apply(t)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  @Override public int hashCode() {
+    // add a random number to avoid collisions with AndPredicate
+    return components.hashCode() + 0x053c91cf;
+  }
+  @Override public boolean equals(@Nullable Object obj) {
+    if (obj instanceof OrPredicate) {
+      OrPredicate&lt;?&gt; that = (OrPredicate&lt;?&gt;) obj;
+      return components.equals(that.components);
+    }
+    return false;
+  }
+  @Override public String toString() {
+    return &quot;Predicates.or(&quot; + COMMA_JOINER.join(components) + &quot;)&quot;;
+  }
+  private static final long serialVersionUID = 0;
+}
+</code></pre>
+<p>将多个 Predicate 做或操作，无非就是遍历集合，只要有一个谓词为真，则整体为真。</p>
+<p>OrPredicate 的实现中，值得关注的地方，都加上了注释。第一个是 apply 函数。这段注释说的是，遍历集合的过程中，为了减少垃圾对象的产生，不使用迭代器，而是直接遍历下标。</p>
+<p>使用迭代器的好处是，无论目标集合是什么数据结构，总能保证获取下一个元素的时间复杂度是 $O(1)$，然而根据下标获取元素则没有这个保证，假如用于初始化 OrPredicate 的 List 其实是一个链表，那么用下标遍历集合的时间复杂度就是 $O(N^2)$。</p>
+<p>Guava 的设计者肯定不会允许一个平方复杂度的遍历存在，我们接下来看一看究竟是 Guava 是如何保证遍历谓词集合的复杂度不会退化为 $O(N^2)$ 的。</p>
+<pre><code class="java">public static &lt;T&gt; Predicate&lt;T&gt; or(
+    Iterable&lt;? extends Predicate&lt;? super T&gt;&gt; components) {
+  return new OrPredicate&lt;T&gt;(defensiveCopy(components));
+}
+static &lt;T&gt; List&lt;T&gt; defensiveCopy(Iterable&lt;T&gt; iterable) {
+  ArrayList&lt;T&gt; list = new ArrayList&lt;T&gt;();
+  for (T element : iterable) {
+    list.add(checkNotNull(element));
+  }
+  return list;
+}
+</code></pre>
+<p>从工厂函数的实现来看，在用一个谓词集合构造 OrPredicate 之前，这个集合首先被做了一份拷贝，这种操作被称为“防御性拷贝”。如此构造出来的谓词，即使当初用于构建谓词的集合发生了变化，谓词的行为不会随之而变。正是这个防御性拷贝，使得构造出来的谓词不依赖于外部的变量，是一个可重入的函数。同时，防御性拷贝得到的 List 是一个 ArrayList，即使根据下标来遍历列表，复杂度也是 $O(N)$。</p>
+<p>下一个注释出现在 hashCode 函数中，解释了为作为参数的谓词集合的哈希值加上一个固定随机值的原因：为了不和 AndPredicate 产生碰撞。考虑这样一个场景，用户用一组谓词，分别通过 Predicates#and 和 Predicates#or 生成两个组合谓词。如果仅仅是使用这组谓词的哈希值作为组合谓词的哈希值，那么这两个不同的组合谓词就会产生哈希碰撞，然后哈希表退化为链表。</p>
+<p>最后我们看一看用于判定字符串是否包含正则模式的谓词，Predicates#contains 的实现。这段代码比较长，而且包含了 Guava 开发者对 Java 官方代码的吐槽，比较有趣。</p>
+<pre><code class="java">private static class ContainsPatternPredicate
+    implements Predicate&lt;CharSequence&gt;, Serializable {
+  final Pattern pattern;
+
+  ContainsPatternPredicate(Pattern pattern) {
+    this.pattern = checkNotNull(pattern);
+  }
+  @Override
+  public boolean apply(CharSequence t) {
+    return pattern.matcher(t).find();
+  }
+  @Override public int hashCode() {
+    // Pattern uses Object.hashCode, so we have to reach
+    // inside to build a hashCode consistent with equals.
+    return Objects.hashCode(pattern.pattern(), pattern.flags());
+  }
+  @Override public boolean equals(@Nullable Object obj) {
+    if (obj instanceof ContainsPatternPredicate) {
+      ContainsPatternPredicate that = (ContainsPatternPredicate) obj;
+      // Pattern uses Object (identity) equality, so we have to reach
+      // inside to compare individual fields.
+      return Objects.equal(pattern.pattern(), that.pattern.pattern())
+          &amp;&amp; Objects.equal(pattern.flags(), that.pattern.flags());
+    }
+    return false;
+  }
+  @Override public String toString() {
+    String patternString = Objects.toStringHelper(pattern)
+        .add(&quot;pattern&quot;, pattern.pattern())
+        .add(&quot;pattern.flags&quot;, pattern.flags())
+        .toString();
+    return &quot;Predicates.contains(&quot; + patternString + &quot;)&quot;;
+  }
+  private static final long serialVersionUID = 0;
+}
+</code></pre>
+<p>我们关注 hashCode 和 equals 函数。一般来说，这两个函数一旦覆盖就必须同时覆盖，如果只覆盖其中一个就有可能产生极其难以发现的 bug。我们假设逻辑相等的对象有着相同的哈希值，在覆盖这两个方法的时候也需要小心的确保这个假设成立。</p>
+<p>我们看看 Guava 开发者吐槽了什么。这两段注释说的差不多是同一个意思，埋怨 Pattern 类的 hashCode 和 equals 都直接使用继承自 Object 的实现，导致他们不得不深入 Pattern 内部，以获取能用来实现这两个函数的东西。</p>
+<p>因为我们永远不知道自己设计的类会被使用者用在什么地方，所以有这么一个最佳实践是为所有的类覆盖实现 hashCode 和 equals 函数。接下来我们看看为什么继承自 Object 的实现被 Guava 开发者视为不可用的实现。</p>
+<p>我们先说 equals 函数。</p>
+<pre><code class="java">public boolean equals(Object obj) {
+    return (this == obj);
+}
+</code></pre>
+<p>equals 函数判断两个对象是否逻辑相等，当且仅当两个对象其实指向同一个对象。这种比较未免太简单粗暴了，完全不是逻辑相等，而是绝对相等。</p>
+<p>然后我们看看 hashCode 函数。</p>
+<pre><code class="java">public native int hashCode();
+</code></pre>
+<p>Object 对象的 hashCode 函数是一个 native 方法，返回的哈希值依赖于对象的内存地址。</p>
+<p>所以说，Object 的 hashCode 和 equals 对于那些需要逻辑相等的对象来说都太严格了，判断两个正则模式是否相等，需要一种较为宽松的比较方式。为什么 Guava 开发者选择了 Pattern#flags 和 Pattern#pattern 作为判断两个 Pattern 相等的依据？</p>
+<p>考察 Pattern 的构造函数，我们发现它的构造函数最多能够接收两个参数，一个字符串格式的正则表达式，还有一个整型的标志位。</p>
+<pre><code class="java">public static Pattern compile(String regex, int flags) {
+    return new Pattern(regex, flags);
+}
+private Pattern(String p, int f) {
+    pattern = p;
+    flags = f;
+    //other codes
+}
+</code></pre>
+<p>看到这里我们就知道了，只要 Pattern#pattern 和 Pattern#flags 一致，那么两个 Pattern 对象就是一致的。</p>
+]]></content>
+    
+    
+      <category term="Java" scheme="http://www.jamespan.me/blog/tags/Java/"/>
+    
+      <category term="Guava" scheme="http://www.jamespan.me/blog/tags/Guava/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[这是一个充满恶意的世界]]></title>
+    <link href="http://www.jamespan.me/blog/2015/03/28/a-world-full-of-malice/"/>
+    <id>http://www.jamespan.me/blog/2015/03/28/a-world-full-of-malice/</id>
+    <published>2015-03-28T14:15:25.000Z</published>
+    <updated>2015-03-29T13:09:35.000Z</updated>
+    <content type="html"><![CDATA[<p>不知从什么时候开始，起床之后的第一件事就是打开知乎日报看瞎扯。常在河边走，哪有不湿鞋。就在这周三，我一起床就遭遇了强烈的精神攻击，整个人都不好了。</p>
+<p><img src="/blog/images/a-world-full-of-malice/zhihu.png" alt="知乎瞎扯"></p>
+<p>尼玛，这是什么鬼啊！我顿时感觉到了来自世界的满满恶意。然后我就想起了不久前在 B 站看过的一个一本正经胡说八道的视频。</p>
+<iframe class="player" src="https://secure.bilibili.com/secure,cid=3089960&amp;aid=1999408" scrolling="no" border="0" frameborder="no" framespacing="0" onload="window.securePlayerFrameLoaded=true"></iframe>
+
+<p>作为一个宅男 + 程序员 + 单身狗 + 处女座，我发现我身上集合了各种被黑的元素。黑码农的风潮已经过去，处女座刚被黑完没多久，现在是黑单身狗风头最盛的时候。</p>
+<p>不知道是不是真的，我反而比较享受现在的状态，能够全身心的投入去做自己喜欢的事情。</p>
+<p>虽然工作上有时候免不了撕逼（写个代码都要撕逼也是醉了），但是有些时候还是有点意思，用自己的能力让一个能工作却包含各种 ugly hack 的系统一点一点变得更好，不正是能让自诩为软件工程师的码农们感受到自身价值的事情之一么。</p>
+<p>作为一个宅男，除了写代码之外的娱乐活动就是去哔哩哔哩看看动漫，最近的几部动漫都挺不错的，《<a href="http://www.bilibili.com/sp/路人女主的养成方法" target="_blank" rel="external">路人女主的养成方法</a>》也刚刚完结。</p>
+<p><img src="/blog/images/a-world-full-of-malice/luren1.jpg" alt="毁灭吧现充"></p>
+<p>集腹黑、黑长直等萌属性于一身的诗羽学姐，有着教科书式的傲娇的英梨梨，还有存在感薄弱的吐槽役加藤惠，都是很萌很萌的女主角。</p>
+<p><img src="/blog/images/a-world-full-of-malice/luren2.jpg" alt="宅的全力"></p>
+<p>路人女主完结了，还是有许多不舍，无论如何，至少失去了每个周五看更新的喜悦。不知道下一次出现这么有趣的新番是什么时候了，未来总是充满了不确定性。</p>
+<p>不知道从什么时候起，我总是把我看过的觉得不错的动漫和电影下载下来存归档。我有一个 3T 的硬盘，除了用来作为时光机的备份，就是放我各种收集的美剧、电影和动漫。让一个自诩为互联网人士的码农对互联网服务不信任到这种地步，真是不敢想象。</p>
+<p>前段时间跟一个女同学聊天的时候说到我现在越来越忙，工作的事做完不算，自己还有好多事要做，光是写书写博客就已经把我的业余时间全部占用了，简直就是注孤生的节奏。</p>
+<p>不知道是真心还是社交辞令，这位同学跟我说，没时间不会注孤生，没本事才会注孤生。也算是让我得到一些安慰吧。</p>
+<p>前不久我才怂恿她买了一根号称“最好的触控笔”的 <a href="http://www.adonit.net/jot/script/" target="_blank" rel="external">Jot Script</a>，然后过了不久，我大四上学期购买的 KEYCOOL 青轴渐渐不能满足我各种姿势写代码的需求了，于是我就买了一个 Filco 的蓝牙键盘，从此我在公司可以后仰到椅子里写代码，在家可以用更加懒散的姿势。</p>
+<p>不知道是不是我的错觉，我感到 Filco 的键帽手感比 KEYCOOL 的好很多，打字的时候如丝般顺滑。</p>
+<p><img src="/blog/images/a-world-full-of-malice/keyboard.jpg" alt="新玩具"></p>
+<p>也许就像大部分人没法理解宅男花了许多钱买手办一样，我们这些追求极致编码体验的码农，在电脑和键盘上花了许多钱，外人也是很难理解的。哈哈，该被黑的时候还是被黑，该自嘲的时候就去自嘲，不足为外人道也。</p>
+<p>写了几个月的博客，现在写博文的速度也是越来越快了，真的是熟能生巧的缘故？</p>
+]]></content>
+    
+    
+      <category term="Sketch" scheme="http://www.jamespan.me/blog/tags/Sketch/"/>
+    
+      <category term="Life" scheme="http://www.jamespan.me/blog/categories/Life/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[大开脑洞用简书之SEO]]></title>
+    <link href="http://www.jamespan.me/blog/2015/03/25/play-seo-with-jianshu/"/>
+    <id>http://www.jamespan.me/blog/2015/03/25/play-seo-with-jianshu/</id>
+    <published>2015-03-24T20:41:48.000Z</published>
+    <updated>2015-03-24T15:15:30.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="背景">背景</h1>
+<p>前些日子，我每写完一篇新的博文之后，会找个良辰吉日，把链接投稿到<a href="http://news.dbanotes.net" target="_blank" rel="external">小道消息</a>和<a href="http://toutiao.io" target="_blank" rel="external">开发者头条</a>。</p>
+<p>就目前来说，虽然整体流量很低，但是从小道消息跳转到我的博客的流量是开发者头条的好几倍。</p>
+<p>昨天晚上我突然想到了一个方法，或许能够帮助提升博客文章在搜索引擎的排名。当然，我主要关注的搜索引擎还是 Google。百度是啥，能吃么？</p>
+<p><img src="/blog/images/play-seo-with-jianshu/twitter.png" alt="标题搜索"></p>
+<h1 id="简书">简书</h1>
+<p><a href="http://www.jianshu.com" target="_blank" rel="external">简书</a>是目前中文圈子一个比较流行的基于内容分享的社区，口号是”交流故事，沟通想法”。</p>
+<p>从简书的链接还是 <a href="http://jianshu.io" target="_blank" rel="external">jianshu.io</a> 的时候我就是简书的用户了，那时简书上面还没有多少人，口号还是“找回文字的力量”，我也还没开始认真写博客，反正就是看到一个不错的应用，然后上去注册个帐号写一篇文字试试的意思。</p>
+<p>后来渐渐的，简书的用户渐渐多了起来，开始出现各式各样的人，写各式各样的文。</p>
+<p>再后来，简书就成了现在的样子，一个活跃的社区，每天产生大量的原创文字。</p>
+<h1 id="脑洞">脑洞</h1>
+<p>一开始要我用简书，我是不愿意的。</p>
+<p>我有自己的独立博客，我可以在自己喜爱的文本编辑器上写字，然后敲几行命令就把写好的博客发布到 GitCafe 和 Github。</p>
+<p>我可以随心所欲定制博客的外观和使用体验，至少就我个人感觉而言，我的博客在阅读体验上不输于简书。</p>
+<p>直到后来，我脑洞一开，发现简书是可以为我所用的。</p>
+<p>我不需要把文章发布到简书，我的文章还是发表在我的独立博客，然后我可以模仿那些摘要输出的 RSS，把摘要信息以引用的形式发表在简书，然后在引用结束之后放一个指向博客原文的链接。</p>
+<p>简书的在 Google 的权重，不知道比我的博客高到哪里去！最让人膝盖中箭的是，直接无论是搜索关键字还是搜索标题，我发布在简书的摘要，都排在博客本尊的前面。</p>
+<p><img src="/blog/images/play-seo-with-jianshu/search-result2.png" alt="关键字搜索"></p>
+<p><img src="/blog/images/play-seo-with-jianshu/search-result1.png" alt="标题搜索"></p>
+<p>对我而言，似乎这是一种一箭双雕的做法，既能够在一个高质量的网站上面增加指向我的博客的链接，又实实在在的输出了内容。</p>
+<p>比较对不起的就是简书了，但愿简书不要被玩坏，同时能够为我的博客带来一批高质量的读者。</p>
+<h1 id="漫谈">漫谈</h1>
+<p>我发现这两个网站的链接排名算法有些意思。好几年前，我还在读大学的时候，拜读过阮一峰先生的《<a href="http://www.ruanyifeng.com/blog/2012/02/ranking_algorithm_hacker_news.html" target="_blank" rel="external">基于用户投票的排名算法</a>》系列文章，对这类排名算法也算是有一些粗浅的认知。</p>
+<p>从感觉上来说，小道消息的排名算法比起开发者头条更加科学一些，那些票数比较多的投稿，能够较长时间在首页占据一席之地；相比之下，开发者头条的投稿按天滚动，即使某篇文章当天得到了很多票，第二天一到，也得老老实实退居二线。</p>
+<p>目测开发者头条的链接排序算法的比较算子是先以天为单位比较时间，再以比较票数，最后比较达到当前票数的时间。</p>
+<p>最近小道消息的投稿区被 Memcet 刷屏了，整屏整屏都是来自这个网站的链接，影响很坏！曾经慧都控件网也在小道消息刷屏，后来直接黑名单了。</p>
+<p>开发者头条是我用过的华语开发者链接分享推荐社区中，仅次于小道消息的存在，投稿的文章会经过审核，质量上有一定的保证，值得关注。</p>
+]]></content>
+    
+    
+      <category term="Tool" scheme="http://www.jamespan.me/blog/tags/Tool/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Guava 是个风火轮之函数式编程(1)]]></title>
+    <link href="http://www.jamespan.me/blog/2015/03/22/guava-functional-programing-1/"/>
+    <id>http://www.jamespan.me/blog/2015/03/22/guava-functional-programing-1/</id>
+    <published>2015-03-22T00:10:21.000Z</published>
+    <updated>2015-03-21T16:16:13.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p><a href="http://en.wikipedia.org/wiki/Functional_programming" target="_blank" rel="external">函数式编程</a>是一种历久弥新的编程范式，比起<a href="http://en.wikipedia.org/wiki/Imperative_programming" target="_blank" rel="external">命令式编程</a>，它更加关注程序的执行结果而不是执行过程。Guava 做了一些很棒的工作，搭建了在 Java 中模拟函数式编程的基础设施，让我们不用多费手脚就能享受部分函数式编程带来的便利。</p>
+<p>Java 始终是一个面向对象（命令式）的语言，在我们使用函数式编程这种黑魔法之前，需要确认：同样的功能，使用函数式编程来实现，能否在<strong>健壮性</strong>和<strong>可维护性</strong>上，超过使用面向对象（命令式）编程的实现？</p>
+<h2 id="Function">Function</h2>
+<p>Function 接口是我们第一个介绍的 Guava 函数式编程基础设施。</p>
+<p>下面这段代码是去掉注释之后的 Function 接口。</p>
+<pre><code class="java">@GwtCompatible
+public interface Function&lt;F, T&gt; {
+  @Nullable T apply(@Nullable F input);
+  @Override
+  boolean equals(@Nullable Object object);
+}
+</code></pre>
+<p>实例化这个仿函数接口要求至少要实现 apply 方法。只有在需要判断两个函数是否等价的时候才覆盖实现 equals 方法。</p>
+<p>下面我们通过一个简单的函数定义的例子看看 Function 接口的用法。</p>
+<pre><code class="java">Function&lt;Double, Double&gt; sqrt = new Function&lt;Double, Double&gt;() {
+    public Double apply(Double input) {
+        return Math.sqrt(input);
+    }
+};
+sqrt.apply(4.0);//2.0
+</code></pre>
+<p>这里我们通过实例化一个匿名类的方式来完成了仿函数的定义、初始化和赋值。</p>
+<p>注意到仿函数始终不是一个函数，而是一个对象，我们只能调用这个对象的方法来模拟函数调用。</p>
+<p>这种 Function 接口的用法和函数式编程中将一个匿名函数赋值给变量的做法类似。当然，更加常见的函数定义方式是显式的声明一个函数然后实现它。</p>
+<pre><code class="java">class SqrtFunction implements Function&lt;Double, Double&gt; {
+    public Double apply(Double input) {
+        return Math.sqrt(input);
+    }
+}
+new SqrtFunction().apply(4.0);//2.0
+</code></pre>
+<p>从接口定义我们可以看出来，Function 接口模拟的函数只能接收一个参数，这不得不说是一个不小的限制。假如我们希望实现一个接收两甚至多个个参数的函数，我们就不得不做一些额外的工作来绕过这个限制。</p>
+<p>下面的例子我们实现一个仅接收两个参数的函数。</p>
+<pre><code class="java">Function&lt;SimpleEntry&lt;Double, Double&gt;, Double&gt; power
+        = new Function&lt;SimpleEntry&lt;Double, Double&gt;, Double&gt;() {
+    public Double apply(SimpleEntry&lt;Double, Double&gt; input) {
+        return Math.pow(input.getKey(), input.getValue());
+    }
+};
+power.apply(new SimpleEntry&lt;Double, Double&gt;(3.0, 2.0));//9.0
+</code></pre>
+<p>最后一个例子是实现一个接收可变参数的函数。由于变长参数实际上是 Java 编译器提供的语法糖，在编译期间会被解语法糖变成对象数组 Object[]，而且变长参数无法作为泛型参数，这里直接使用对象数组作为参数。</p>
+<pre><code class="java">Function&lt;Double[], Double&gt; sum = new Function&lt;Double[], Double&gt;() {
+    public Double apply(Double[] input) {
+        Double result = 0.0;
+        for (Double element : input) {
+            result += element;
+        }
+        return result;
+    }
+};
+sum.apply(new Double[]{3.0, 4.0, 5.1});//12.1
+</code></pre>
+<p>虽然从代码长度来看，使用 Function 接口来定义函数，需要写更多的代码。实际上，大部分的泛型声明和函数覆盖的代码都是由 IDE 自动生成的，手写的代码不过是 apply 的函数体而已。</p>
+<h2 id="Functions">Functions</h2>
+<p>Functions 是 Guava 中与 Function 接口配套使用的工具类，为处理实现了 Function 接口的仿函数提供方便。我们一起看看 Functions 是如何让 Function 接口如虎添翼的。</p>
+<p>Functions 是一个方法工厂，提供各种返回 Function 实例的方法。如果我们把 Function 视为函数，那么 Functions 的方法就是高阶函数，因为它能够将函数作为它的返回值。</p>
+<p><img src="/blog/images/guava-functional-programing/functions1.png" alt=""></p>
+<p>Functions#toStringFunction 返回这样一个函数 $f(x) = x.toString()$，以对象为入参，以对象的 toString 方法的返回值为返回值。</p>
+<p>Functions#identity 返回这样一个函数 $f(x) = x$，以对象为入参，返回对象本身。</p>
+<p>Functions#constant 返回一个常函数 $f(x) = a$，入参就是返回的函数的返回值。</p>
+<p>Functions#compose 返回一个复合函数 $h(x) = g(f(x))$，以两个函数为入参，返回这两个函数复合之后的函数。例如我们有函数 $f:X \to Y$ 和函数 $g: Y \to Z$，复合之后得到复合函数 $g \circ f:X \to Z$。</p>
+<p>想象一个数据处理程序，我们可以实现一个一个函数，让数据流从函数组成的阀门中间依次流过，最终得到想要的结果。我们可以使用复合函数方法将各个函数组合成流水线，当然也可以使用其他方法。</p>
+<p>接下来是 3 组以 for 开头的方法，将其他数据结构或者接口的实例转变成 Function 实例。</p>
+<p>Functions#forMap(java.util.Map<k,v>) 以一个映射 map 为入参，返回这样一个函数，$f(x) = map.get(x)$。</k,v></p>
+<p>Functions#forMap(java.util.Map<k,? extends="" v="">, V) 和上面的方法类似，区别在于这个方法的第二个参数是一个默认值，当映射中不包含入参键的时候，第一个方法返回的函数会抛出异常，而第二个方法返回的函数会返回默认值。</k,?></p>
+<p>Functions#forPredicate 以 Guava 的谓词实例为入参，返回一个 Function 实例。后续博文会介绍谓词接口 Predicate。</p>
+<p>Functions#forSupplier 以 Guava 的 Supplier 实例为入参，返回一个 Function 实例。后续博文会介绍惰性求值接口 Supplier。</p>
+<h3 id="源码分析">源码分析</h3>
+<p>下面这张图是 Functions 类的结构。</p>
+<p><img src="/blog/images/guava-functional-programing/functions2.png" alt=""></p>
+<p>可以看出，Functions 的 8 个公有方法都有对应的内部类作为功能支撑。这 8 个方法的实现大同小异，我们这里选取两个具有代表性的方法进行源码分析。</p>
+<p>首先是最简单的 Functions#identity。</p>
+<pre><code class="java">public static &lt;E&gt; Function&lt;E, E&gt; identity() {
+  return (Function&lt;E, E&gt;) IdentityFunction.INSTANCE;
+}
+
+// enum singleton pattern
+private enum IdentityFunction implements Function&lt;Object, Object&gt; {
+  INSTANCE;
+
+  @Override
+  @Nullable
+  public Object apply(@Nullable Object o) {
+    return o;
+  }
+  @Override public String toString() {
+    return &quot;identity&quot;;
+  }
+}
+</code></pre>
+<p>注意到 Functions#identity 其实是个常函数，它返回的函数 $f(x) = x$ 可以表示为一个常量或者单例，于是实现中使用了枚举在完成函数定义的同时顺便实现了单例。</p>
+<p>接下来是构造复合函数的高阶函数 Functions#compose。</p>
+<pre><code class="java">  /**
+   * Returns the composition of two functions. For {@code f: A-&gt;B} and {@code g: B-&gt;C}, composition
+   * is defined as the function h such that {@code h(a) == g(f(a))} for each {@code a}.
+   *
+   * @param g the second function to apply
+   * @param f the first function to apply
+   * @return the composition of {@code f} and {@code g}
+   * @see &lt;a href=&quot;//en.wikipedia.org/wiki/Function_composition&quot;&gt;function composition&lt;/a&gt;
+   */
+  public static &lt;A, B, C&gt; Function&lt;A, C&gt; compose(Function&lt;B, C&gt; g, Function&lt;A, ? extends B&gt; f) {
+    return new FunctionComposition&lt;A, B, C&gt;(g, f);
+  }
+</code></pre>
+<p>Javadoc 里面详细的描述了复合函数的复合方式，参数名的定义也符合数学上对复合函数的常见描述，让人一目了然。最后的 @see 还给出了 WikiPedia 的链接，颇有种旁征博引的感觉。</p>
+<pre><code class="java">private static class FunctionComposition&lt;A, B, C&gt; implements Function&lt;A, C&gt;, Serializable {
+  private final Function&lt;B, C&gt; g;
+  private final Function&lt;A, ? extends B&gt; f;
+
+  public FunctionComposition(Function&lt;B, C&gt; g, Function&lt;A, ? extends B&gt; f) {
+    this.g = checkNotNull(g);
+    this.f = checkNotNull(f);
+  }
+  @Override
+  public C apply(@Nullable A a) {
+    return g.apply(f.apply(a));
+  }
+  @Override public boolean equals(@Nullable Object obj) {
+    if (obj instanceof FunctionComposition) {
+      FunctionComposition&lt;?, ?, ?&gt; that = (FunctionComposition&lt;?, ?, ?&gt;) obj;
+      return f.equals(that.f) &amp;&amp; g.equals(that.g);
+    }
+    return false;
+  }
+  @Override public int hashCode() {
+    return f.hashCode() ^ g.hashCode();
+  }
+  @Override public String toString() {
+    return g + &quot;(&quot; + f + &quot;)&quot;;
+  }
+  private static final long serialVersionUID = 0;
+}
+</code></pre>
+<p>复合函数的支撑类的实现也比较直观，FunctionComposition 类内部持有需要复合的两个 Function 实例，然后在复合函数被调用的时候依次调用持有的两个函数。</p>
+<p>一个有趣的地方是关于泛型声明，复合的时候需要声明 3 个类型，函数 $f$ 的入参类型 A ，函数 $f$ 的返回值类型(函数 $g$ 的入参类型) B，函数 $g$ 的返回值类型 C。初始化 FunctionComposition 的时候，函数 $f$ 的返回值类型却是 B 或 B 的子类。为什么函数 $f$ 的返回值类型能够放宽到 B 的子类呢？</p>
+<p>原因就是“里氏替换原则”，派生类（子类）对象能够替换其基类（超类）对象被使用，所以函数 $f$ 的返回值类型如果是 B 的子类，也能够被函数 $g$ 正确处理。</p>
+]]></content>
+    
+    
+      <category term="Java" scheme="http://www.jamespan.me/blog/tags/Java/"/>
+    
+      <category term="Guava" scheme="http://www.jamespan.me/blog/tags/Guava/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[谈谈在独立博客发布招聘信息那些事]]></title>
+    <link href="http://www.jamespan.me/blog/2015/03/20/recruiting-on-blog/"/>
+    <id>http://www.jamespan.me/blog/2015/03/20/recruiting-on-blog/</id>
+    <published>2015-03-20T10:39:45.000Z</published>
+    <updated>2015-03-21T05:58:16.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="背景">背景</h1>
+<p>最近我在博客的侧栏挂上了招聘信息，一条关于社招，一条关于校招。</p>
+<p><img src="/blog/images/recruiting-on-blog/advertise.png" alt="招聘信息"></p>
+<p>刚把招聘信息挂到博客上的时候，为了让更多的人看到，我找了之前写的一篇博文，投稿到<a href="http://news.dbanotes.net" target="_blank" rel="external">小道消息</a>和<a href="http://toutiao.io" target="_blank" rel="external">开发者头条</a>，然后坐等访问量一点一点爬升。</p>
+<p>有些不好意思的是，我这个博客，其实没多少访问量。挂上招聘信息那几天，我接连把两篇博文投稿到那两个网站，访问量达到历史新高，最高日PV 1735。</p>
+<p>毕竟我的博客干货还不是很多，没有那么多的资料值得网友一次次访问；同时我也没有认真的去做 SEO，至少百度是完全搜索不到我的博客，我连站点地图都没有生成百度兼容的版本。</p>
+<p>于是几天下来我没有收到一封简历，一封都没有。之前我往 V2EX 发招聘贴的时候，收到的简历可是一封接一封的。</p>
+<p>我开始思考在博客发布招聘信息是不是一件靠谱的事情。</p>
+<h1 id="访客画像">访客画像</h1>
+<p>想想看，能访问到我的博客的网友，大概是什么样子？</p>
+<p>首先，他们和我一样，经常去小道消息看看有没有让人涨姿势的文章，或者去开发者头条看看当天有哪些新鲜事。</p>
+<p>能有闲情逸致去看这些东西的人，如果是上班族，那么应该是处于工作比较稳定的状态；如果是学生党，那么在技术上应该算是超出大部分同学几个段位的了。那些工作稳定的上班族没有理由跳槽去一个陌生的环境，那些学生中的技术大神们，想必也是不屑于内推的罢。</p>
+<p>由于我的博文在自由的知识共享协议下发布，很多 IT 类信息网站也有转载我的博文，当然通过这些网站看到我的博文的网友，就看不到那可怜的招聘信息了。</p>
+<h1 id="精准投放">精准投放</h1>
+<p>广告投放的一个常见词汇就是，精准投放。想用户之所想，急用户之所急，分析用户行为，猜测用户所需，然后雪中送广告。</p>
+<p>回头看看我的这个招聘信息，可是跟精准投放一点都不沾边呢。先不说访客基本没有求职意愿，就想想谁会在需要找工作的时候跑去刷博客？</p>
+<p>有的时候想想，在独立博客投放招聘信息，就像在微博投放淘宝广告似的，人家是来看博文的，又不是来找职位信息的，转化率自然惨淡无比。</p>
+<h1 id="个人博客">个人博客</h1>
+<p>我开始写博客是工作之后的事情，认真写博客那是 15 年初才开始的，标志性文章就是那篇半回忆半教程不伦不类的《<a href="/blog/2015/01/07/when-i-talk-about-mac/">对我而言，什么是 Mac</a>》。其后零零散散好几篇各式各样的文章，记录自己开脑洞写的轻应用的过程，还有一些工作中遇到的粗浅的技术问题。</p>
+<p>就像阮一峰先生的访谈《<a href="http://www.ituring.com.cn/article/111023" target="_blank" rel="external">为什么写博客？</a>》里的，我尽量的避免在自己的博客中谈论公司。</p>
+<blockquote>
+<p>我觉得一定要分清楚，哪些是自己建立起来的，哪些是公司带给你的。你之所以拥有后者，很可能仅仅是因为运气好，是公司的成功，而不是你的成功。所以，我不太会写到公司。</p>
+</blockquote>
+<p>我来杭州已经一年多了，如果算上实习的话，工作时间也有一年了，现在回头看看这篇访谈，感触真的很深。</p>
+<p>我从入职以来就跟着师兄做一个项目，一个注定解放许许多多生产力的项目。我们投入了许多，收获了许多技术进步，也因为各种原因的故障长了许多堑智。</p>
+<p>昨天我们作为获奖团队参加兄弟部门的年会，一个 Leader 的发言让我深思。作为一个技术人员，无论你的技术头衔是什么，突然有一天把你放到一个陌生的团队，没有人知道你是谁，没有人知道你是高 P 的专家还是低 P 的工程师，你该如何让团队的人知道你的能力，认可你的价值？</p>
+<p>借着公司的平台，个人能力可以得到快速的成长。相对的，很多人容易迷失在这个平台上，不知道什么东西是真正属于自己的，什么东西是公司借给你的。</p>
+<p>也许这也是我开始写博客的原因之一。我希望以后回头看看我这段与时间赛跑的日子，能有一些属于我的东西留下，有一些东西能证明我的能力，不需要我多费口舌就能让别人知道我是谁。</p>
+<p>招聘信息还是会保留一段时间，等有缘人。祝贺学姐通过实习生面试，最初投的研发，却被转到了测试。</p>
+<h1 id="最后">最后</h1>
+<p>最近我在读 <em><a href="https://book.douban.com/subject/25736606/" target="_blank" rel="external">Seven Concurrency Models in Seven Weeks</a></em>，如果时间允许的话，会在博客上分享一些收获。</p>
+]]></content>
+    
+    
+      <category term="Sketch" scheme="http://www.jamespan.me/blog/tags/Sketch/"/>
+    
+      <category term="Life" scheme="http://www.jamespan.me/blog/categories/Life/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[想要捐赠？想得美！]]></title>
+    <link href="http://www.jamespan.me/blog/2015/03/18/donate-nice-try/"/>
+    <id>http://www.jamespan.me/blog/2015/03/18/donate-nice-try/</id>
+    <published>2015-03-18T01:48:26.000Z</published>
+    <updated>2015-03-17T17:09:37.000Z</updated>
+    <content type="html"><![CDATA[<p>前些日子，我在浏览简书上的文字的时候，注意到了文章的最下方，有一个可以让读者点赞的地方。比如垠神新作<a href="http://www.jianshu.com/p/8f9a5be17499" target="_blank" rel="external">对的人</a>，短短几个小时，收获了 61 个喜欢。</p>
+<p><img src="/blog/images/donate-nice-try/jianshu.png" alt="王垠-对的人"></p>
+<p>简书是我觉得很赞的一个内容分享社区。从“找回文字的力量”，到“交流故事，沟通想法”，虽然格调日趋下降，但是也因为用户基数的增加，这个社区变得愈发的丰富多彩。</p>
+<p>我也曾经在简书写过一篇文章，关于我毕业时候的感想，对不堪回首的本科四年说再见，顺便吐槽所谓的“国之大学”。</p>
+<p>后来，为了维护码农博客的高冷，我买了域名搭建了独立博客。其实我是嫌弃简书把我的文章变成了 URL 中一串由散列算法生成的毫无意义的字符串。</p>
+<p>至于那些博客园、CSDN，我更是敬而远之，博客园上那个曾经被我用来发 ICPC 算法题解的博客，已经消失在了次元的彼岸。</p>
+<p>后来，我在微博文章的最后看到了一个大大的“赏”字。</p>
+<p><img src="/blog/images/donate-nice-try/weibo.png" alt="微博打赏"></p>
+<p>我开始思考，是否我也能在我的博客弄一个类似的点赞、打赏的东西，让我在写博客之余收获一些虚无的成就感？</p>
+<p>考虑到点赞的功能多说已经帮我做好了，我只需要弄一个打赏的功能。</p>
+<p>首先想到的是支付宝的付款链接。令人头疼的是，支付宝的付款链接功能已经下线，我只能另辟蹊径。</p>
+<p>最终做出来的效果是这样的。</p>
+<p><img src="/blog/images/donate-nice-try/donate.png" alt="捐赠"></p>
+<p>如果有读者点击了绿色按钮，会在新标签页中打开支付宝的转账页面。为了能够知道是我的哪篇文字让读者产生了鼓 (juān) 励 (zèng)我的冲动，我在备注里写上了文章标题。</p>
+<p><img src="/blog/images/donate-nice-try/transfer.png" alt="转账"></p>
+<p>这个捐赠按钮的实现很简单，就是向支付宝的转账页面 POST 一个表单而已。</p>
+<pre><code class="html">&lt;form accept-charset=&quot;GBK&quot; action=&quot;https://shenghuo.alipay.com/send/payment/fill.htm&quot; method=&quot;POST&quot; target=&quot;_blank&quot;&gt;
+  &lt;input name=&quot;optEmail&quot; type=&quot;hidden&quot; value=&quot;panjiabang@qq.com&quot;&gt;
+  &lt;input name=&quot;payAmount&quot; type=&quot;hidden&quot; value=&quot;10&quot;&gt;
+  &lt;input id=&quot;title&quot; name=&quot;title&quot; type=&quot;hidden&quot; value=&quot;来自博客读者的鼓励&quot;&gt;
+  &lt;input name=&quot;memo&quot; type=&quot;hidden&quot; value=&quot;你的文章《&lt;%- page.title %&gt;》写的不错嘛，小小鼓励一下，要继续加油哦~&quot;&gt;
+  &lt;input name=&quot;pay&quot; type = &quot;submit&quot; value=&quot;鼓 (juān) 励 (zèng)&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+<p>值得一提的是，为了弄这个捐赠表单，我还专门注册了个支付宝小号。假如我就这么大摇大摆的把常用支付宝帐号贴在页面上，谁知道会发生什么事情，哪怕是被无聊的人暴力登录到锁账户，也够你恶心一壶的了。</p>
+<p>其实我不是真的求爷爷告奶奶要来自读者的捐赠，这么十块八块的钱我也不缺，就是想看看我的博文到底价值几何。</p>
+<p>然后我想明白了，就凭现在的我，即使博文里写出花来，也是收不到捐赠的。</p>
+<p>正所谓“藏诸名山，传之其人”，倾注了心血和时间的作品，如此轻易的出卖，岂不可惜？</p>
+]]></content>
+    
+    
+      <category term="Sketch" scheme="http://www.jamespan.me/blog/tags/Sketch/"/>
+    
+      <category term="Life" scheme="http://www.jamespan.me/blog/categories/Life/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[用 Hypothes.is 为你喜欢的文字添加评论]]></title>
+    <link href="http://www.jamespan.me/blog/2015/03/16/annotate-the-web-with-hypothesis/"/>
+    <id>http://www.jamespan.me/blog/2015/03/16/annotate-the-web-with-hypothesis/</id>
+    <published>2015-03-16T02:59:20.000Z</published>
+    <updated>2015-03-29T13:09:03.000Z</updated>
+    <content type="html"><![CDATA[<p>2015 年 3 月 15 日深夜，我刚从公司回到宿舍。不是加班，是去蹭饭。整整花了一个周末，我才把书的提纲写出来发给编辑。</p>
+<p>坐在床边落寞的刷着人人，发现网友<a href="http://www.renren.com/480812352/" target="_blank" rel="external">@邵成=undefined</a>分享了一个链接，<a href="https://hypothes.is/。" target="_blank" rel="external">https://hypothes.is/。</a></p>
+<p>点进去一看，发现这个果然是一个高贵冷艳的第三方评论系统，可以对网页内容做圈点，对圈点的内容做点评，界面和功能一样的狂拽酷炫。</p>
+<p><img src="http://ww4.sinaimg.cn/large/e724cbefgw1eq6zbr8tnlj20yr0l4gpw.jpg" alt=""></p>
+<p>Hypothes.is 不同于一般的评论系统。我的博客已经使用了一个叫 “多说” 的第三方评论系统，多说虽然做的不错，但是没有跳出常见的评论系统的桎浩，只能在网页的最下方，正文之后做评论。Hypothes.is 的做法相当于给网页添加了一个图层，用户可以在这个图层上对网页做评论，这样子就把一个平面的网页给立体化起来了。</p>
+<p>下面这个是一个介绍的动画。</p>
+<div class="video-container"><br>    <iframe src="https://player.vimeo.com/video/71468316" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen></iframe> <p><a href="https://vimeo.com/71468316" target="_blank" rel="external">Hypothes.is Animated Intro</a> from <a href="https://vimeo.com/user7906166" target="_blank" rel="external">Hypothes.is</a> on <a href="https://vimeo.com" target="_blank" rel="external">Vimeo</a>.</p><br></div>
+
+<p>然后是创始人在传教。</p>
+<div class="video-container"><br>    <iframe src="https://player.vimeo.com/video/29633009" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen></iframe> <p><a href="https://vimeo.com/29633009" target="_blank" rel="external">Hypothes.is Intro</a> from <a href="https://vimeo.com/user7906166" target="_blank" rel="external">Hypothes.is</a> on <a href="https://vimeo.com" target="_blank" rel="external">Vimeo</a>.</p><br></div>
+
+<p>我们可以轻易地将 Hypothes.is 集成到网站中，只要将下面一段 js 引用添加到页面就好了。</p>
+<pre><code class="html">&lt;script async defer src=&quot;//hypothes.is/embed.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>Hypothes.is 的效果是显而易见的，网页的右边界出现了一个浮层，点击浮层可以展开评论框。</p>
+<p>如果你选中一段文字，文字末尾会弹出一个钢笔小图标，点击小图标就会进入 “引用并评论” 模式。</p>
+<p>Hypothes.is 的评论系统做的很不错，支持 Markdown，支持 $\LaTeX{}$ 公式标记，简直不能更赞！</p>
+<p>对于那些没有使用 Hypothes.is 的网站，我们也是可以添加评论的！Chrome 用户可以下载 Hypothes.is 的浏览器插件，其他浏览器的用户把下面这段代码添加为书签，打开想要评论的网页之后，点击一下书签执行其中的脚本，就可以尽情的评论了。</p>
+<pre><code class="js">javascript:(function(){window.hypothesisConfig=function(){return{showHighlights:true};};var%20d=document,s=d.createElement(&#39;script&#39;);s.setAttribute(&#39;src&#39;,&#39;https://hypothes.is/app/embed.js&#39;);d.body.appendChild(s)})();
+</code></pre>
+<p>需要注意的是，用 Hypothes.is “引用并评论” 的地方，会给那段被选中的文字加上 span 标签。对于设计良好的网站，这是没有问题的，要是碰上那些给 span 加了样式的网站，就有可能出现样式崩坏。</p>
+<p>最后，祝大家评 (tŭ) 论 (cáo)愉快~</p>
+]]></content>
+    
+    
+      <category term="JavaScript" scheme="http://www.jamespan.me/blog/tags/JavaScript/"/>
+    
+      <category term="Tool" scheme="http://www.jamespan.me/blog/tags/Tool/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Guava 是个风火轮之基础工具(4)]]></title>
+    <link href="http://www.jamespan.me/blog/2015/03/10/guava-basic-utilities-4/"/>
+    <id>http://www.jamespan.me/blog/2015/03/10/guava-basic-utilities-4/</id>
+    <published>2015-03-10T00:20:32.000Z</published>
+    <updated>2015-03-09T16:23:43.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p>Guava 是 Java 开发者的好朋友。虽然我在开发中使用 Guava 很长时间了，Guava API 的身影遍及我写的生产代码的每个角落，但是我用到的功能只是 Guava 的功能集中一个少的可怜的真子集，更别说我一直没有时间认真的去挖掘 Guava 的功能，没有时间去学习 Guava 的实现。直到最近，我开始阅读 <em><a href="http://book.douban.com/subject/25710862/" target="_blank" rel="external">Getting Started with Google Guava</a></em>，感觉有必要将我学习和使用 Guava 的一些东西记录下来。</p>
+<h1 id="Preconditions">Preconditions</h1>
+<p>Precondition 是先决条件的意思，也叫前置条件，可以人为是使函数正常执行的参数需要满足的条件。在 Preconditions 这个静态工厂中，Guava 为我们提供了一系列的静态方法，用于帮助我们在函数执行的开始检查参数，函数执行的过程中检查状态等等。</p>
+<pre><code class="java">Preconditions.checkArgument(5 &lt; 3);//IllegalArgumentException
+Preconditions.checkState(5 &lt; 3);//IllegalStateException
+Preconditions.checkNotNull(null);//NullPointerException
+Preconditions.checkElementIndex(4, 4);//IndexOutOfBoundsException
+Preconditions.checkPositionIndex(5, 4);//IndexOutOfBoundsException
+</code></pre>
+<h2 id="源码分析">源码分析</h2>
+<p>源码来自 Guava 18.0。Preconditions 类代码约 440 行，大部分是 JavaDoc 和函数重载，那些真正干活的代码大部分也是先 if 然后 throw 的模式。</p>
+<pre><code class="java">public static void checkArgument(boolean expression) {
+  if (!expression) {
+    throw new IllegalArgumentException();
+  }
+}
+</code></pre>
+<p>大约在 255 行处有<a href="https://github.com/google/guava/blob/v18.0/guava/src/com/google/common/base/Preconditions.java#L255-L279" target="_blank" rel="external">一大段的注释</a>，讲了一个有趣的事情。</p>
+<p>大概从 2009 年开始，由于 Hotspot 虚拟机优化器的一个 bug，对于抛异常的代码，直接在初始化异常时传入字符串常量反而导致效率低下，效率远远不如在初始化前调用一个类型是 String 的函数来获取字符串，而且这个性能差距不是 10% 或者 20%，而是可怕的 2 倍到 8 倍。于是我们看到的 JDK 类库的抛异常代码，就从</p>
+<pre><code class="java">if (guardExpression) {
+   throw new BadException(messageExpression);
+}
+</code></pre>
+<p>变成了下面这样。</p>
+<pre><code class="java">if (guardExpression) {
+   throw new BadException(badMsg(...));
+}
+</code></pre>
+<h1 id="Objects">Objects</h1>
+<p>我们在定义一个类的时候，免不了会去覆盖 toString 方法；如果要把这个类的对象放到 HashMap 中，还得去覆盖 hashCode 方法；如果对象之间需要比较大小，那么还得实现 Comparable 接口的 compareTo 方法。</p>
+<p>Guava 为我们提供了方便的实现这些方法的工具。虽然优秀的 IDE 比如 IntelliJ IDEA 能够自动帮我们生成 toString 和 hashCode，但是依赖代码生成器始终不是一个科学的开发方式。</p>
+<p>需要说明的一点是，Objects 类中用于帮助实现 toString 方法的内部类 ToStringHelper，已经被标记为过时，在 Guava 18.0 中迁移到 MoreObjects 中了，而用于帮助实现 compareTo 的则是 ComparisonChain 类，稍后会解读这个类的用法和代码。</p>
+<p>现在的 Objects 中硕果仅存的两个函数，分别是 Objects#equal 和 Objects#hashCode，分别用于判断两个对象是否相等，和生成对象的 hashCode。</p>
+<pre><code class="java">Objects.equal(new Object(), new Object());//false
+Objects.hashCode(&quot;&quot;, new Object());//340664367
+</code></pre>
+<h2 id="源码分析-1">源码分析</h2>
+<p>源码来自 Guava 18.0。Objects 类代码约 320 行，刨除过时代码之后，也没剩几行了。</p>
+<p>硕果仅存的两个函数，实现比想象中还简单。</p>
+<pre><code class="java">public static boolean equal(@Nullable Object a, @Nullable Object b) {
+  return a == b || (a != null &amp;&amp; a.equals(b));
+}
+
+public static int hashCode(@Nullable Object... objects) {
+  return Arrays.hashCode(objects);
+}
+</code></pre>
+<p>我好奇的跟到 Arrays#hashCode 里面看了看，发现这段计算 hashCode 的代码，和 String 类里面的算法几乎一样，31 据说是一个经验值，反正无论如何必须是个质数。</p>
+<pre><code class="java">public static int hashCode(Object a[]) {
+    if (a == null)
+        return 0;
+    int result = 1;
+    for (Object element : a)
+        result = 31 * result + (element == null ? 0 : element.hashCode());
+    return result;
+}
+</code></pre>
+<h1 id="MoreObjects">MoreObjects</h1>
+<p>MoreObjects 是从 18.0 版本开始出现的一个新类，从 Objects 中分裂出来的，主要剥离了内部类 ToStringHelper 以及一系列的包装函数。</p>
+<p>至于那个顺便一起迁移过来的 MoreObjects#firstNonNull 函数，功能和实现都过分简单，这里就不展开了，有兴趣的可以查看<a href="https://github.com/google/guava/blob/v18.0/guava/src/com/google/common/base/MoreObjects.java#L51-L53" target="_blank" rel="external">源码</a>。</p>
+<p>下面是 ToStringHelper 的简单用法，通过调用 ToStringHelper#omitNullValues 来配置 ToStringHelper 使得生成的字符串中不含 null 值。</p>
+<pre><code class="java">public class Player {
+    private String name = &quot;Underwood&quot;;
+    private String sex;
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).omitNullValues()
+                .add(&quot;name&quot;, name)
+                .add(&quot;sex&quot;, sex)
+                .toString();//Player{name=Underwood}
+    }
+}
+</code></pre>
+<h2 id="源码分析-2">源码分析</h2>
+<p>源码来自 Guava 18.0。MoreObjects 类代码约 390 行，甚至比 Objects 还要多。其中 ToStringHelper 代码约 240 行，这里我们主要看看 ToStringHelper 的实现。</p>
+<p>从 ToStringHelper 的属性可以看出，它内部维护着一个链表。</p>
+<pre><code class="java">public static final class ToStringHelper {
+  private final String className;
+  private ValueHolder holderHead = new ValueHolder();
+  private ValueHolder holderTail = holderHead;
+  private boolean omitNullValues = false;
+  //some codes
+  private static final class ValueHolder {
+    String name;
+    Object value;
+    ValueHolder next;
+  }
+}
+</code></pre>
+<p>为了保持插入结点后链表结点顺序和代码调用的顺序一致，ToStringHelper 还额外维护了一个尾指针，在链表尾插入新结点。</p>
+<pre><code class="java">private ValueHolder addHolder() {
+  ValueHolder valueHolder = new ValueHolder();
+  holderTail = holderTail.next = valueHolder;
+  return valueHolder;
+}
+private ToStringHelper addHolder(String name, @Nullable Object value) {
+  ValueHolder valueHolder = addHolder();
+  valueHolder.value = value;
+  valueHolder.name = checkNotNull(name);
+  return this;
+}
+</code></pre>
+<p>最后的最后，ToStringHelper#toString 就是遍历对象内部维护的链表，拼接字符串了。说道字符串拼接，之前在<a href="/blog/2015/02/08/guava-basic-utilities-1/#追加拼接结果">Guava 是个风火轮之基础工具(1)</a>中，我们看到 Joiner 使用 if 和 while 来实现了比较优雅的分隔符拼接，避免了在末尾插入分隔符的尴尬。在这里，Guava 的作者展示了另一个技巧，用更少的代码实现同样的效果。</p>
+<pre><code class="java">@Override public String toString() {
+  // create a copy to keep it consistent in case value changes
+  boolean omitNullValuesSnapshot = omitNullValues;
+  String nextSeparator = &quot;&quot;;
+  StringBuilder builder = new StringBuilder(32).append(className)
+      .append(&#39;{&#39;);
+  for (ValueHolder valueHolder = holderHead.next; valueHolder != null;
+      valueHolder = valueHolder.next) {
+    if (!omitNullValuesSnapshot || valueHolder.value != null) {
+      builder.append(nextSeparator);
+      nextSeparator = &quot;, &quot;;
+      if (valueHolder.name != null) {
+        builder.append(valueHolder.name).append(&#39;=&#39;);
+      }
+      builder.append(valueHolder.value);
+    }
+  }
+  return builder.append(&#39;}&#39;).toString();
+}
+</code></pre>
+<p>一开始的时候，先把分隔符置为空字符串，完成分隔符拼接之后，将分隔符置为逗号，这样就实现了从第二个元素开始，每个元素前面拼接分隔符的效果。这样子就不用去判断当前元素是不是第一个元素，代价仅仅是每次循环多出一次冗余的赋值，完全可以忽略不计。</p>
+<h1 id="ComparisonChain">ComparisonChain</h1>
+<p>ComparisonChain 可以帮助我们优雅地实现具有短回路功能链式比较，然后我们可以借助 ComparisonChain 来实现 compareTo 方法。先看看这个类的用法。</p>
+<pre><code class="java">public class Player implements Comparable&lt;Player&gt; {
+    private String name = &quot;Underwood&quot;;
+    private String sex;
+    public int compareTo(Player that) {
+        return ComparisonChain.start()
+                .compare(this.name, that.name)
+                .compare(this.sex, that.sex)
+                .result();
+    }
+}
+</code></pre>
+<p>美中不足的是，比较链的参数，基本不能有空指针，不然当场就 NPE 了。虽然我们可以通过自定义比较器去兼容空指针，但是这样一来代码就变得一点都不优雅了。</p>
+<h2 id="源码分析-3">源码分析</h2>
+<p>带着对 ComparisonChain 空指针处理不力的不满，我们来看看它的实现，如果可能就动手实现我们需要的特性。</p>
+<p>源码来自 Guava 18.0。ComparisonChain 类代码约 220 行，大部分是注释和 ComparisonChain#compare 函数的各种重载。看到 ComparisonChain 是一个抽象类，各种 ComparisonChain#compare 都是虚函数，返回结果的 ComparisonChain#result 也是虚函数，我以为有希望继承它然后做些改造。不过看到代码里那个私有的构造函数之后，我打消了继承它的念头。</p>
+<p>ComparisonChain 内部维护着 3 个 ComparisonChain 类型的变量，ACTIVE、LESS、GREATER，容易知道这代表着链式比较的状态，ACTIVE 还需要继续比较，其他两个则是已经知道最终结果了。</p>
+<p>LESS 和 GREATER 状态其实是 InactiveComparisonChain 类的对象，这个类内部有一个属性维护比较链的结果，然后各种 compare 函数都是直接返回 this 指针，着就是所谓的短回路了，能够避免调用被比较对象的 compareTo 函数。</p>
+<pre><code class="java">private static final class InactiveComparisonChain extends ComparisonChain {
+  final int result;
+  InactiveComparisonChain(int result) { this.result = result; }
+  @Override public ComparisonChain compare(int left, int right) { return this; }
+  //other compare functions
+  @Override public int result() { return result; }
+}
+</code></pre>
+<p>最后，我对 ComparisonChain 稍作改动，增强了它对空指针的容忍，可以通过 ComparisonChain#nullValueLess 来设置 null 字段在比较的时候小于非 null 字段，访问 <a href="https://gist.github.com/JamesPan/f2d5b6dfd5fc71bef644" target="_blank" rel="external">Gist</a> 查看代码片段。</p>
+<!-- <script src="https://gist.github.com/JamesPan/f2d5b6dfd5fc71bef644.js"></script> -->
+
+]]></content>
+    
+    
+      <category term="Java" scheme="http://www.jamespan.me/blog/tags/Java/"/>
+    
+      <category term="Guava" scheme="http://www.jamespan.me/blog/tags/Guava/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Guava 是个风火轮之基础工具(3)]]></title>
+    <link href="http://www.jamespan.me/blog/2015/03/01/guava-basic-utilities-3/"/>
+    <id>http://www.jamespan.me/blog/2015/03/01/guava-basic-utilities-3/</id>
+    <published>2015-03-01T00:23:14.000Z</published>
+    <updated>2015-02-28T16:30:37.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p>Guava 是 Java 开发者的好朋友。虽然我在开发中使用 Guava 很长时间了，Guava API 的身影遍及我写的生产代码的每个角落，但是我用到的功能只是 Guava 的功能集中一个少的可怜的真子集，更别说我一直没有时间认真的去挖掘 Guava 的功能，没有时间去学习 Guava 的实现。直到最近，我开始阅读 <em><a href="http://book.douban.com/subject/25710862/" target="_blank" rel="external">Getting Started with Google Guava</a></em>，感觉有必要将我学习和使用 Guava 的一些东西记录下来。</p>
+<h1 id="Charsets">Charsets</h1>
+<p>Charsets 是一个常量工厂，给出了 6 个Java 承诺了全平台支持的字符集，类似的静态工厂在 Apache 的类库中也有提供。如果没有静态变量，我们要么使用 Charset#forName 方法，传入一个字符串来获取指定的字符集，要么自己定义一个类似的工厂类。</p>
+<p>使用 Charset#forName 的问题就在于用户需要关注入参字符串的拼写，一旦拼写错误就会出现意料之外的事情。</p>
+<p>到了 Java 7 中，JDK 提供了一个官方的静态工厂类 java.nio.charset.StandardCharsets，Guava 也推荐使用 Java 7 及以上的用户使用 StandardCharsets。</p>
+<h1 id="Strings">Strings</h1>
+<p>在 Guava 中，以名词的复数形式命名的类，基本上都是静态工厂。Strings 就是这么一个用来操作字符串的方法工厂。</p>
+<p>Strings 提供了空指针、空字符串的判断和互换方法。</p>
+<pre><code class="java">Strings.isNullOrEmpty(&quot;&quot;);//true
+Strings.nullToEmpty(null);//&quot;&quot;
+Strings.nullToEmpty(&quot;a&quot;);//&quot;a&quot;
+Strings.emptyToNull(&quot;&quot;);//null
+Strings.emptyToNull(&quot;a&quot;);//&quot;a&quot;
+</code></pre>
+<p>对于防御式编程，可以在拿到字符串入参之后，调用一下 Strings#nullToEmpty 将可能的空指针变成空字符串，然后也就不用担心字符串引发的 NPE，或者字符串拼接时候出现的 “null” 了。</p>
+<p>Strings 还提供了常见的字符串前后拼接同一个字符直到达到某个长度，或者重复拼接自身 n 次。</p>
+<pre><code class="java">Strings.padStart(&quot;7&quot;, 3, &#39;0&#39;);//&quot;007&quot;
+Strings.padStart(&quot;2010&quot;, 3, &#39;0&#39;);//&quot;2010&quot;
+Strings.padEnd(&quot;4.&quot;, 5, &#39;0&#39;);//&quot;4.000&quot;
+Strings.padEnd(&quot;2010&quot;, 3, &#39;!&#39;);//&quot;2010&quot;
+Strings.repeat(&quot;hey&quot;, 3);//&quot;heyheyhey&quot;
+</code></pre>
+<p>Strings 的最后一组功能是查找两个字符串的公共前缀、后缀。</p>
+<pre><code class="java">Strings.commonPrefix(&quot;aaab&quot;, &quot;aac&quot;);//&quot;aa&quot;
+Strings.commonSuffix(&quot;aaac&quot;, &quot;aac&quot;);//&quot;aac&quot;
+</code></pre>
+<h2 id="源码分析">源码分析</h2>
+<p>源码来自 Guava 18.0。Strings 类的源码大约 240 行，大部分的函数实现中规中矩，值得关注的是 Strings#repeat。代码注释赫然写着，如果你修改了这里的代码，必须同步更新 Benchmark！看来这段代码是经过极致优化了的，让我不禁想起当年楼教主比赛时“我去上个厕所，不要动键盘”的霸气。</p>
+<pre><code class="java">public static String repeat(String string, int count) {
+  checkNotNull(string);  // eager for GWT.
+  if (count &lt;= 1) {
+    checkArgument(count &gt;= 0, &quot;invalid count: %s&quot;, count);
+    return (count == 0) ? &quot;&quot; : string;
+  }
+  // IF YOU MODIFY THE CODE HERE, you must update StringsRepeatBenchmark
+  final int len = string.length();
+  final long longSize = (long) len * (long) count;
+  final int size = (int) longSize;
+  if (size != longSize) {
+    throw new ArrayIndexOutOfBoundsException(&quot;Required array size too large: &quot; + longSize);
+  }
+  final char[] array = new char[size];
+  string.getChars(0, len, array, 0);
+  int n;
+  for (n = len; n &lt; size - n; n &lt;&lt;= 1) {
+    System.arraycopy(array, 0, array, n, n);
+  }
+  System.arraycopy(array, 0, array, n, size - n);
+  return new String(array);
+}
+</code></pre>
+<p>真正的代码从霸气注释开始。开头的 3 行代码，int 升级 long 然后降级 int，是为了确保字符串 repeat 之后没有超过 String 的长度限制，而先强制提升然后截断的方法，能够高效的判断溢出，这种手法在 C 语言中也是常见的。由于这里是判断 int 溢出，可以升级到 long，如果判断 long 溢出，就只能用除法了。</p>
+<p>然后这里没有用 StringBuilder，而是出于性能考虑用了 char[]，直接申请目标大小的数组。循环复制字符串的时候，复制源的长度指数增长，以最快的速度结束循环。System#arraycopy 是个 native 方法，也就是用 C 来实现的，性能上似乎更值得信赖一点。</p>
+<p>另外一段让我涨姿势的代码是查找相同前缀的。</p>
+<pre><code class="java">public static String commonPrefix(CharSequence a, CharSequence b) {
+  checkNotNull(a);
+  checkNotNull(b);
+  int maxPrefixLength = Math.min(a.length(), b.length());
+  int p = 0;
+  while (p &lt; maxPrefixLength &amp;&amp; a.charAt(p) == b.charAt(p)) {
+    p++;
+  }
+  if (validSurrogatePairAt(a, p - 1) || validSurrogatePairAt(b, p - 1)) {
+    p--;
+  }
+  return a.subSequence(0, p).toString();
+}
+
+static boolean validSurrogatePairAt(CharSequence string, int index) {
+  return index &gt;= 0 &amp;&amp; index &lt;= (string.length() - 2)
+      &amp;&amp; Character.isHighSurrogate(string.charAt(index))
+      &amp;&amp; Character.isLowSurrogate(string.charAt(index + 1));
+}
+</code></pre>
+<p>整个函数本来很简单的，但是 while 后面还跟着一个莫名其妙的 if，这是什么东西！函数名里面居然出现了我不认识的单词，英语水平暴露了！</p>
+<p>一番 Google 之后发现，这里其实是判断最后两个字符是不是合法的“<a href="http://www.oracle.com/technetwork/articles/javase/index-142761.html" target="_blank" rel="external">Java 平台增补字符</a>”。看起来这些增补字符占了 2 个字节，然后要用判断高位低位之类的。。仔细看了函数的头注释，里面也提到 taking care not to split surrogate pairs，然后就明了了。</p>
+<h1 id="CharMacher">CharMacher</h1>
+<p>一提起字符串操作，我们都会想起一个神奇的符号，StringUtil。不仅仅 Apache Common 有一个 StringUtil，Spring 也有一个类似的 StringUtils，然后各个公司、各个项目也会造个轮子，或者重写，或者继承来实现自己的一些特殊的字符串操作。</p>
+<blockquote>
+<p>随着 StringUtil 无节制的发展，StringUtil 里面充斥着 allAscii, collapse, collapseControlChars, collapseWhitespace, indexOfChars, lastIndexNotOf, numSharedChars, removeChars, removeCrLf, replaceChars, retainAllChars, strip, stripAndCollapse, stripNonDigits 等等函数。这些函数本质上是两个概念的点积：</p>
+<ol>
+<li>如何界定匹配的字符？</li>
+<li>要对匹配的字符做什么？</li>
+</ol>
+</blockquote>
+<p>为了解决这种野蛮增长，Guava 带来了 CharMacher。一个 CharMacher 实例本身，界定了一个匹配字符的集合，而 CharMacher 实例的方法，解决了要对匹配字符做什么的问题。然后我们就可以用最小化的 API 来处理字符匹配和字符操作，把 $M \times N$ 的复杂度下降到了 $M + N$。</p>
+<p>CharMacher 自带常量工厂，域定义了一系列常用的字符集合，比如 CharMatcher#ASCII 匹配 ASCII 码，CharMatcher#DIGIT 匹配 Unicode 的数字 0~9，还有其他常量如 JAVA_DIGIT、JAVA_LETTER 等。</p>
+<p>CharMacher 提供了一系列的静态方法用于构造自定义的字符集合。</p>
+<p>CharMatcher#is 得到界定单个匹配字符的实例，CharMatcher#isNot 正好与前者逻辑反。CharMatcher#anyOf 生成存在量词，CharMatcher#noneOf 生成否定全称量词。CharMatcher#inRange 范围量词，闭区间。</p>
+<p>本质上 CharMacher 继承自 Predicate，是专门字符对象的断言，因此 Predicate 享有的与或非等等操作，CharMacher 也有。我们可以用 CharMatcher#and、CharMatcher#or、CharMatcher#negate 来完成 CharMacher 的与或非，对于匹配字符集合来说就是交并补。</p>
+<p>如果上述两种构造 CharMacher 的手段还是太弱没法描述我们想要的匹配器，没关系，我们还有大招：初始化一个重载了 CharMatcher#matches 方法的匿名类实例，或者显式继承 CharMacher 然后实现 matches 方法。</p>
+<p>接下来我们看看 CharMacher 有哪些实例方法可用。根据函数的返回值和名称我们能够轻易将这些方法分为 3 类。</p>
+<p>第一类是判定型函数，判断 CharMacher 和入参字符串的匹配关系。</p>
+<pre><code class="java">CharMatcher.is(&#39;a&#39;).matchesAllOf(&quot;aaa&quot;);//true
+CharMatcher.is(&#39;a&#39;).matchesAnyOf(&quot;aba&quot;);//true
+CharMatcher.is(&#39;a&#39;).matchesNoneOf(&quot;aba&quot;);//true
+</code></pre>
+<p>第二类是计数型函数，查找入参字符串中第一次、最后一次出现目标字符的位置，或者目标字符出现的次数，比如 CharMatcher#indexIn，CharMatcher#lastIndexIn 和 CharMatcher#countIn。</p>
+<p>第三类就是对匹配字符的操作。我们能对字符串中的匹配字符做什么操作呢？基本上就是移除、仅保留、替换、前后修剪、collapse（不知道怎么翻译比较恰当） 等等，我们可以轻易地使用 CharMatcher#removeFrom、CharMatcher#retainFrom、CharMatcher#replaceFrom、CharMatcher#trimFrom、CharMatcher#collapseFrom 等等一系列正交的方法来实现。</p>
+<h2 id="源码分析-1">源码分析</h2>
+<p>源码来自 Guava 18.0。CharMatcher 类源码约 1400 行，大致上分为常量、内部类、静态工厂、非静态工厂以及文本处理例程。</p>
+<p>CharMatcher 整个类都被打上了 @Beta 注解，还有一句注释，Possibly change from chars to code points; decide constants vs. methods，看得我云里雾里的。不管怎么说，CharMatcher 自从 Guava 1.0 就一直存在了，虽然有着 Beta 注解，个人感觉被移除或者过时的可能性很小。</p>
+<h3 id="继承与组合">继承与组合</h3>
+<p>前不久我在一篇博文中看到这样一种说法（具体出处找不到了），那些可以直接实例化的类，应该被声明为 final，这样可以强制其他开发者使用组合而不是继承来复用代码。那些可以被继承的类，应该是抽象类，要么在实例化的时候补全虚函数的实现，要么通过继承实现虚函数。</p>
+<p>对照 Guava 的代码，还真有点类似的意思。那些工厂类，基本上都被声明为了 final，而 CharMatcher 则是一个抽象类，在实例化的时候覆盖实现各种虚函数，也被各种内部类、外部类继承。</p>
+<p>CharMatcher 中有 3 个私有静态类，CharMatcher\$And、CharMatcher\$Or、CharMatcher\$NegatedMatcher，用于描述 CharMatcher 的与或非关系。这 3 个类与 CharMatcher 之间既是继承，又是聚合。突然感觉 UML 好难画。</p>
+<p>其他 4 个静态类，则是为了实现某种匹配模式，而对 CharMatcher 作出了特化处理，比如 RangesMatcher 专门匹配一段连续的字符范围，FastMatcher 专门匹配那些无法通过预处理获得性能提升的字符（们）。</p>
+<h3 id="代码即文档">代码即文档</h3>
+<p>我在写代码的时候总是把“自注释”、“代码即文档”等等挂在嘴边，但是真正能做到的代码却不多。有的时候把自己的代码拿出来，一眼看去尽是 IDE 自动生成的毫无意义的变量名，真是惭愧。</p>
+<p>下面这段代码的参数命名比较有趣，值得借鉴。</p>
+<pre><code class="java">public static CharMatcher inRange(final char startInclusive, final char endInclusive) {
+  checkArgument(endInclusive &gt;= startInclusive);
+  String description = &quot;CharMatcher.inRange(&#39;&quot; +
+      showCharacter(startInclusive) + &quot;&#39;, &#39;&quot; +
+      showCharacter(endInclusive) + &quot;&#39;)&quot;;
+  return inRange(startInclusive, endInclusive, description);
+}
+</code></pre>
+<p>不需要任何文档，我们从函数名和参数名就能够看出，这段代码返回的 CharMatcher 匹配的是一个闭区间内的字符。如果换了别人来实现，能用 start 和 end 做参数名的已经算是很不错了，大部分估计用 c1、c2 敷衍了事，更不用说加上起到关键作用的 Inclusive 了。</p>
+<p>总体而言，CharMatcher 的代码虽然长，却没有特别深奥或者精彩的片段，less is more。</p>
+]]></content>
+    
+    
+      <category term="Java" scheme="http://www.jamespan.me/blog/tags/Java/"/>
+    
+      <category term="Guava" scheme="http://www.jamespan.me/blog/tags/Guava/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Guava 是个风火轮之基础工具(2)]]></title>
+    <link href="http://www.jamespan.me/blog/2015/02/09/guava-basic-utilities-2/"/>
+    <id>http://www.jamespan.me/blog/2015/02/09/guava-basic-utilities-2/</id>
+    <published>2015-02-08T23:43:38.000Z</published>
+    <updated>2015-02-28T16:42:03.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p>Guava 是 Java 开发者的好朋友。虽然我在开发中使用 Guava 很长时间了，Guava API 的身影遍及我写的生产代码的每个角落，但是我用到的功能只是 Guava 的功能集中一个少的可怜的真子集，更别说我一直没有时间认真的去挖掘 Guava 的功能，没有时间去学习 Guava 的实现。直到最近，我开始阅读 <em><a href="http://book.douban.com/subject/25710862/" target="_blank" rel="external">Getting Started with Google Guava</a></em>，感觉有必要将我学习和使用 Guava 的一些东西记录下来。</p>
+<h1 id="Splitter">Splitter</h1>
+<p>Guava 提供了 Joiner 类用于将多个对象拼接成字符串，如果我们需要一个反向的操作，就要用到 Splitter 类。Splitter 能够将一个字符串按照指定的分隔符拆分成可迭代遍历的字符串集合，<code>Iterable&lt;String&gt;</code>。</p>
+<p>Splitter 的 API 和 Joiner 类似，使用 Splitter#on 指定分隔符，使用 Splitter#split 完成拆分。</p>
+<pre><code class="java">Splitter.on(&#39; &#39;).split(&quot;1 2 3&quot;);//[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]
+</code></pre>
+<p>Splitter 还支持使用正则表达式来描述分隔符。</p>
+<pre><code class="java">Splitter.onPattern(&quot;\\s+&quot;).split(&quot;1 \t   2 3&quot;);//[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]
+</code></pre>
+<p>Splitter 还支持根据长度来拆分字符串。</p>
+<pre><code class="java">Splitter.fixedLength(3).split(&quot;1 2 3&quot;);//[&quot;1 2&quot;, &quot; 3&quot;]
+</code></pre>
+<h2 id="Splitter-MapSplitter">Splitter.MapSplitter</h2>
+<p>与 Joiner.MapJoiner 相对，Splitter.MapSplitter 用来拆分被拼接了的 Map 对象，返回 <code>Map&lt;String, String&gt;</code>。</p>
+<pre><code class="java">Splitter.on(&quot;#&quot;).withKeyValueSeparator(&quot;:&quot;).split(&quot;1:2#3:4&quot;);//{&quot;1&quot;:&quot;2&quot;, &quot;3&quot;:&quot;4&quot;}
+</code></pre>
+<p>需要注意的是，不是所有由 MapJoiner 拼接出来的字符串，都能够被 MapSplitter 拆分，MapSplitter 对键值对个格式有着严格的校验。比如下面的拆分会抛出异常。</p>
+<pre><code class="java">Splitter.on(&quot;#&quot;).withKeyValueSeparator(&quot;:&quot;).split(&quot;1:2#3:4:5&quot;);
+//java.lang.IllegalArgumentException: Chunk [3:4:5] is not a valid entry
+</code></pre>
+<p>因此，如果希望使用 MapSplitter 来拆分 KV 结构的字符串，需要保证键-值分隔符和键值对之间的分隔符不会称为键或值的一部分。也许是出于类似方面的考虑，MapSplitter 被加上了 @Beta 注解，也许在不久的将来它会被移除，或者有大的变化。如果在应用中有可能用到 KV 结构的字符串，我一般推荐使用 JSON 而不是 MapJoiner + MapSplitter。</p>
+<h2 id="源码分析">源码分析</h2>
+<p>源码来自 Guava 18.0。Splitter 类源码约 600 行，依旧大部分是注释和函数重载。Splitter 的实现中有十分明显的策略模式和模板模式，有各种神乎其技的方法覆盖，还有 Guava 久负盛名的迭代技巧和惰性计算。</p>
+<p>不得不说，平时翻阅一些基础类库，总是感觉 “这种代码我也能写”，“这代码写的还没我好”，“在工具类中强依赖日志组件，人干事？”，如果 IDE 配上弹幕恐怕全是吐槽，难有让人精神为之一振的代码。阅读 Guava 的代码，每次都有新的惊喜，各种神技巧黑科技让我五体投地，写代码的脑洞半径屡次被 Guava 撑大。 </p>
+<h3 id="成员变量">成员变量</h3>
+<p>Splitter 类有 4 个成员变量，strategy 用于帮助实现策略模式，omitEmptyStrings 用于控制是否删除拆分结果中的空字符串，通过 Splitter#omitEmptyStrings 设置，trimmer 用于描述删除拆分结果的前后空白符的策略，通过 Splitter#trimResults 设置，limit 用于控制拆分的结果个数，通过 Splitter#limit 设置。</p>
+<h3 id="策略模式">策略模式</h3>
+<p>Splitter 支持根据字符、字符串、正则、长度还有 Guava 自己的字符匹配器 CharMatcher 来拆分字符串，基本上每种匹配模式的查找方法都不太一样，但是字符拆分的基本框架又是不变的，策略模式正好合用。</p>
+<p>策略接口的定义很简单，就是传入一个 Splitter 和一个待拆分的字符串，返回一个迭代器。</p>
+<pre><code class="java">private interface Strategy {
+  Iterator&lt;String&gt; iterator(Splitter splitter, CharSequence toSplit);
+}
+</code></pre>
+<p>然后在重载入参为 CharMatcher 的 Splitter#on 的时候，传入一个覆盖了 Strategy#iterator 方法的策略实例，返回值是 SplittingIterator 这个专用的迭代器。然后 SplittingIterator 是个抽象类，需要覆盖实现 separatorStart 和 separatorEnd 两个方法才能实例化。这两个方法是 SplittingIterator 用到的模板模式的重要组成。</p>
+<pre><code class="java">public static Splitter on(final CharMatcher separatorMatcher) {
+  checkNotNull(separatorMatcher);
+  return new Splitter(new Strategy() {
+    @Override public SplittingIterator iterator(Splitter splitter, final CharSequence toSplit) {
+      return new SplittingIterator(splitter, toSplit) {
+        @Override int separatorStart(int start) {
+          return separatorMatcher.indexIn(toSplit, start);
+        }
+        @Override int separatorEnd(int separatorPosition) {
+          return separatorPosition + 1;
+        }
+      };
+    }
+  });
+}
+</code></pre>
+<p>阅读源码的过程在，一个神奇的 continue 的用法让我震惊了，赶紧 Google 一番之后发现这种用法一直都有，只是我不知道而已。这段代码出自 Splitter#on 的字符串重载。</p>
+<pre><code class="java">return new SplittingIterator(splitter, toSplit) {
+  @Override public int separatorStart(int start) {
+    int separatorLength = separator.length();
+    positions:
+    for (int p = start, last = toSplit.length() - separatorLength; p &lt;= last; p++) {
+      for (int i = 0; i &lt; separatorLength; i++) {
+        if (toSplit.charAt(i + p) != separator.charAt(i)) {
+          continue positions;
+        }
+      }
+      return p;
+    }
+    return -1;
+  }
+  @Override public int separatorEnd(int separatorPosition) {
+    return separatorPosition + separator.length();
+  }
+};
+</code></pre>
+<p>这里的 continue 可以直接跳出内循环，然后继续执行与 positions 标签平级的循环。如果是 break，就会直接跳出 positions 标签平级的循环。以前用 C 的时候在跳出多重循环的时候都是用 goto 的，没想到 Java 也提供了类似的功能。</p>
+<p>这段 for 循环如果我来实现，估计会写成这样，虽然功能差不多，大家的内循环都不紧凑，但是明显没有 Guava 的实现那么高贵冷艳，而且我的代码的计算量要大一些。</p>
+<pre><code class="java">for (int p = start, last = toSplit.length() - separatorLength; p &lt;= last; p++) {
+  boolean match = true;
+  for (int i = 0; i &lt; separatorLength; i++) {
+    match &amp;= (toSplit.charAt(i + p) == separator.charAt(i))
+  }
+  if (match) {
+    return p;
+  }
+}
+</code></pre>
+<h3 id="惰性迭代器与模板模式">惰性迭代器与模板模式</h3>
+<p>惰性求值是函数式编程中的常见概念，它的目的是要最小化计算机要做的工作，即把计算推迟到不得不算的时候进行。Java 虽然没有原生支持惰性计算，但是我们依然可以通过一些手段享受惰性计算的好处。</p>
+<p>Guava 中的迭代器使用了惰性计算的技巧，它不是一开始就算好结果放在列表或集合中，而是在调用 hasNext 方法判断迭代是否结束时才去计算下一个元素。为了看懂 Guava 的惰性迭代器实现，我们要从 AbstractIterator 开始。</p>
+<p>AbstractIterator 使用一个私有的枚举变量 state 来记录当前的迭代进度，比如是否找到了下一个元素，迭代是否结束等等。</p>
+<pre><code class="java">private enum State {
+  READY, NOT_READY, DONE, FAILED,
+}
+</code></pre>
+<p>AbstractIterator 给出了一个抽象方法 computeNext，计算下一个元素。由于 state 是私有变量，而迭代是否结束只有在调用 computeNext 的过程中才知道，于是我们有了一个保护的 endOfData 方法，允许 AbstractIterator 的子类将 state 设置为 State#DONE。</p>
+<p>AbstractIterator 实现了迭代器最重要的两个方法，hasNext 和 next。</p>
+<pre><code class="java">@Override
+public final boolean hasNext() {
+  checkState(state != State.FAILED);
+  switch (state) {
+    case DONE:
+      return false;
+    case READY:
+      return true;
+    default:
+  }
+  return tryToComputeNext();
+}
+
+@Override
+public final T next() {
+  if (!hasNext()) {
+    throw new NoSuchElementException();
+  }
+  state = State.NOT_READY;
+  T result = next;
+  next = null;
+  return result;
+}
+</code></pre>
+<p>hasNext 很容易理解，一上来先判断迭代器当前状态，如果已经结束，就返回 false；如果已经找到下一个元素，就返回true，不然就试着找找下一个元素。</p>
+<p>next 则是先判断是否还有下一个元素，属于防御式编程，先对自己做保护；然后把状态复原到还没找到下一个元素，然后返回结果。至于为什么先把 next 赋值给 result，然后把 next 置为 null，最后才返回 result，我想这可能是个面向 GC 的优化，减少无意义的对象引用。</p>
+<pre><code>private boolean tryToComputeNext() {
+  state = State.FAILED; // temporary pessimism
+  next = computeNext();
+  if (state != State.DONE) {
+    state = State.READY;
+    return true;
+  }
+  return false;
+}
+</code></pre><p>tryToComputeNext 可以认为是对模板方法 computeNext 的包装调用，首先把状态置为失败，然后才调用 computeNext。这样一来，如果计算下一个元素的过程中发生 RTE，整个迭代器的状态就是 State#FAILED，一旦收到任何调用都会抛出异常。</p>
+<p>AbstractIterator 的代码就这些，我们现在知道了它的子类需要覆盖实现 computeNext 方法，然后在迭代结束时调用 endOfData。接下来看看 SplittingIterator 的实现。</p>
+<p>SplittingIterator 还是一个抽象类，虽然实现了 computeNext 方法，但是它又定义了两个虚函数 separatorStart 和 separatorEnd，分别返回分隔符在指定下标之后第一次出现的下标，和指定下标后面第一个不包含分隔符的下标。之前的策略模式中我们可以看到，这两个函数在不同的策略中有各自不同的覆盖实现，在 SplittingIterator 中，这两个函数就是模板函数。</p>
+<p>接下来我们看看 SplittingIterator 的核心函数 computeNext，注意这个函数一直在维护的两个内部全局变量，offset 和 limit。</p>
+<pre><code class="java">@Override protected String computeNext() {
+  /*
+   * The returned string will be from the end of the last match to the
+   * beginning of the next one. nextStart is the start position of the
+   * returned substring, while offset is the place to start looking for a
+   * separator.
+   */
+  int nextStart = offset;
+  while (offset != -1) {
+    int start = nextStart;
+    int end;
+
+    int separatorPosition = separatorStart(offset);
+    if (separatorPosition == -1) {
+      end = toSplit.length();
+      offset = -1;
+    } else {
+      end = separatorPosition;
+      offset = separatorEnd(separatorPosition);
+    }
+    if (offset == nextStart) {
+      /*
+       * This occurs when some pattern has an empty match, even if it
+       * doesn&#39;t match the empty string -- for example, if it requires
+       * lookahead or the like. The offset must be increased to look for
+       * separators beyond this point, without changing the start position
+       * of the next returned substring -- so nextStart stays the same.
+       */
+      offset++;
+      if (offset &gt;= toSplit.length()) {
+        offset = -1;
+      }
+      continue;
+    }
+    while (start &lt; end &amp;&amp; trimmer.matches(toSplit.charAt(start))) {
+      start++;
+    }
+    while (end &gt; start &amp;&amp; trimmer.matches(toSplit.charAt(end - 1))) {
+      end--;
+    }
+    if (omitEmptyStrings &amp;&amp; start == end) {
+      // Don&#39;t include the (unused) separator in next split string.
+      nextStart = offset;
+      continue;
+    }
+    if (limit == 1) {
+      // The limit has been reached, return the rest of the string as the
+      // final item.  This is tested after empty string removal so that
+      // empty strings do not count towards the limit.
+      end = toSplit.length();
+      offset = -1;
+      // Since we may have changed the end, we need to trim it again.
+      while (end &gt; start &amp;&amp; trimmer.matches(toSplit.charAt(end - 1))) {
+        end--;
+      }
+    } else {
+      limit--;
+    }
+    return toSplit.subSequence(start, end).toString();
+  }
+  return endOfData();
+}
+</code></pre>
+<p>进入 while 循环之后，先找找 offset 之后第一个分隔符出现的位置，if 分支处理没找到的情况，else 分支处理找到了的情况。然后下一个 if 处理的是第一个字符就是分隔符的特殊情况。然后接下来的两个 while 就开始根据 trimmer 来对找到的元素做前后处理，比如去除空白符之类的。再然后就是根据需要去除那些是空字符串的元素，trim完之后变成空字符串的也会被去除。最后一步操作就是判断 limit，如果还没到 limit 的极限，就让 limit 自减，否则就要调整 end 指针的位置标记 offset 为 -1 然后重新 trim 一下。下一次再调用 computeNext 的时候就发现 offset 已经是 -1 了，然后就返回 endOfData 表示迭代结束。</p>
+<p>整个 Splitter 最有意思的部分基本上就是这些了，至于 split 函数，其实就是用匿名类函数覆盖技巧调用了一下策略模式中被花样覆盖实现了的 Strategy#iterator 而已。</p>
+<pre><code class="java">public Iterable&lt;String&gt; split(final CharSequence sequence) {
+  checkNotNull(sequence);
+  return new Iterable&lt;String&gt;() {
+    @Override public Iterator&lt;String&gt; iterator() {
+      return splittingIterator(sequence);
+    }
+    @Override public String toString() {
+      return Joiner.on(&quot;, &quot;)
+          .appendTo(new StringBuilder().append(&#39;[&#39;), this)
+          .append(&#39;]&#39;)
+          .toString();
+    }
+  };
+}
+</code></pre>
+<p>按理说实例化 Iterable 接口只需要实现 iterator 函数即可，这里覆盖了 toString 想必是为了方便打印吧？</p>
+<p>MapSplitter 的实现中规中矩，使用 outerSplitter 拆分键值对，使用 entrySplitter 拆分键和值，拆分键和值前中后各种校验，然后返回一个不可修改的 Map。</p>
+<p>最后说一下 Splitter 中一个略显画蛇添足的 API，Splitter#splitToList。</p>
+<pre><code class="java">public List&lt;String&gt; splitToList(CharSequence sequence) {
+  checkNotNull(sequence);
+  Iterator&lt;String&gt; iterator = splittingIterator(sequence);
+  List&lt;String&gt; result = new ArrayList&lt;String&gt;();
+  while (iterator.hasNext()) {
+    result.add(iterator.next());
+  }
+  return Collections.unmodifiableList(result);
+}
+</code></pre>
+<p>这个函数其实就是吭哧吭哧把惰性迭代器跑了一遍生成完整数据存放到 ArrayList 中，然后又用 Collections 把这个列表变成不可修改列表返回出去，一点都不酷。</p>
+]]></content>
+    
+    
+      <category term="Java" scheme="http://www.jamespan.me/blog/tags/Java/"/>
+    
+      <category term="Guava" scheme="http://www.jamespan.me/blog/tags/Guava/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Guava 是个风火轮之基础工具(1)]]></title>
+    <link href="http://www.jamespan.me/blog/2015/02/08/guava-basic-utilities-1/"/>
+    <id>http://www.jamespan.me/blog/2015/02/08/guava-basic-utilities-1/</id>
+    <published>2015-02-07T17:01:53.000Z</published>
+    <updated>2015-02-10T14:20:44.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p>Guava 是 Java 开发者的好朋友。虽然我在开发中使用 Guava 很长时间了，Guava API 的身影遍及我写的生产代码的每个角落，但是我用到的功能只是 Guava 的功能集中一个少的可怜的真子集，更别说我一直没有时间认真的去挖掘 Guava 的功能，没有时间去学习 Guava 的实现。直到最近，我开始阅读 <em><a href="http://book.douban.com/subject/25710862/" target="_blank" rel="external">Getting Started with Google Guava</a></em>，感觉有必要将我学习和使用 Guava 的一些东西记录下来。</p>
+<h1 id="Joiner">Joiner</h1>
+<p>我们经常需要将几个字符串，或者字符串数组、列表之类的东西，拼接成一个以指定符号分隔各个元素的字符串，比如把 [1, 2, 3] 拼接成 “1 2 3”。</p>
+<p>在 Python 中我只需要简单的调用 str.join 函数，就可以了，就像这样。</p>
+<pre><code class="python">&#39; &#39;.join(map(str, [1, 2, 3]))
+</code></pre>
+<p>到了 Java 中，如果你不知道 Guava 的存在，基本上就得手写循环去实现这个功能，代码瞬间变得丑陋起来。</p>
+<p>Guava 为我们提供了一套优雅的 API，让我们能够轻而易举的完成字符串拼接这一简单任务。还是上面的例子，借助 Guava 的 Joiner 类，代码瞬间变得优雅起来。</p>
+<pre><code class="java">Joiner.on(&#39; &#39;).join(1, 2, 3);
+</code></pre>
+<p>被拼接的对象集，可以是硬编码的少数几个对象，可以是实现了 Iterable 接口的集合，也可以是迭代器对象。</p>
+<p>除了返回一个拼接过的字符串，Joiner 还可以在实现了 Appendable 接口的对象所维护的内容的末尾，追加字符串拼接的结果。</p>
+<pre><code class="java">StringBuilder sb = new StringBuilder(&quot;result:&quot;);
+Joiner.on(&quot; &quot;).appendTo(sb, 1, 2, 3);
+System.out.println(sb);//result:1 2 3
+</code></pre>
+<p>Guava 对空指针有着严格的限制，如果传入的对象中包含空指针，Joiner 会直接抛出 NPE。与此同时，Joiner 提供了两个方法，让我们能够优雅的处理待拼接集合中的空指针。</p>
+<p>如果我们希望忽略空指针，那么可以调用 skipNulls 方法，得到一个会跳过空指针的 Joiner 实例。如果希望将空指针变为某个指定的值，那么可以调用 useForNull 方法，指定用来替换空指针的字符串。</p>
+<pre><code class="java">Joiner.on(&#39; &#39;).skipNulls().join(1, null, 3);//1 3
+Joiner.on(&#39; &#39;).useForNull(&quot;None&quot;).join(1, null, 3);//1 None 3
+</code></pre>
+<p>需要注意的是，Joiner 实例是不可变的，skipNulls 和 useForNull 都不是在原实例上修改某个成员变量，而是生成一个新的 Joiner 实例。</p>
+<h2 id="Joiner-MapJoiner">Joiner.MapJoiner</h2>
+<p>MapJoiner 是 Joiner 的内部静态类，用于帮助将 Map 对象拼接成字符串。</p>
+<pre><code class="java">Joiner.on(&quot;#&quot;).withKeyValueSeparator(&quot;=&quot;).join(ImmutableMap.of(1, 2, 3, 4));//1=2#3=4
+</code></pre>
+<p>withKeyValueSeparator 方法指定了键与值的分隔符，同时返回一个 MapJoiner 实例。有些家伙会往 Map 里插入键或值为空指针的键值对，如果我们要拼接这种 Map，千万记得要用 useForNull 对 MapJoiner 做保护，不然 NPE 妥妥的。</p>
+<h2 id="源码分析">源码分析</h2>
+<p>源码来自 Guava 18.0。Joiner 类的源码约 450 行，其中大部分是注释、函数重载，常用手法是先实现一个包含完整功能的函数，然后通过各种封装，把不常用的功能隐藏起来，提供优雅简介的接口。这样子的好处显而易见，用户可以使用简单接口解决 80% 的问题，那些罕见而复杂的需求，交给全功能函数去支持。</p>
+<h3 id="初始化方法">初始化方法</h3>
+<p>由于构造函数被设置成了私有，Joiner 只能通过 Joiner#on 函数来初始化。最基础的 Joiner#on 接受一个字符串入参作为分隔符，而接受字符入参的 Joiner#on 方法是前者的重载，内部使用 String#valueOf 函数将字符变成字符串后调用前者完成初始化。或许这是一个利于字符串内存回收的优化。</p>
+<h3 id="追加拼接结果">追加拼接结果</h3>
+<p>整个 Joiner 类最核心的函数莫过于 <code>&lt;A extends Appendable&gt; Joiner#appendTo(A, Iterator&lt;?&gt;)</code>，一切的字符串拼接操作，最后都会调用到这个函数。这就是所谓的全功能函数，其他的一切 appendTo 只不过是它的重载，一切的 join 不过是它和它的重载的封装。</p>
+<pre><code class="java">public &lt;A extends Appendable&gt; A appendTo(A appendable, Iterator&lt;?&gt; parts) throws IOException {
+  checkNotNull(appendable);
+  if (parts.hasNext()) {
+    appendable.append(toString(parts.next()));
+    while (parts.hasNext()) {
+      appendable.append(separator);
+      appendable.append(toString(parts.next()));
+    }
+  }
+  return appendable;
+}
+</code></pre>
+<p>这段代码的第一个技巧是使用 if 和 while 来实现了比较优雅的分隔符拼接，避免了在末尾插入分隔符的尴尬；第二个技巧是使用了自定义的 toString 方法而不是 Object#toString 来将对象序列化成字符串，为后续的各种空指针保护开了方便之门。</p>
+<p>注意到一个比较有意思的 appendTo 重载。</p>
+<pre><code class="java">public final StringBuilder appendTo(StringBuilder builder, Iterator&lt;?&gt; parts) {
+  try {
+    appendTo((Appendable) builder, parts);
+  } catch (IOException impossible) {
+    throw new AssertionError(impossible);
+  }
+  return builder;
+}
+</code></pre>
+<p>在 Appendable 接口中，append 方法是会抛出 IOException 的。然而 StringBuilder 虽然实现了 Appendable，但是它覆盖实现的 append 方法却是不抛出 IOException 的。于是就出现了明知不可能抛异常，却又不得不去捕获异常的尴尬。</p>
+<p>这里的异常处理手法十分机智，异常变量命名为 impossible，我们一看就明白这里是不会抛出 IOException 的。但是如果 catch 块里面什么都不做又好像不合适，于是抛出一个 AssertionError，表示对于这里不抛异常的断言失败了。</p>
+<p>另一个比较有意思的 appendTo 重载是关于可变长参数。</p>
+<pre><code class="java">public final &lt;A extends Appendable&gt; A appendTo(
+    A appendable, @Nullable Object first, @Nullable Object second, Object... rest)
+        throws IOException {
+  return appendTo(appendable, iterable(first, second, rest));
+}
+</code></pre>
+<p>注意到这里的 iterable 方法，它把两个变量和一个数组变成了一个实现了 Iterable 接口的集合，手法精妙！</p>
+<pre><code class="java">private static Iterable&lt;Object&gt; iterable(
+    final Object first, final Object second, final Object[] rest) {
+  checkNotNull(rest);
+  return new AbstractList&lt;Object&gt;() {
+    @Override public int size() {
+      return rest.length + 2;
+    }
+
+    @Override public Object get(int index) {
+      switch (index) {
+        case 0:
+          return first;
+        case 1:
+          return second;
+        default:
+          return rest[index - 2];
+      }
+    }
+  };
+}
+</code></pre>
+<p>如果是我来实现，可能是简单粗暴的创建一个 ArrayList 的实例，然后把这两个变量一个数组的全部元素放到 ArrayList 里面然后返回。这样子代码虽然短了，但是代价却不小：为了一个小小的重载调用而产生了 O(n) 的时空复杂度。</p>
+<p>看看人家 G 社的做法。要想写出这样的代码，需要熟悉顺序表迭代器的实现。迭代器内部维护着一个游标，cursor。迭代器的两大关键操作，hasNext 判断是否还有没遍历的元素，next 获取下一个元素，它们的实现是这样的。</p>
+<pre><code class="java">public boolean hasNext() {
+    return cursor != size();
+}
+
+public E next() {
+    checkForComodification();
+    try {
+        int i = cursor;
+        E next = get(i);
+        lastRet = i;
+        cursor = i + 1;
+        return next;
+    } catch (IndexOutOfBoundsException e) {
+        checkForComodification();
+        throw new NoSuchElementException();
+    }
+}
+</code></pre>
+<p>hasNext 中关键的函数调用是 size，获取集合的大小。next 方法中关键的函数调用是 get，获取第 i 个元素。Guava 的实现返回了一个被覆盖了 size 和 get 方法的 AbstractList，巧妙的复用了由编译器生成的数组，避免了新建列表和增加元素的开销。</p>
+<h3 id="空指针处理">空指针处理</h3>
+<p>当待拼接列表中可能包含空指针时，我们用 useForNull 将空指针替换为我们指定的字符串。它是通过返回一个覆盖了方法的 Joiner 实例来实现的。</p>
+<pre><code class="java">  public Joiner useForNull(final String nullText) {
+    checkNotNull(nullText);
+    return new Joiner(this) {
+      @Override CharSequence toString(@Nullable Object part) {
+        return (part == null) ? nullText : Joiner.this.toString(part);
+      }
+
+      @Override public Joiner useForNull(String nullText) {
+        throw new UnsupportedOperationException(&quot;already specified useForNull&quot;);
+      }
+
+      @Override public Joiner skipNulls() {
+        throw new UnsupportedOperationException(&quot;already specified useForNull&quot;);
+      }
+    };
+  }
+</code></pre>
+<p>首先是使用复制构造函数保留先前初始化时候设置的分隔符，然后覆盖了之前提到的 toString 方法。为了防止重复调用 useForNull 和 skipNulls，还特意覆盖了这两个方法，一旦调用就抛出运行时异常。为什么不能重复调用 useForNull ？因为覆盖了 toString 方法，而覆盖实现中需要调用覆盖前的 toString。</p>
+<p>在不支持的操作中抛出 UnsupportedOperationException 是 Guava 的常见做法，可以在第一时间纠正不科学的调用方式。</p>
+<p>skipNulls 的实现就相对要复杂一些，覆盖了原先全功能 appendTo 中使用 if 和 while 的优雅实现，变成了 2 个 while 先后执行。第一个 while 找到 第一个不为空指针的元素，起到之前的 if 的功能，第二个 while 功能和之前的一致。</p>
+<pre><code class="java">public Joiner skipNulls() {
+  return new Joiner(this) {
+    @Override public &lt;A extends Appendable&gt; A appendTo(A appendable, Iterator&lt;?&gt; parts)
+        throws IOException {
+      checkNotNull(appendable, &quot;appendable&quot;);
+      checkNotNull(parts, &quot;parts&quot;);
+      while (parts.hasNext()) {
+        Object part = parts.next();
+        if (part != null) {
+          appendable.append(Joiner.this.toString(part));
+          break;
+        }
+      }
+      while (parts.hasNext()) {
+        Object part = parts.next();
+        if (part != null) {
+          appendable.append(separator);
+          appendable.append(Joiner.this.toString(part));
+        }
+      }
+      return appendable;
+    }
+
+    @Override public Joiner useForNull(String nullText) {
+      throw new UnsupportedOperationException(&quot;already specified skipNulls&quot;);
+    }
+
+    @Override public MapJoiner withKeyValueSeparator(String kvs) {
+      throw new UnsupportedOperationException(&quot;can&#39;t use .skipNulls() with maps&quot;);
+    }
+  };
+}
+</code></pre>
+<h3 id="拼接键值对">拼接键值对</h3>
+<p>MapJoiner 实现为 Joiner 的一个静态内部类，它的构造函数和 Joiner 一样也是私有，只能通过 Joiner#withKeyValueSeparator 来生成实例。类似地，MapJoiner 也实现了 appendTo 方法和一系列的重载，还用 join 方法对 appendTo 做了封装。MapJoiner 整个实现和 Joiner 大同小异，在实现中大量使用 Joiner 的 toString 方法来保证空指针保护行为和初始化时的语义一致。</p>
+<p>MapJoiner 也实现了一个 useForNull 方法，这样的好处是，在获取 MapJoiner 之后再去设置空指针保护，和获取 MapJoiner 之前就设置空指针保护，是等价的，用户无需去关心顺序问题。</p>
+]]></content>
+    
+    
+      <category term="Java" scheme="http://www.jamespan.me/blog/tags/Java/"/>
+    
+      <category term="Guava" scheme="http://www.jamespan.me/blog/tags/Guava/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[高級數據結構之「并查集」]]></title>
+    <link href="http://www.jamespan.me/blog/2015/01/31/union-find/"/>
+    <id>http://www.jamespan.me/blog/2015/01/31/union-find/</id>
+    <published>2015-01-31T03:38:24.000Z</published>
+    <updated>2015-02-10T14:34:04.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="背景">背景</h1>
+<p>數據結構是計算機科學的基礎學科，其中許多簡單的數據結構早已被各種高級語言抽象成類庫，以方便人們使用，如數組、列表、優先隊列、哈希表等等。</p>
+<p>我習慣於把那些比較難以抽象成通用組件的數據結構，稱爲「高級數據結構」。這些數據結構通常只適用於解決某幾類問題，在使用過程中還需要針對問題模型作出一些定製性的優化，如果硬要抽象成通用組建反而限制了它們的性能。</p>
+<p>并查集夠高效地判斷兩個元素是否同屬一個集合、合併兩個集合，常用與解決一些不相交集合的合併和查詢問題，比如計算無向圖的聯通分量個數、染色，在 CodeForces 中，并查集的標籤是 <a href="http://codeforces.com/problemset/tags/dsu" target="_blank" rel="external">dsu</a>，因爲并查集的英文是 Disjoint Set Union，「并查集」這個翻譯可能更多的來自一個英文別稱 Merge–Find Set 。</p>
+<h1 id="實現">實現</h1>
+<p>并查集有很多種實現方式，可以用鏈表實現，也可以用森林來實現。然後這兩種數據結構又各自可以用數組和指針來實現。所以說高級數據結構在使用的時候需要根據場景做定製才能發揮最佳性能。</p>
+<p>因爲并查集的核心操作只有「合併」與「查找」，所以無論何種實現，都比較簡單。</p>
+<h2 id="鏈表">鏈表</h2>
+<p>早期人們使用鏈表來實現并查集。鏈表的每個結點包含兩個指針，next 指向鏈表中的下一個結點，head 指向鏈表的頭結點。</p>
+<p>對於一個有 n 個元素的集合，初始化的時候將他們都置爲鏈表的頭結點，於是我們得到了 n 個鏈表。</p>
+<p>在判斷兩個元素是否屬於同一集合的時候，我們其實是判斷兩個元素所在結點是否位於同一個鏈表，既他們是否擁有同一個頭結點。這個操作只是簡單的指針取值+等值判斷，$O(1)$ 時間內完成。</p>
+<p>在合併集合的時候，我們至少需要遍歷兩個集合中的一個，將 head 指針指向另一個鏈表的頭結點，然後還得拼接兩個鏈表，$O(n)$ 時間內完成。</p>
+<p>由於鏈表實現沒法發揮并查集全部性能，且難以進一步優化，現在比較常見的并查集實現方式是森林。</p>
+<h2 id="森林">森林</h2>
+<p>不同於一般的樹形結構，并查集使用的樹形結構的結點沒有指向孩子結點的指針，只有指向父結點的指針。</p>
+<p>與鏈表實現類似，初始化的時候集合中的每個元素都是一棵樹的根結點，我們使用樹的根結點作爲集合的代表，這時候每個元素都是一個集合。</p>
+<p>在合併集合的時候，只需要把結點 A 所在樹的跟結點的父指針，指向結點 B 或者結點 B 所在樹的跟結點。修改指針的指向在 $O(1)$ 時間內完成，整個合併操作的時間主要花在了尋找跟結點上。</p>
+<p>查找跟結點的效率正比與樹的深度，一般來說我們可以認爲查找能在 $O(logN)$ 時間內完成，最快情況莫過於樹形結構退化爲鏈表，因此查找的最壞情況的時間複雜度爲 $O(n)$。</p>
+<p>樸素的并查集森林實現如下。</p>
+<h3 id="結點定義">結點定義</h3>
+<p>我們將結點初始化爲根結點，根結點的父結點就是自身。</p>
+<pre><code>class Node:
+    def __init__(self, key=None, value=None):
+        self.parent = self
+        self.key = key
+        self.value = value
+</code></pre><h3 id="查找結點所在集合">查找結點所在集合</h3>
+<p>我們使用樹的根結點作爲集合的代表，查找結點所在集合，即返回結點所在樹的根結點。</p>
+<p>下面是迭代的實現方式。</p>
+<pre><code>def find(node):
+    p = node.parent
+    while p.parent != p:
+        p = p.parent
+    return p
+</code></pre><p>還有遞歸的實現方式。這種遞歸實際上是尾遞歸，現代編譯器可以將尾遞歸優化成迭代。</p>
+<pre><code>def find(node):
+    if node.parent == node:
+        return node
+    return find(node.parent)
+</code></pre><h3 id="合併兩個集合">合併兩個集合</h3>
+<p>首先計算兩個結點所在樹的根結點，然後修改根結點的父結點指針。</p>
+<pre><code>def union(node1, node2):
+    p1 = find(node1)
+    p2 = find(node2)
+    p1.parent = p2
+</code></pre><h1 id="優化">優化</h1>
+<p>使用森林來作爲并查集的實現，不僅代碼簡單，還可以根據實際的性能需求進行優化。常見的并查集優化手段包括路徑壓縮等。</p>
+<h2 id="路徑壓縮">路徑壓縮</h2>
+<p>查找操作是合併操作中的耗時大戶，也是完成集合構造之後調用最頻繁的函數，對查找操作做優化能得到最大收益。</p>
+<p>樸素的查找實現中，我們使用迭代或者遞歸去沿着結點的父指針一路遍歷，直到找到根結點，平均複雜度 $O(logN)$。如果我們在找到根結點之後，將沿途遍歷的結點的父指針全都指向根結點，下次再查找的時候，實際複雜度就是$O(1)$ 了。</p>
+<p>遞歸的查找函數實現只需要做一點點修改，就能實現路徑壓縮。遞歸調用一直壓棧，直到遇到根結點開始返回，然後在返回過程中順便把沿途結點的父指針指向了根結點。</p>
+<pre><code>def find(node):
+    if node.parent == node:
+        return node
+    node.parent = find(node.parent)
+    return node.parent
+</code></pre><p>遞歸的表達能力遠遠強於迭代，因爲遞歸是有去有回，迭代是一去不回。受馮·諾伊曼結構的限制，現實中的遞歸沒有理論中那麼好用，不但性能上不及迭代，一旦壓棧次數多了還可能棧溢出。迭代版本的路徑壓縮要麼需要使用一個列表來存儲沿途結點（空間換時間），要麼將沿途結點的父結點指針指向其祖父結點（時間換空間）。</p>
+<pre><code>def find(node):
+    l = []
+    p = node
+    while p.parent != p:
+        l.append(p)
+        p = p.parent
+    for n in l:
+        n.parent = p
+    return p
+</code></pre><h1 id="例題">例題</h1>
+<h2 id="277A_Learning_Languages"><a href="http://codeforces.com/problemset/problem/277/A" target="_blank" rel="external">277A Learning Languages</a></h2>
+<p>這道題目其實是求聯通子圖的個數，直接使用并查集的森林實現即可。由於問題規模在輸入中給出，我們可以直接使用數組來實現。</p>
+<h2 id="356A_Knight_Tournament"><a href="http://codeforces.com/problemset/problem/356/A" target="_blank" rel="external">356A Knight Tournament</a></h2>
+<p>這道題目屬於區間染色問題，暴力算法的時間複雜度是 $O(n^2)$，直接就會超時。使用并查集的時候需要對合併操作稍加修改，增加染色的動作，同時跳過那些已經被染色過的區間。</p>
+<h1 id="參考文獻">參考文獻</h1>
+<ol>
+<li><a href="http://en.wikipedia.org/wiki/Disjoint-set_data_structure" target="_blank" rel="external">Disjoint-set data structure</a></li>
+</ol>
+]]></content>
+    
+    
+      <category term="Data Structure" scheme="http://www.jamespan.me/blog/tags/Data-Structure/"/>
+    
+      <category term="OJ" scheme="http://www.jamespan.me/blog/tags/OJ/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[那些关于去除剪贴板中富文本格式的故事]]></title>
+    <link href="http://www.jamespan.me/blog/2015/01/28/paste-without-format/"/>
+    <id>http://www.jamespan.me/blog/2015/01/28/paste-without-format/</id>
+    <published>2015-01-28T06:13:42.000Z</published>
+    <updated>2015-02-01T08:00:59.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="背景">背景</h1>
+<p>我工作时候使用的 IM 是阿里旺旺 Mac 版。虽然我厂是个体量可以排到全球前几的互联网企业，但是在这里，Mac 用户依然不是太多，因此内部工具的 Mac 版本也就不太完善。</p>
+<p>我经常需要从 IDE 里复制代码粘贴到 IM 发送给同事，从 IDEA 中复制出来的代码是带有格式的富文本，粘贴到 IM 之后不仅把深色的背景、高亮的颜色全都贴进去了，还带来一个挺大的副作用，新输入的文字，都有着和代码一样的颜色和背景色。要想让输入的文本变得正常，最快的方式莫过于 ⌘Q 然后重新运行 IM。</p>
+<p>为了从频繁地重启 IM 中解脱出来，我决定做些什么。</p>
+<h1 id="尝试">尝试</h1>
+<p>纯文本是程序猿的好朋友。我想要这样一个东西，虽然我剪贴板中的内容是富文本，但是在我粘贴的时候，得到的是纯文本。</p>
+<h2 id="原生">原生</h2>
+<p>对于那些 OS X 原生的应用，是自带这样的功能的，叫做 Paste and Match Style，通过快捷键 ⌥⇧⌘V 触发。</p>
+<p>对于那些非原生的应用，则自求多福了。</p>
+<h2 id="ClipMenu">ClipMenu</h2>
+<p>那时候我有在使用一个叫做 <a href="http://www.clipmenu.com" target="_blank" rel="external">ClipMenu</a> 的剪贴板管理工具。在粘贴纯文本的时候，通过快捷键 ⌘⇧V 触发，弹出最近的几条剪贴板历史，右键希望粘贴的剪贴板记录，在弹出的菜单中单击 Paste as Plain Text 子菜单。</p>
+<p>我觉得这样的操作太过繁琐，应该有更加简便快捷的实现。</p>
+<h2 id="Plain_Clip">Plain Clip</h2>
+<p>几经寻找，发现一个轻巧的 App，叫做 <a href="http://www.bluem.net/en/mac/plain-clip/" target="_blank" rel="external">Plain Clip</a>，可以通过 brew cask 安装。</p>
+<p>这个 App 没有图形界面，点击图标执行后，剪贴板中的富文本就被处理成了纯文本，然后就可以粘贴到想粘贴的地方去了。</p>
+<p>网络上都推荐把这个 App 的图标拖到 Dock 上，然后可以直接点击 Dock 图标来将剪贴板的富文本变成纯文本。</p>
+<p>作为一个大学期间认真学习过《人本界面》的码农，我对这种交互方式的效率感到怀疑。Dock 肯定贴在屏幕的某个边界，假设鼠标位于屏幕正中央，为了完成粘贴纯文本的动作，我首先要把鼠标移动到屏幕边缘，然后单击，然后把鼠标移回原位。考虑到苹果对 Dock 图标的点击命中做了优化，即有效点击半径远大于图标半径，移动鼠标的时间和屏幕大小正相关，将鼠标移回原位的耗时约为移动鼠标点击图标的 2 倍，而且这个完成操作的时间基本上没法随着熟练程度的增加而减少。</p>
+<p>我个人比较推荐的方式是键盘操作。无论使用 Spotlight 还是 Alfred 作为应用启动器，都只需要 2 次击键。完成应用的搜索定位也只需要 2 次击键，加上执行程序的回车击键，总共也就 5 次键。而且随着熟练程度的提高，操作速度会越来越快，比如我完成这样的应用启动耗时在 1 秒以内。</p>
+<h2 id="Get_Plain_Text">Get Plain Text</h2>
+<p>即使我能够在 1 秒钟内完成富文本的去格式，我还是需要在完成粘贴动作前付出思考的时间和操作的时间。假如我在粘贴忘记去除格式，那我只能重启 IM 了。</p>
+<p><a href="http://zipzapmac.com/getplaintext" target="_blank" rel="external">Get Plain Text</a> 就是这么一款在交互上做到极致的 App。富文本对我而言是一种负担，让我时时刻刻提心吊胆要去清除格式。我希望有这么一个应用能够帮助我自动把剪贴板中的富文本变成纯文本，而 Get Plain Text 恰恰做到了。</p>
+<p>这个应用提供了一个选项，Automatically clear formatting，一旦勾选它就会自动将剪贴板中富文本的格式清除，从此我只需要复制、粘贴，不用再去考虑文本格式的问题。</p>
+<p>对于那些仅仅是偶尔需要粘贴纯文本的用户，可以选择不去勾选 Automatically clear formatting，在需要粘贴纯文本的时候使用 Get Plain Text 提供的快捷键 ⌘⇧K 即可。</p>
+<p>曾经这个应用卖到了 18 CNY，如今在 <a href="https://itunes.apple.com/cn/app/get-plain-text/id508368068" target="_blank" rel="external">iTunes</a> 上免费获取。</p>
+<h1 id="总结">总结</h1>
+<p>这一次为了满足我摆脱富文本的小需求，尝试了 3 个应用，在使用 Plain Clip 的过程中还试图写 Apple Script 将去除富文本格式的过程自动化，不幸以失败告终。最后幸运地找到了 Get Plain Text，相信在接下来的日子里，它能为我节省不少时间。</p>
+]]></content>
+    
+    
+      <category term="Tool" scheme="http://www.jamespan.me/blog/tags/Tool/"/>
+    
+      <category term="OS X" scheme="http://www.jamespan.me/blog/tags/OS-X/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[一种错误的缓存使用方式]]></title>
+    <link href="http://www.jamespan.me/blog/2015/01/24/missuse-of-cache/"/>
+    <id>http://www.jamespan.me/blog/2015/01/24/missuse-of-cache/</id>
+    <published>2015-01-24T11:09:56.000Z</published>
+    <updated>2015-02-07T08:30:57.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="背景">背景</h1>
+<p>从上周开始我就一直在做数据清洗的工作，这次算是体会到了什么叫做“抛开数据量谈实现就是耍流氓”。</p>
+<p>我设计方案和调试代码连接的都是日常环境的数据库，里面的单表数据量在百级，无论我怎么实现都是瞬间洗完。到了性能测试的时候用的就是性能库，双 11 之前@W君做性能测试的时候，往里面写入了 2000W 的数据，足够我战个痛快。</p>
+<p>上一篇文章<a href="/blog/2015/01/22/trick-of-paging-query/">分页查询的那些坑和各种技巧</a>中我解决了分页查询遇到的性能问题，整个数据清洗代码的性能虽有提升，但是十分有限。这说明了其实分页查询不是性能最热点，路漫漫其修远兮。</p>
+<h1 id="发现">发现</h1>
+<p>一开始从性能日志根本看不出问题，后来仔细翻看了一下输出性能日志的代码，发现我只在更新数据库的时候写了日志，查询数据库的代码，没有输出日志。加上日志后重新执行清洗，问题粗线了！</p>
+<p>从日志来看，代码对数据库的读写比例是几百比一，也就是做了百来两百次查询之后，才会有一次更新产生。为什么会这样呢？</p>
+<h1 id="根源">根源</h1>
+<p>基于对软硬件的不信任，我对洗数据的代码做了功能增强：断点续传功能，记录当前执行进度，以便程序中断后继续执行；洗过判定功能，更新数据库之前判断待更新记录在逻辑上是否已经被清洗过，避免重复清洗造成的脏数据风险。</p>
+<p>断点续传是基于当前分页的 minId 实现的，一旦从中断处继续执行，必然会重新读取该页数据进行清洗，如果没有洗过判定，就可能对逻辑上已经清洗过的记录重复清洗，影响数据的准确性。</p>
+<p>最初的设计是程序使用一个本地缓存记录已经被清洗过的记录的关键信息，当代码扫描到一行记录时，如果这行记录的关键信息在本地缓存中，则该记录逻辑上已经清洗过，直接抛弃接着处理下一行记录。</p>
+<p>在我的想象中，这个方案在内存足够大，应用不重启的时候有着完美的性能，但是现实世界总是残酷的，内存十分有限，应用可能崩溃。</p>
+<p>Guava 是 Java 世界中一个伟大的轮子，也是我最喜欢的类库。我直接使用的 LocalManualCache 作为本地缓存，设置了缓存中记录的数量上限以免发生 OOM。有了容量上限之后，缓存中查不到当前记录的关键信息，就有两种可能，要么这条记录逻辑上没被清洗过，要么逻辑上被清洗了，但是相关信息被缓存的 LRU 算法替换掉了。于是缓存不命中的时候，程序得发起一次数据库查询，看看这行记录逻辑上到底有没有被处理过，并将相关信息写入缓存。</p>
+<p>由于 LocalManualCache 不支持批量查询，洗过判定是通过使用循环去遍历当前分页的数据，然后一次一次访问缓存，一旦缓存不命中就查询数据库的方式实现的。</p>
+<p>看起来这里的循环查询数据库确实成了性能瓶颈，得想办法不要循环查询才好。</p>
+<h1 id="歧路">歧路</h1>
+<p>首先想到的是一个朴素的方法，既然是缓存容量有上限造成了缓存不命中的二义性，那我就用一个容量”无限“的缓存好了。正好现在的应用里面有用到这样的缓存系统，类似于 Memcached，我直接复用就好了。</p>
+<p>吭哧吭哧把本地缓存替换成了缓存系统，发现系统性能变化不大。一个原因是查询缓存系统有网络开销，就算查询一次耗时 1ms，循环查 200 次的话耗时至少 200ms。考虑到线上数据的形态，缓存能够帮我拦截的数据库查询请求不过比 1% 多那么零点几，大部分的情况还是击穿了缓存去数据库逛了一圈发现记录没被清洗过。</p>
+<p>我的心好痛，缓存居然只能帮我挡下 1% 的数据库查询，我开始思考缓存方案的合理性。</p>
+<p>一般场景下，缓存是这样使用的。缓存中取到的结果直接参与后续的运算。而且每次“事务”中只需要查询 1 次缓存，至多查询 1 次数据库。随着时间的推移，缓存中的数据愈发完整，对数据库的查询越来越少。</p>
+<pre><code class="python">cached = cache.get(key)
+if cached is not None:
+    return cached
+db_result = db.query(key)
+cache.put(key, db_result)
+return db_result
+</code></pre>
+<p>然而在数据清洗的场景下，缓存中取到的结果不参与后续的运算，缓存中取不到结果的，需要去数据库确认缓存的正确性，然后才能参与后续运算。这样一来每次“事务”中需要查询 200 次缓存，至多查询 200 次数据库，平均至少查询 198 次数据库。如此看来，我使用缓存的方式不仅没能帮我提升性能，反而损害了性能。</p>
+<h1 id="涅槃">涅槃</h1>
+<p>我决定不使用缓存了。</p>
+<p>洗过判定还是要做的。脱离了缓存的限制，我可以直接使用组合条件在一次查询中得到当前分页中那些被逻辑清洗过的记录，然后将这些记录从待清洗列表中排除。</p>
+<p>原先的代码在各种改动之后已经让我不忍直视了，我只好完全重写。事实证明，在一份开始腐烂的代码上做修改，远远没有另起炉灶来的方便。</p>
+<p>代码重写花了我大概半小时，日志、开关一应俱全。对数据库的查询从每页 200 次下降到了每页 1 次，性能上也达到了可以接受的程度。</p>
+<h1 id="扩展">扩展</h1>
+<p>有没有这样一种可能，先用缓存把那些在缓存中的记录过滤，再用组合条件去做一次性查询？</p>
+<p>这种方式在功能上是没问题的，我之所以没有采用，是出于工程和性能方面的考虑。</p>
+<p>首先，用组合条件查询当前分页中被逻辑清洗过的记录，一次至多查询出 200 条，而且我给的组合条件能够让数据库使用索引完成查询，性能上可以接受。</p>
+<p>其次，引入缓存会在一定程度上增加代码的复杂度，效果只有 1%，可以忽略不计，性价比极低。</p>
+<p>最后，使用本地缓存需要限制容量上限，造成缓存不可信；使用缓存系统有额外的网络开销，最终带来的耗时远高于直接查询数据库。</p>
+<h1 id="总结">总结</h1>
+<p>没有银弹，缓存在大多数场景下能帮助提升性能，但仅仅是大多数场景。</p>
+<p>误用工具比不用工具要糟糕得多。</p>
+]]></content>
+    
+    
+      <category term="MySQL" scheme="http://www.jamespan.me/blog/tags/MySQL/"/>
+    
+      <category term="Cache" scheme="http://www.jamespan.me/blog/tags/Cache/"/>
+    
+      <category term="Work" scheme="http://www.jamespan.me/blog/categories/Work/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[分页查询的那些坑和各种技巧]]></title>
+    <link href="http://www.jamespan.me/blog/2015/01/22/trick-of-paging-query/"/>
+    <id>http://www.jamespan.me/blog/2015/01/22/trick-of-paging-query/</id>
+    <published>2015-01-22T01:53:19.000Z</published>
+    <updated>2015-02-07T08:31:32.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="背景">背景</h1>
+<p>从上周开始我就一直在做数据清洗的工作，这次算是体会到了什么叫做“抛开数据量谈实现就是耍流氓”。</p>
+<p>我设计方案和调试代码连接的都是日常环境的数据库，里面的单表数据量在百级，无论我怎么实现都是瞬间洗完。到了性能测试的时候用的就是性能库，双 11 之前@W君做性能测试的时候，往里面写入了 2000W 的数据，足够我战个痛快。</p>
+<h1 id="深坑">深坑</h1>
+<p>一开始的时候，分页查询用的是 limit 子句，SQL 语句形态如下。</p>
+<pre><code class="sql">select * from table where xxx in (1,2,3) order by id limit #offset#, 200
+</code></pre>
+<p>limit 子句的优点很明显，简单好用。缺点平时不显著，数据量一大就暴露了。数据库会完整扫描 offset 的行，然后继续扫描 200 行之后才把结果集返回。 offset 在 400W 的时候，这样的 SQL 做一次分页查询就已经至少耗时 5s 了。</p>
+<h1 id="挣扎">挣扎</h1>
+<p>顿时感觉自己陷入了一个泥水坑，赶紧找老司机请教。@Y君给了我一个方案，不使用 limit，直接使用主键索引 + 左右范围查找，SQL 语句形态如下。</p>
+<pre><code class="sql">select * from table where xxx in (1,2,3) and id &gt;= #minId# and id &lt; #maxId#
+</code></pre>
+<p>其中 minId 和 maxId 由我的代码给出，启动时先算出当前表的 id 范围，然后在此范围内以 200 为步长分页读取，即 maxId - minId = 200，有可能读不到数据，有可能读到 200 条。</p>
+<p>在数据库里面试着跑了几条这样的查询，果然效率高了很多。赶紧吭哧吭哧在代码中实现这种分页逻辑，信心满满想要性能飙升，结果。。。</p>
+<p>在日常数据库测试的时候就发现问题了。我的数据库的 id 不是由 MySQL 自动生成的连续的自增主键，而是通过其他中间件产生的，从整体来看，整个 id 的分布比较离散，步长 200 的时候，一次查询根本查不出几条数据。如果整张表的 maxId 比 minId 大出很多很多，会产生很多次无意义的查询。要想有比较好的命中率，还需要关心表里面 id 的分布，根据分布情况调整步长。</p>
+<p>接下来我就在 limit 和 min-max-id 两种分页方案之间纠结，开始去分析线上表的数据分布，然后考虑把大表和小表区分对待，使用不同的分页策略等等。</p>
+<h1 id="灵光">灵光</h1>
+<p>白天被分页查询的性能泥潭弄得心力憔悴，晚上回家的路上冷风吹着头脑稍微清醒一些，想到一个条似乎可行的 SQL 语句。</p>
+<pre><code class="sql">select * from table where id &gt;= #minId# and xxx in (1,2,3) limit 200
+</code></pre>
+<p>回到家之后迫不及待开始写代码，先把这条 SQL 换着参数在数据库里面一遍遍执行，感觉这种分页方式完全符合我的要求，查询使用的主键索引，虽然从执行计划看影响行数在百万级，但是实际执行的时候影响行数不过百级，还不需要考虑 id 的分布，每次都能实打实的给我捞出 200 条数据。</p>
+<p>不过使用这样的 SQL 语句做分页，需要注意调整 minId 的值，扫表过程中需要做到不重不漏。一种可行的方案是将本次查出的结果集中的最大的 id，自增 1 后作为下次查询的 minId。</p>
+<pre><code class="python">max_id, min_id = select min(id), max(id) from table
+while min_id &lt;= max_id:
+    objs = select * from table where id &gt;= min_id and xxx in (1,2,3) limit 200
+    max_id_in_page = max(map(lambda x: x.id, objs))
+    min_id = max_id_in_page + 1
+</code></pre>
+<p>整体来说，这种分页方式避免了使用 limit 时候遍历 offset 带来的无谓的性能开销，避免了对 id 使用左右范围查询时候 id 的离散分布对命中率的影响，代价是需要在内存中遍历结果集获取当前分页中 id 的最大值，局限是只能在对全表唯一的字段做分页时使用。</p>
+<h1 id="扩展">扩展</h1>
+<p>关于分页查询，不同的数据库在做 offset 的时候语法也不太一样，比如 M$ 家的语法就是 TOP n，MySQL 的语法就是 limit n。</p>
+<p>网上的很多博客都提到一种利用子查询来提高性能的做法，大体的意思是先使用普通的 offset 语法获取目标分页的记录的 id 集合，再根据 id 集合去获取完整的目标数据，SQL 语句形态如下。</p>
+<pre><code class="sql">select * from table where id in (select id from table order by id limit #offset#, #size#)
+</code></pre>
+<p>其实有些版本尤其低版本的 MySQL 是不支持直接对带 limit 的子查询的结果做 in 子句的，执行的时候会报错，信息如下。</p>
+<blockquote>
+<p>This version of MySQL doesn’t yet support ‘LIMIT &amp; IN/ALL/ANY/SOME subquery’ </p>
+</blockquote>
+<p>针对这个问题，他们就有了一个改进之后的子查询版本。</p>
+<pre><code class="sql">select * from table where id &gt;= (select id from table order by id limit #offset#, 1)
+</code></pre>
+<p>其实是先取出目标分页的第一条记录的id， 然后根据 id 做范围查找和条数限制。这条 SQL 语句的效率在 offset 达到百万级时相比直接 limit 有数倍的提升，但是注意到 MySQL 子查询其实是一个坑，这条语句不但没有避免遍历 offset，还做了大量的无用重复工作。</p>
+<p>本质上，我最终使用的分页方案是对这条 SQL 语句的优化，借助 id 的有序性和唯一性，使用 <code>max(map(lambda x: x.id, objs)) + 1</code> 替代了子查询。</p>
+<p>有人为了绕过 MySQL 不支持对子查询结果做 in 子句的限制，脑洞大开写出了如下查询。</p>
+<pre><code class="sql">select * from table where id in (select id from (select id from table order by id limit #offset#, #size#) as tmp)
+</code></pre>
+<p>既然不允许直接对带 limit 的子查询做 in，那么干脆用子查询套子查询，也是醉了。这条 SQL 语句的效率还不如直接 limit。</p>
+<p>还有一种改进方案就是传说中的“查两次”。第一次先查出目标分页的 id 集合，因为只查 id，大部分情况可以直接命中索引然后返回，速度还是可以接受的。然后第二次直接根据 id 集合做 in 子句查询，走的主键索引，这次就是秒出了。</p>
+<p>其实查两次对性能的影响需要具体到情景来分析，不能当做是万金油。</p>
+<p>我在最终使用的分页方案，在我的应用场景下，性能是超过上面其余几种分页方案的。</p>
+<h1 id="现实">现实</h1>
+<p>在现实世界的开发中，分页远比预料的要复杂得多。</p>
+<p>如果 Web 页面通过记录的创建时间来分页，那么很可能我最终使用的分页方案就不能套用了，因为时间不是一个全表唯一的值，很难在不使用 limit 的情况下做到不重不漏。如果运气不错，使用的是数据库的自增主键，那么可以认为主键的变化趋势和创建时间的变化趋势是等价的，可以将对时间的分页映射成对主键的分页。</p>
+<p>在分页的交互逻辑上，天朝的产品经理似乎偏好于电梯式的分页控件。其实还是“抛开数据量谈实现就是耍流氓”，在数据量小的时候，使用什么样的分页方式对系统性能都没什么影响，但是在数据量大到一定程度的时候，电梯式的分页对系统性能的大量消耗反而会伤害所谓的用户体验。</p>
+<p>关于大数据量下的分页实现，业界其实已经有了好几种策略，基于不同的假设。</p>
+<p>假设随着时间的推移，越早产生的数据，价值越小。如果假设成立，我们可以认为绝大多数用户是没有这样一个需求要去查看他在系统中产生的第一条数据的。如果第一条数据对用户真的很重要，即使再困难他也会想办法得到。</p>
+<p>基于这样的假设，在数据量足够大的情况下，我们就可以对系统实现和交互体验做出很多优化，比如不再提供精确的电梯式分页，取而代之的是下一页、上一页；不再提供精确的总页数，而是提供一个大概的条目总数，可以通过查看 SQL 的执行计划得到。</p>
+<p>之前看过一个关于上一页、下一页的实现技巧。假如每页显示 20 条数据，那么查询数据库的时候，用 <code>limit #offset#, 21</code> 取出 21 条记录，页面展现20条。如果取到了 21 条，说明下一页还有数据，在页面展示下一页按钮。如果结果集数量不足 21，说明已经到了最后一页，无需显示下一页按钮了。这种方式完全避免了在分页查询时对总条目数量的查询。</p>
+<p>还有一种策略是基于这样的假设：用户比较关心的是最近产生的一小部分数据。在用户查询的时候，我们可以一次性从数据库查询符合条件的 N 条数据缓存起来，足够用户翻个几页，这样哪怕是使用电梯式分页，在计算总页数时也无需查询数据库了。</p>
+<h1 id="总结">总结</h1>
+<p>被分页问题坑了，其实还是说明一个问题：图样图森破，姿势水平有待提高。这次写洗数据的代码经历好几次方案变换和代码重写，才得到一个勉强拿得出手的版本，期间各种涨姿势，好有收获。</p>
+]]></content>
+    
+    
+      <category term="MySQL" scheme="http://www.jamespan.me/blog/tags/MySQL/"/>
+    
+      <category term="Work" scheme="http://www.jamespan.me/blog/categories/Work/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Timestamp - 一个关于时间戳的轻应用]]></title>
+    <link href="http://www.jamespan.me/blog/2015/01/19/timestamp-the-light-app/"/>
+    <id>http://www.jamespan.me/blog/2015/01/19/timestamp-the-light-app/</id>
+    <published>2015-01-18T18:26:13.000Z</published>
+    <updated>2015-02-07T08:31:21.000Z</updated>
+    <content type="html"><![CDATA[<p>点击<a href="http://www.jamespan.me/lapp/timestamp/index.html" target="_blank" rel="external">这里</a>访问应用。</p>
+<h1 id="背景">背景</h1>
+<p>我在博客给自己开了一个<a href="/blog/timeline">时间轴</a>页面，这样我的一些心情、一些临时的想法感受就能够通过时间轴记录下来，好处是不依赖于第三方的社交服务。</p>
+<p>为了以比较好的效果展示时间轴，同时我希望记录写下心情的时间，我会在每条心情的前面加上一个格式为 <code>YYYY-MM-DD HH:mm:ss</code> 的时间戳。</p>
+<p>之前好几条状态都是在电脑上写的，我可以执行命令 <code>date +&quot;%F %T&quot; | pbcopy</code> 直接将时间戳复制到剪贴板。后来我觉得这样还是不方便，需要我从编辑器切到终端再切回编辑器。然后我就用 Python 给 Sublime Text 写了一个小插件，通过快捷键向当前编辑的文本插入时间戳。于是电脑上编辑心情的方案算是比较完美了。</p>
+<p>然后我想到，如果电脑不在手边，我又希望记录心情，如何是好？当然要通过手机来记录啦。</p>
+<p>然后我开始在 App Store 搜索翻找，希望能找到一个带有输入时间戳功能的输入法、笔记 App，或者直接生成时间戳的 App。事与愿违，没有一个能让我满意。</p>
+<p>Notebooks Lite 虽然能够输入时间戳，但是格式不是我希望的。没有同步功能不要紧，大不了我把文本复制到备忘录走 iCloud 同步，时间戳格式不对就好伤，难道我复制到电脑上之后还要手动调整？</p>
+<p>那些直接生成时间戳的应用就更不靠谱，连自定义格式的功能都不支持。</p>
+<p>既然没有现成的轮子可用，我只好制造一个轮子了。</p>
+<h1 id="分析">分析</h1>
+<p>决定自己写一个应用之后，就是技术选型。该用什么方式实现好呢？</p>
+<p>一开始我打算直接写一个 iOS App。后来同事@不周建议我可以简单搞，先弄一个轻应用。正好我前不久在没有前端同学帮助的情况下独自搭建了一个后台应用，积累了微薄的前端经验，而且我可以把这个应用挂在我的博客里。</p>
+<p>想到我的博客是一个静态站点，我这个应用也是一个静态页面，要想实现功能，就是能用 JavaScript 了。</p>
+<p>于是技术方案就此确定，使用 Bootstrap 渲染样式，JavaScript 实现功能。</p>
+<p>期望完成后的 Light App 具有如下功能：</p>
+<ol>
+<li>计算当前时间</li>
+<li>根据给定的格式描述，返回符合格式的时间戳</li>
+<li>能够比较方便的把时间戳复制到剪贴板</li>
+</ol>
+<h1 id="实现">实现</h1>
+<p>时间的格式化是整个应用的核心，如果这个搞不定，应用就没法实现了。经过一番 Google 之后，我发现了一个库，<a href="http://momentjs.com" target="_blank" rel="external">Moment.js</a>。看起来完全符合我对时间格式化的要求，还有完善的文档，于是这个问题就算解决了。至于如何指定不同的时间戳格式，可以暂时不考虑，因为我一般只用一种格式。</p>
+<p>搞定时间方案之后，就要开始设计页面了。照例先去 Bootstrap 的<a href="http://v3.bootcss.com/getting-started/#examples" target="_blank" rel="external">实例精选</a>看看有木有可以直接套用的模板。还真被我找到一个，<a href="http://v3.bootcss.com/examples/justified-nav/" target="_blank" rel="external">Justified nav</a>。</p>
+<p>把页面源码下载下来一番裁剪，去掉我用不到的页面元素和链接之后，开始修改页面内容为我想要的结果。</p>
+<p>一开始的效果是下面这样的。</p>
+<p><img src="/blog/images/timestamp-the-light-app/20150118-134545.png" alt=""></p>
+<p>绿色 Genreate 按钮的 click 事件绑定了函数，一旦触发就会计算当前时间戳并更新页面显示。如此一来，生成时间戳的功能就算是完成了。</p>
+<pre><code class="js">var generate = function() {
+    fmt = &#39;YYYY-MM-DD HH:mm:ss&#39;;
+    var formated_date = moment().format(fmt);
+    $(&quot;#timestamp&quot;).text(formated_date);
+}
+
+$(&#39;#generate-button&#39;).on(&#39;click&#39;, function (e) {
+    generate();
+})
+</code></pre>
+<h1 id="优化">优化</h1>
+<p>然后我开始想着怎么把时间戳弄到剪贴板里去。各种 Google 之后遗憾的发现，关于浏览器的剪贴板操作没有纯 JavaScript 的解决方案，即使是 Github 的复制仓库地址的功能，也依赖于一个叫 <a href="http://zeroclipboard.org" target="_blank" rel="external">ZeroClipboard</a> 的库，而这个库借助的 Flash 来完成复制到剪贴板的操作。</p>
+<p>考虑我的应用在 PC 端实现复制到剪贴板是没有意义的，因为我在 PC 端的时候基本不会用到它，而 iOS 端由于浏览器不支持 Flash，ZeroClipboard 根本没法使用。</p>
+<p>虽然复制到剪贴板的功能不考虑了，我还是需要设计一种比较方便复制的方案。</p>
+<h2 id="p_标签">p 标签</h2>
+<p>现在的时间戳，我是只使用 p 标签包裹的，在我人肉复制的时候，比较难以快速的实现全选，大部分时候需要手动拖曳光标，只有少数运气好的时候会自动全选。</p>
+<h2 id="input_标签">input 标签</h2>
+<p>于是我开始考虑使用 input 标签作为时间戳的容器。因为在 input 标签处于焦点的情况下，长按其中的文字，会有一个 popup，可以全选然后复制。使用 input 标签之后为了页面美观，就需要考虑调整 input 的宽度，即 size 属性。</p>
+<p>我修改 Generate 按钮的 on_click 函数，生成时间戳之后调整 input 标签的 size，同时将 input 的 click 事件绑定了函数，触发的时候自动全选。</p>
+<pre><code class="js">var generate = function() {
+    fmt = &#39;YYYY-MM-DD HH:mm:ss&#39;;
+    var formated_date = moment().format(fmt);
+    $(&#39;#timestamp&#39;).val(formated_date);
+    $(&#39;#timestamp&#39;).attr(&#39;size&#39;, formated_date.length-2);
+}
+
+var select_all = function(obj) {
+    obj.selectionStart = 0;
+    obj.selectionEnd = obj.value.length;
+}
+
+$(&#39;#generate-button&#39;).on(&#39;click&#39;, function (e) {
+    generate();
+})
+
+$(&#39;#timestamp&#39;).on(&#39;click&#39;, function (e) {
+    select_all(this)
+})
+</code></pre>
+<p>这时候效果是下面这样。</p>
+<p><img src="/blog/images/timestamp-the-light-app/20150118-163533.png" alt=""></p>
+<h2 id="URL_参数解析">URL 参数解析</h2>
+<p>这时候的复制辅助看起来已经可以了，下一步就是想要支持多格式的时间戳生成。</p>
+<p>其实我要解决的问题就是从哪里获取用户指定的时间戳格式。首先想到的是用户可以从 URL 中把时间戳格式传进来。如果这是一个可行的方案，那么我就要解决 JavaScript 解析 URL 的问题了。</p>
+<p>再次 Google， 翻看 Stack Overflow 上的回答和 Github Gist，基本上都是写一段原生代码去解析，其中有一个写的不错的 <a href="https://gist.github.com/varemenos/2531765" target="_blank" rel="external">Gist</a>。不过我可不想在我的应用里面写上这么一坨代码。</p>
+<p>一番更加努力的搜索之后，我发现了一个已经停止维护了的库，<a href="https://github.com/allmarkedup/purl" target="_blank" rel="external">purl</a>。这个库最新一次代码更新已经是 2 年前了，不过没关系，高老头的 TeX 都那么久没更新了，不还是用的好好的。</p>
+<p>然后就是看文档、调试，反正就是能从 URL 把时间格式作为参数传进来了。</p>
+<pre><code>var generate = function() {
+    fmt = $.url().param(&#39;format&#39;) || &#39;YYYY-MM-DD HH:mm:ss&#39;;
+    var formated_date = moment().format(fmt);
+    $(&#39;#timestamp&#39;).val(formated_date);
+    $(&#39;#timestamp&#39;).attr(&#39;size&#39;, formated_date.length-2);
+}
+</code></pre><p>后来我想了想，给应用加上了一个导航条，黑白配，萌！萌！哒！</p>
+<h2 id="div_+_p_标签">div + p 标签</h2>
+<p>就这么用了几天之后，感觉略有不爽。因为使用了自动全选之后，对操作的要求比较高，只能轻轻触碰选区才能触发复制选项，如果操作失误，选择就变成了光标，只能长按 + 全选 + 复制。</p>
+<p><img src="/blog/images/timestamp-the-light-app/input-operation.png" alt=""></p>
+<p>如果不使用自动全选，那么就得点击 + 长按 + 全选 + 复制。</p>
+<p>这个动作流程我总感觉可以再缩短一些。</p>
+<p>经过一番 Google 之后，我发现 div + p 标签的写法应该可行。据说，浏览器上长按一个区域的空白区，那个区域的文字会被全选，要求是目标文本需要以 div 为容器。</p>
+<p>试验之后，果然好用，这个操作流程就缩减为长按 + 复制了。顺带的，之前写的一段 JavaScript 代码也可以被删除。最后我写的驱动这个应用的代码就只剩下面这几行。</p>
+<pre><code>var generate = function() {
+    fmt = $.url().param(&#39;format&#39;) || &#39;YYYY-MM-DD HH:mm:ss&#39;;
+    var formated_date = moment().format(fmt);
+    $(&quot;#timestamp&quot;).text(formated_date);
+}
+
+generate();
+
+$(&#39;#generate-button&#39;).on(&#39;click&#39;, function (e) {
+    generate();
+})
+</code></pre><p>最终的效果是下面这样。</p>
+<p><img src="/blog/images/timestamp-the-light-app/final.png" alt=""></p>
+<h1 id="总结">总结</h1>
+<p>这是一次为了满足自身需求而进行的开发。虽然总共只用了几个小时的时间，但是样式调整、交互优化却颇费时间。特别是亲身感受到使用中的痛点改进点，回过头来在下班之后进一步调优。</p>
+<p>JavaScript 日渐流行，哪天 Node.js 成为各大系统默认集成的基础组件也不是不可能，这个 Timestamp 轻应用就算是我涉足前端开发的 Hello World 好了。</p>
+]]></content>
+    
+    
+      <category term="JavaScript" scheme="http://www.jamespan.me/blog/tags/JavaScript/"/>
+    
+      <category term="Tool" scheme="http://www.jamespan.me/blog/tags/Tool/"/>
+    
+      <category term="Study" scheme="http://www.jamespan.me/blog/categories/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[修复 IntelliJ IDEA 14 的字体渲染]]></title>
+    <link href="http://www.jamespan.me/blog/2015/01/16/font-of-intellij/"/>
+    <id>http://www.jamespan.me/blog/2015/01/16/font-of-intellij/</id>
+    <published>2015-01-16T12:39:24.000Z</published>
+    <updated>2015-03-13T15:47:50.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="背景">背景</h1>
+<p>我现在使用 <a href="https://www.jetbrains.com/idea/" target="_blank" rel="external">IntelliJ IDEA</a> 在 Mac 下进行 Java 开发。之前一直都是从官网下载的 IDEA，用的 14.0，今天突然想换成使用 <a href="http://caskroom.io/" target="_blank" rel="external">Homebrew Cask</a> 来管理。于是我就用 <code>brew cask</code> 安装了一个 14.0.2。</p>
+<h1 id="疑团">疑团</h1>
+<p>安装完成之后运行，感觉界面怪怪的，和之前从官网下载的不一样。</p>
+<p>仔细一看，是字体渲染的问题。联想起之前在 Stack Overflow 看到过<a href="http://stackoverflow.com/questions/15181079/apple-retina-display-support-in-java-jdk-1-7-for-awt-swing" target="_blank" rel="external">讨论</a>说 Mac 下只有 Apple 维护的 <a href="http://support.apple.com/kb/DL1572" target="_blank" rel="external">JDK 6</a> 才能比较好的在 Retina 分辨率下渲染程序界面。其实我之前从官网下载的 IDEA 用的就是 Apple 的 JDK 6，界面渲染的好好的，为什么从 Cask 下载的 IDEA 出了渲染问题？</p>
+<h1 id="尝试">尝试</h1>
+<p>一定是我打开的方式不对。先看看 Cask 版 IDEA 运行时用的哪个 JDK 。打开 About IntelliJ IDEA 瞅瞅，果然都是 JDK 7 惹的祸。</p>
+<p><img src="/blog/images/font-of-intellij/20150115-235153.png" alt="IDEA with JDK 7"></p>
+<p>那么问题来了，为什么官网的 IDEA 用的是 JDK 6，从 Cask 下载的用的却是 JDK 7 ？明明 Cask 也是从官网下载的。</p>
+<p>于是我打算对比两个版本的 IDEA 的 plist 文件。plist 文件可以认为是 OS X 下 GUI 程序的参数配置，相当于 CLI 程序的配置文件，比如 bash 的 .bashrc，zsh 的 .zshrc。</p>
+<h1 id="解决">解决</h1>
+<p>这两个版本之间的 plist 文件差异好大，但是我发现了一个值得注意的地方。</p>
+<p>14.0 版本中，<code>JVMVersion</code> 这个键，对应的值为 <code>1.6*</code>，到了14.0.2 版本中，却变成了 <code>1.6+</code>。</p>
+<p>莫非这就是问题的关键？修改试试。</p>
+<p>修改之后启动 IDEA，看起来问题解决了！</p>
+<p><img src="/blog/images/font-of-intellij/20150116-000727.png" alt="IDEA with JDK 6"></p>
+<p>打开代码一看，字体渲染又和之前的一样，萌！萌！哒！</p>
+]]></content>
+    
+    
+      <category term="Tool" scheme="http://www.jamespan.me/blog/tags/Tool/"/>
+    
+      <category term="OS X" scheme="http://www.jamespan.me/blog/tags/OS-X/"/>
+    
+      <category term="Work" scheme="http://www.jamespan.me/blog/categories/Work/"/>
+    
+  </entry>
+  
+</feed>

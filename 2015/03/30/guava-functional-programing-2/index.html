@@ -1,0 +1,665 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Guava 是个风火轮之函数式编程(2) | James Pan&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="潘家邦">
+    
+    <meta name="description" content="前言
+函数式编程是一种历久弥新的编程范式，比起命令式编程，它更加关注程序的执行结果而不是执行过程。Guava 做了一些很棒的工作，搭建了在 Java 中模拟函数式编程的基础设施，让我们不用多费手脚就能享受部分函数式编程带来的便利。
+Java 始终是一个面向对象（命令式）的语言，在我们使用函数式编程这">
+    
+    
+    
+    
+    <link rel="alternate" href="/blog/atom.xml" title="James Pan&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/blog/img/favicon.png">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/apple_icon.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/apple_icon.jpg">
+    
+    <link rel="stylesheet" href="/blog/css/style.css" type="text/css">
+
+
+    <style type="text/css">
+    @media only print
+    {
+      .print-invisible * { display: none !important; }
+      body > header { display: none !important; }
+      body { color: inherit;}
+      /*body:after { content: "Don't waste paper!"; }*/
+    }
+    </style>
+
+</head>
+
+  <body>
+    <header>
+      <div class="print-invisible">
+		
+			<div id="imglogo">
+				<a href="/blog/"><img src="/blog/img/apple_icon.jpg" alt="James Pan&#39;s Blog" title="James Pan&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="James Pan&#39;s Blog">James Pan&#39;s Blog</a></h1>
+				<h2 class="blog-motto">代码猴子，计算机科学爱好者</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/blog/">Home</a></li>
+					
+						<li><a href="/blog/timeline">Timeline</a></li>
+					
+						<li><a href="/blog/archives">Archives</a></li>
+					
+						<li><a href="/blog/resume">Resume</a></li>
+					
+						<li><a href="/blog/about">About</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com.hk/search" method="get" accept-charset="utf-8" target="_blank">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:www.jamespan.me/blog/">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2015/03/30/guava-functional-programing-2/" title="Guava 是个风火轮之函数式编程(2)" itemprop="url">Guava 是个风火轮之函数式编程(2)</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://www.jamespan.me/blog/" title="潘家邦">潘家邦</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-03-29T20:25:06.000Z" itemprop="datePublished">Mar 30 2015</time>
+    Updated:<time datetime="2015-03-29T12:50:35.000Z" itemprop="dateModified">Mar 29 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Predicate"><span class="toc-number">1.1.</span> <span class="toc-text">Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Predicates"><span class="toc-number">1.2.</span> <span class="toc-text">Predicates</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#源码分析"><span class="toc-number">1.2.1.</span> <span class="toc-text">源码分析</span></a></li></ol></li></ol></li></ol>
+		</div>
+		
+		<h1 id="前言">前言</h1>
+<p><a href="http://en.wikipedia.org/wiki/Functional_programming" target="_blank" rel="external">函数式编程</a>是一种历久弥新的编程范式，比起<a href="http://en.wikipedia.org/wiki/Imperative_programming" target="_blank" rel="external">命令式编程</a>，它更加关注程序的执行结果而不是执行过程。Guava 做了一些很棒的工作，搭建了在 Java 中模拟函数式编程的基础设施，让我们不用多费手脚就能享受部分函数式编程带来的便利。</p>
+<p>Java 始终是一个面向对象（命令式）的语言，在我们使用函数式编程这种黑魔法之前，需要确认：同样的功能，使用函数式编程来实现，能否在<strong>健壮性</strong>和<strong>可维护性</strong>上，超过使用面向对象（命令式）编程的实现？</p>
+<h2 id="Predicate">Predicate</h2>
+<p>Predicate 接口是我们第二个介绍的 Guava 函数式编程基础设施。</p>
+<p>下面这段代码是去掉注释之后的 Predicate 接口。</p>
+<pre><code class="java">@GwtCompatible
+public interface Predicate&lt;T&gt; {
+  boolean apply(@Nullable T input);
+  @Override
+  boolean equals(@Nullable Object object);
+}
+</code></pre>
+<p>它看起来就是一个简化版本的 Function，除了指定返回值的类型为 boolean 之外，没有其他的差别了。</p>
+<p>下面我们定义一个简单的谓词函数，判断一个字符串的长度是否小于10。</p>
+<pre><code class="java">Predicate&lt;String&gt; lengthLessThen10 = new Predicate&lt;String&gt;() {
+    public boolean apply(String input) {
+        return input.length() &lt; 10;
+    }
+};
+lengthLessThen10.apply(&quot;lessThen10&quot;);//false
+</code></pre>
+<p>这里我们实例化了一个谓词仿函数，能且只能判断一个字符串的长度是否小于 10。假如我们希望得到更加通用的代码，能够根据不同的参数得到判断字符串长度小于不同长度的谓词，我们就需要用到函数式编程中一种称为“柯里化”的技术。</p>
+<pre><code class="java">Function&lt;Integer, Predicate&lt;String&gt;&gt; lengthLessThen = new Function&lt;Integer, Predicate&lt;String&gt;&gt;() {
+    public Predicate&lt;String&gt; apply(final Integer input) {
+        return new Predicate&lt;String&gt;() {
+            public boolean apply(String str) {
+                return str.length() &lt; input;
+            }
+        };
+    }
+};
+lengthLessThen.apply(10).apply(&quot;lessThen10&quot;);//false
+</code></pre>
+<p>首先，我们定义了一个 Function，接受 Integer 类型的参数，返回 Predicate 实例；在实例化 Predicate 的时候，我们访问了匿名类外部的变量，也即 Function 实例的 apply 方法的参数，由于 Java 语言的限制，匿名类内部用到的外部变量必须声明为 final。</p>
+<h2 id="Predicates">Predicates</h2>
+<p>Predicates 是 Guava 中与 Predicate 接口配套使用的工具类，提供了一些非常有用的工具类，比如使用 and 和 or 组合多个谓词，还有 not 将谓词的条件取反。和 Functions 比较类似的是，Predicates 提供了一个 compose 方法，用于组合 Function 和 Predicate。</p>
+<p>Predicates 是一个方法工厂，返回各种各样的 Predicate 实例。</p>
+<p><img src="/blog/images/guava-functional-programing/predicates1.png" alt=""></p>
+<p>Predicates#alwaysTrue 返回一个永真谓词，Predicates#alwaysFalse 返回一个永假谓词。</p>
+<p>Predicates#isNull 返回的谓词在参数为 null 时为真，Predicates#notNull 则返回与之相反的谓词。</p>
+<p>Predicates#equalTo 返回一个谓词，当谓词参数与 Predicates#equalTo 的参数在逻辑上等价时为真。</p>
+<p>Predicates#instanceOf 返回一个谓词，当谓词参数是 Predicates#instanceOf 的参数的实例时为真。</p>
+<p>Predicates#assignableFrom 返回一个谓词，当谓词参数表示的类和 Predicates#assignableFrom 的参数表示的类，有着相同或者超类、接口关系的时候为真。</p>
+<p>Predicates#in 返回一个谓词，当谓词参数在 Predicates#in 的参数表示的集合中时为真。</p>
+<p>Predicates#contains 返回一个谓词，当谓词参数表示的字符串中包含 Predicates#contains 的参数所表示的正则模式时为真。Predicates#containsPattern 的功能与之类似。</p>
+<p>我们可以看到，除了最先介绍的 4 个工厂函数，其余工厂函数返回的谓词，都和工厂函数的参数有着紧密的绑定关系，类似于我们在介绍 Predicate 时提到的闭包。然而 Guava 在实现中为了给用户更好的体验，没有直接使用闭包，而是使用了许多的内部类来支撑这些工厂函数，具体细节我们在源码分析部分展开。</p>
+<p>接下来是谓词之间的与或非运算，还有和函数组合称为新的谓词。</p>
+<p>Predicates#not 返回一个取反之后的谓词，Predicates#and 返回两个或多个谓词做与运算之后的谓词，Predicates#or 返回两个或多个谓词做或运算之后的谓词，Predicates#compose 将参数中的 Function 的返回值作为另一个参数谓词的参数，返回新的谓词。</p>
+<h3 id="源码分析">源码分析</h3>
+<p>我们先看看支撑了 Predicates#alwaysTrue 等 4 个谓词工厂函数的内部类，ObjectPredicate。</p>
+<pre><code class="java">enum ObjectPredicate implements Predicate&lt;Object&gt; {
+  /** @see Predicates#alwaysTrue() */
+  ALWAYS_TRUE {
+    @Override public boolean apply(@Nullable Object o) { return true; }
+    @Override public String toString() { return &quot;Predicates.alwaysTrue()&quot;; }
+  },
+  /** @see Predicates#alwaysFalse() */
+  ALWAYS_FALSE {
+    @Override public boolean apply(@Nullable Object o) { return false; }
+    @Override public String toString() { return &quot;Predicates.alwaysFalse()&quot;; }
+  },
+  /** @see Predicates#isNull() */
+  IS_NULL {
+    @Override public boolean apply(@Nullable Object o) { return o == null; }
+    @Override public String toString() { return &quot;Predicates.isNull()&quot;; }
+  },
+  /** @see Predicates#notNull() */
+  NOT_NULL {
+    @Override public boolean apply(@Nullable Object o) { return o != null; }
+    @Override public String toString() { return &quot;Predicates.notNull()&quot;; }
+  };
+
+  @SuppressWarnings(&quot;unchecked&quot;) // safe contravariant cast
+  &lt;T&gt; Predicate&lt;T&gt; withNarrowedType() { return (Predicate&lt;T&gt;) this; }
+}
+</code></pre>
+<p>这些谓词的构造过程无需来自工厂函数的参数，因此全都用枚举类构造成了单例，类似的手法在 Functions 类中也使用过。</p>
+<p>这里比较有意思的代码是 withNarrowedType 函数。结合 Predicates#alwaysTrue 我们就容易明白这段代码的用途。</p>
+<pre><code class="java">public static &lt;T&gt; Predicate&lt;T&gt; alwaysTrue() {
+  return ObjectPredicate.ALWAYS_TRUE.withNarrowedType();
+}
+</code></pre>
+<p>工厂函数返回的 Predicate 支持泛型，然而 ObjectPredicate 内部的单例却是 Predicate 接口的 Object 类型实现。这段代码其实就是把泛型参数为 Object 的 ObjectPredicate 实例，强制转换为用户指定的泛型参数的谓词。</p>
+<p>下面我们以支撑 Predicates#or 功能的内部类 OrPredicate 为例，分析类似功能的实现。</p>
+<pre><code class="java">private static class OrPredicate&lt;T&gt; implements Predicate&lt;T&gt;, Serializable {
+  private final List&lt;? extends Predicate&lt;? super T&gt;&gt; components;
+
+  private OrPredicate(List&lt;? extends Predicate&lt;? super T&gt;&gt; components) {
+    this.components = components;
+  }
+  @Override
+  public boolean apply(@Nullable T t) {
+    // Avoid using the Iterator to avoid generating garbage (issue 820).
+    for (int i = 0; i &lt; components.size(); i++) {
+      if (components.get(i).apply(t)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  @Override public int hashCode() {
+    // add a random number to avoid collisions with AndPredicate
+    return components.hashCode() + 0x053c91cf;
+  }
+  @Override public boolean equals(@Nullable Object obj) {
+    if (obj instanceof OrPredicate) {
+      OrPredicate&lt;?&gt; that = (OrPredicate&lt;?&gt;) obj;
+      return components.equals(that.components);
+    }
+    return false;
+  }
+  @Override public String toString() {
+    return &quot;Predicates.or(&quot; + COMMA_JOINER.join(components) + &quot;)&quot;;
+  }
+  private static final long serialVersionUID = 0;
+}
+</code></pre>
+<p>将多个 Predicate 做或操作，无非就是遍历集合，只要有一个谓词为真，则整体为真。</p>
+<p>OrPredicate 的实现中，值得关注的地方，都加上了注释。第一个是 apply 函数。这段注释说的是，遍历集合的过程中，为了减少垃圾对象的产生，不使用迭代器，而是直接遍历下标。</p>
+<p>使用迭代器的好处是，无论目标集合是什么数据结构，总能保证获取下一个元素的时间复杂度是 $O(1)$，然而根据下标获取元素则没有这个保证，假如用于初始化 OrPredicate 的 List 其实是一个链表，那么用下标遍历集合的时间复杂度就是 $O(N^2)$。</p>
+<p>Guava 的设计者肯定不会允许一个平方复杂度的遍历存在，我们接下来看一看究竟是 Guava 是如何保证遍历谓词集合的复杂度不会退化为 $O(N^2)$ 的。</p>
+<pre><code class="java">public static &lt;T&gt; Predicate&lt;T&gt; or(
+    Iterable&lt;? extends Predicate&lt;? super T&gt;&gt; components) {
+  return new OrPredicate&lt;T&gt;(defensiveCopy(components));
+}
+static &lt;T&gt; List&lt;T&gt; defensiveCopy(Iterable&lt;T&gt; iterable) {
+  ArrayList&lt;T&gt; list = new ArrayList&lt;T&gt;();
+  for (T element : iterable) {
+    list.add(checkNotNull(element));
+  }
+  return list;
+}
+</code></pre>
+<p>从工厂函数的实现来看，在用一个谓词集合构造 OrPredicate 之前，这个集合首先被做了一份拷贝，这种操作被称为“防御性拷贝”。如此构造出来的谓词，即使当初用于构建谓词的集合发生了变化，谓词的行为不会随之而变。正是这个防御性拷贝，使得构造出来的谓词不依赖于外部的变量，是一个可重入的函数。同时，防御性拷贝得到的 List 是一个 ArrayList，即使根据下标来遍历列表，复杂度也是 $O(N)$。</p>
+<p>下一个注释出现在 hashCode 函数中，解释了为作为参数的谓词集合的哈希值加上一个固定随机值的原因：为了不和 AndPredicate 产生碰撞。考虑这样一个场景，用户用一组谓词，分别通过 Predicates#and 和 Predicates#or 生成两个组合谓词。如果仅仅是使用这组谓词的哈希值作为组合谓词的哈希值，那么这两个不同的组合谓词就会产生哈希碰撞，然后哈希表退化为链表。</p>
+<p>最后我们看一看用于判定字符串是否包含正则模式的谓词，Predicates#contains 的实现。这段代码比较长，而且包含了 Guava 开发者对 Java 官方代码的吐槽，比较有趣。</p>
+<pre><code class="java">private static class ContainsPatternPredicate
+    implements Predicate&lt;CharSequence&gt;, Serializable {
+  final Pattern pattern;
+
+  ContainsPatternPredicate(Pattern pattern) {
+    this.pattern = checkNotNull(pattern);
+  }
+  @Override
+  public boolean apply(CharSequence t) {
+    return pattern.matcher(t).find();
+  }
+  @Override public int hashCode() {
+    // Pattern uses Object.hashCode, so we have to reach
+    // inside to build a hashCode consistent with equals.
+    return Objects.hashCode(pattern.pattern(), pattern.flags());
+  }
+  @Override public boolean equals(@Nullable Object obj) {
+    if (obj instanceof ContainsPatternPredicate) {
+      ContainsPatternPredicate that = (ContainsPatternPredicate) obj;
+      // Pattern uses Object (identity) equality, so we have to reach
+      // inside to compare individual fields.
+      return Objects.equal(pattern.pattern(), that.pattern.pattern())
+          &amp;&amp; Objects.equal(pattern.flags(), that.pattern.flags());
+    }
+    return false;
+  }
+  @Override public String toString() {
+    String patternString = Objects.toStringHelper(pattern)
+        .add(&quot;pattern&quot;, pattern.pattern())
+        .add(&quot;pattern.flags&quot;, pattern.flags())
+        .toString();
+    return &quot;Predicates.contains(&quot; + patternString + &quot;)&quot;;
+  }
+  private static final long serialVersionUID = 0;
+}
+</code></pre>
+<p>我们关注 hashCode 和 equals 函数。一般来说，这两个函数一旦覆盖就必须同时覆盖，如果只覆盖其中一个就有可能产生极其难以发现的 bug。我们假设逻辑相等的对象有着相同的哈希值，在覆盖这两个方法的时候也需要小心的确保这个假设成立。</p>
+<p>我们看看 Guava 开发者吐槽了什么。这两段注释说的差不多是同一个意思，埋怨 Pattern 类的 hashCode 和 equals 都直接使用继承自 Object 的实现，导致他们不得不深入 Pattern 内部，以获取能用来实现这两个函数的东西。</p>
+<p>因为我们永远不知道自己设计的类会被使用者用在什么地方，所以有这么一个最佳实践是为所有的类覆盖实现 hashCode 和 equals 函数。接下来我们看看为什么继承自 Object 的实现被 Guava 开发者视为不可用的实现。</p>
+<p>我们先说 equals 函数。</p>
+<pre><code class="java">public boolean equals(Object obj) {
+    return (this == obj);
+}
+</code></pre>
+<p>equals 函数判断两个对象是否逻辑相等，当且仅当两个对象其实指向同一个对象。这种比较未免太简单粗暴了，完全不是逻辑相等，而是绝对相等。</p>
+<p>然后我们看看 hashCode 函数。</p>
+<pre><code class="java">public native int hashCode();
+</code></pre>
+<p>Object 对象的 hashCode 函数是一个 native 方法，返回的哈希值依赖于对象的内存地址。</p>
+<p>所以说，Object 的 hashCode 和 equals 对于那些需要逻辑相等的对象来说都太严格了，判断两个正则模式是否相等，需要一种较为宽松的比较方式。为什么 Guava 开发者选择了 Pattern#flags 和 Pattern#pattern 作为判断两个 Pattern 相等的依据？</p>
+<p>考察 Pattern 的构造函数，我们发现它的构造函数最多能够接收两个参数，一个字符串格式的正则表达式，还有一个整型的标志位。</p>
+<pre><code class="java">public static Pattern compile(String regex, int flags) {
+    return new Pattern(regex, flags);
+}
+private Pattern(String p, int f) {
+    pattern = p;
+    flags = f;
+    //other codes
+}
+</code></pre>
+<p>看到这里我们就知道了，只要 Pattern#pattern 和 Pattern#flags 一致，那么两个 Pattern 对象就是一致的。</p>
+
+		
+<div align="center" style="background:#e6e6e6"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="知识共享授权条款" style="border-width:0" src="/blog/images/i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><a href="/blog/2015/03/30/guava-functional-programing-2/">本著作</a>由<a xmlns:cc="http://creativecommons.org/ns#" href="/blog/about/" property="cc:attributionName" rel="cc:attributionURL">潘家邦</a>制作，以<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享 姓名标示-相同方式分享 4.0 国际 授权条款</a>释出。</div>
+
+
+		<div class="print-invisible">
+		
+<script type="text/javascript" id="wumiiRelatedItems"></script>
+
+<script type="text/javascript">
+    var wumiiPermaLink = "http://www.jamespan.me/blog/2015/03/30/guava-functional-programing-2/";
+    var wumiiTitle = "Guava 是个风火轮之函数式编程(2)";
+    
+    	
+    	var wumiiTags = "Java,Guava"; //请用代码生成文章标签，以英文逗号分隔，如："标签1,标签2"
+    
+    
+    	
+    	var wumiiCategories = ["Study"]; //请用代码生成文章分类，分类名放在 JSONArray 中，如: ["分类1", "分类2"]
+    
+    var wumiiSitePrefix = "http://www.jamespan.me/blog/";
+    var wumiiParams = "&num=5&mode=2&pf=JAVASCRIPT";
+    </script>
+
+    <script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+    <a href="http://www.wumii.com/widget/relatedItems" style="border:0;">
+    	<img src="http://static.wumii.cn/images/pixel.png" alt="无觅关联推荐，快速提升流量" style="border:0;padding:0;margin:0;" />
+    </a>
+
+
+		</div>
+	</div>
+		<footer class="article-footer clearfix print-invisible">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/blog/tags/Java/">Java</a><a href="/blog/tags/Guava/">Guava</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/blog/categories/Study/">Study</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://www.jamespan.me/blog/2015/03/30/guava-functional-programing-2/" data-title="Guava 是个风火轮之函数式编程(2) | James Pan&#39;s Blog" data-tsina="3877948399" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix print-invisible">
+ 
+ <div class="prev" >
+ <a href="/blog/2015/04/03/a-repair-of-the-retina/" title="Macbook Pro 换屏记">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Macbook Pro 换屏记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/blog/2015/03/28/a-world-full-of-malice/"  title="这是一个充满恶意的世界">
+ <strong>NEXT:</strong><br/> 
+ <span>这是一个充满恶意的世界
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment print-invisible">
+	<div class="ds-thread" data-thread-key="/blog/2015/03/30/guava-functional-programing-2/" data-title="Guava 是个风火轮之函数式编程(2)"></div>
+</section>
+
+
+</div>  
+      <div class="openaside print-invisible"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Predicate"><span class="toc-number">1.1.</span> <span class="toc-text">Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Predicates"><span class="toc-number">1.2.</span> <span class="toc-text">Predicates</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#源码分析"><span class="toc-number">1.2.1.</span> <span class="toc-text">源码分析</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+<div id="asidepart" class="print-invisible">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="tagslist">
+	<p class="asidetitle">Advertisement</p>
+		<ul>
+			<li>
+				<p><a href="mailto:jiabang.pjb@alibaba-inc.com">阿里集团-菜鸟网络面向社会招聘资深工程师、技术专家，有意者邮件发送简历至本人邮箱，长期有效</a></p>
+			</li>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">Tag Cloud</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/blog/tags/Cache/" style="font-size: 10.00px;">Cache</a><a href="/blog/tags/Concurrency/" style="font-size: 10.00px;">Concurrency</a><a href="/blog/tags/Data-Structure/" style="font-size: 10.00px;">Data Structure</a><a href="/blog/tags/Emacs/" style="font-size: 10.00px;">Emacs</a><a href="/blog/tags/Entertainment/" style="font-size: 10.00px;">Entertainment</a><a href="/blog/tags/Exercise/" style="font-size: 10.00px;">Exercise</a><a href="/blog/tags/Guava/" style="font-size: 16.67px;">Guava</a><a href="/blog/tags/Java/" style="font-size: 18.33px;">Java</a><a href="/blog/tags/JavaScript/" style="font-size: 15.00px;">JavaScript</a><a href="/blog/tags/Mac/" style="font-size: 11.67px;">Mac</a><a href="/blog/tags/MySQL/" style="font-size: 11.67px;">MySQL</a><a href="/blog/tags/OJ/" style="font-size: 10.00px;">OJ</a><a href="/blog/tags/OS-X/" style="font-size: 13.33px;">OS X</a><a href="/blog/tags/Python/" style="font-size: 10.00px;">Python</a><a href="/blog/tags/Reading/" style="font-size: 10.00px;">Reading</a><a href="/blog/tags/Sketch/" style="font-size: 13.33px;">Sketch</a><a href="/blog/tags/Tool/" style="font-size: 20.00px;">Tool</a>
+    </div>
+  </div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/blog/categories/Life/" title="Life">Life<sup>7</sup></a></li>
+		
+			<li><a href="/blog/categories/Study/" title="Study">Study<sup>16</sup></a></li>
+		
+			<li><a href="/blog/categories/Work/" title="Work">Work<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://www.jamespan.me/blog/" target="_blank" title="James Pan's Blog">The Blog</a></li>
+      <li><a href="http://jamespan.github.io/blog/" target="_blank" title="James Pan's Blog">The Blog via Github</a></li>
+      <li><a href="http://panjiabang.gitcafe.io/blog/" target="_blank" title="James Pan's Blog">The Blog via GitCafe</a></li>
+      <li><a href="http://ifeve.com" target="_blank" title="并发编程网">并发编程网</a></li>
+      <li><a href="http://blog.sina.com.cn/ld2254432" target="_blank" title="刘典的博客">刘典的博客</a></li>
+      <li><a href="http://news.dbanotes.net/news" target="_blank" title="Startup News">Startup News</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/blog/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer class="print-invisible"><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 情不知所起，一往而深， <br/>
+			再而衰，三而竭</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/3877948399" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/JamesPan" target="_blank" title="github"></a>
+		
+		
+		
+        <a href="https://www.linkedin.com/pub/jiabang-pan" target="_blank" title="linkedin"></a>
+        
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://www.jamespan.me" target="_blank" title="潘家邦">潘家邦</a>
+		 
+Analyse with <script src="http://s23.cnzz.com/z_stat.php?id=1000543904&web_id=1000543904" language="JavaScript"></script>
+
+		</p>
+
+</div>
+</footer>
+    <!--<script src="/blog/js/jquery-2.1.0.min.js"></script>-->
+<script src="http://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+$("span.heimu").attr("title", "你知道的太多了")
+</script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script src="http://cdn.bootcss.com/highlight.js/8.4/highlight.min.js"></script>
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/8.4/styles/github.min.css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h1'),
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(h.length<=1){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"jamespanblog"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<script async defer src="https://hypothes.is/embed.js"></script>
+
+
+  <!-- mathjax config similar to math.stackexchange -->
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script type="text/javascript" src="http://cdn.bootcss.com/mathjax/2.4.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+</body>
+</html>

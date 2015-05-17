@@ -1,0 +1,587 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Guava 是个风火轮之基础工具(3) | James Pan&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="潘家邦">
+    
+    <meta name="description" content="前言
+Guava 是 Java 开发者的好朋友。虽然我在开发中使用 Guava 很长时间了，Guava API 的身影遍及我写的生产代码的每个角落，但是我用到的功能只是 Guava 的功能集中一个少的可怜的真子集，更别说我一直没有时间认真的去挖掘 Guava 的功能，没有时间去学习 Guava 的实">
+    
+    
+    
+    
+    <link rel="alternate" href="/blog/atom.xml" title="James Pan&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/blog/img/favicon.png">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/apple_icon.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/apple_icon.jpg">
+    
+    <link rel="stylesheet" href="/blog/css/style.css" type="text/css">
+
+
+    <style type="text/css">
+    @media only print
+    {
+      .print-invisible * { display: none !important; }
+      body > header { display: none !important; }
+      body { color: inherit;}
+      /*body:after { content: "Don't waste paper!"; }*/
+    }
+    </style>
+
+</head>
+
+  <body>
+    <header>
+      <div class="print-invisible">
+		
+			<div id="imglogo">
+				<a href="/blog/"><img src="/blog/img/apple_icon.jpg" alt="James Pan&#39;s Blog" title="James Pan&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="James Pan&#39;s Blog">James Pan&#39;s Blog</a></h1>
+				<h2 class="blog-motto">代码猴子，计算机科学爱好者</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/blog/">Home</a></li>
+					
+						<li><a href="/blog/timeline">Timeline</a></li>
+					
+						<li><a href="/blog/archives">Archives</a></li>
+					
+						<li><a href="/blog/resume">Resume</a></li>
+					
+						<li><a href="/blog/about">About</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com.hk/search" method="get" accept-charset="utf-8" target="_blank">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:www.jamespan.me/blog/">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2015/03/01/guava-basic-utilities-3/" title="Guava 是个风火轮之基础工具(3)" itemprop="url">Guava 是个风火轮之基础工具(3)</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://www.jamespan.me/blog/" title="潘家邦">潘家邦</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-03-01T00:23:14.000Z" itemprop="datePublished">Mar 1 2015</time>
+    Updated:<time datetime="2015-02-28T16:30:37.000Z" itemprop="dateModified">Mar 1 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Charsets"><span class="toc-number">2.</span> <span class="toc-text">Charsets</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Strings"><span class="toc-number">3.</span> <span class="toc-text">Strings</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析"><span class="toc-number">3.1.</span> <span class="toc-text">源码分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CharMacher"><span class="toc-number">4.</span> <span class="toc-text">CharMacher</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析-1"><span class="toc-number">4.1.</span> <span class="toc-text">源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#继承与组合"><span class="toc-number">4.1.1.</span> <span class="toc-text">继承与组合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码即文档"><span class="toc-number">4.1.2.</span> <span class="toc-text">代码即文档</span></a></li></ol></li></ol></li></ol>
+		</div>
+		
+		<h1 id="前言">前言</h1>
+<p>Guava 是 Java 开发者的好朋友。虽然我在开发中使用 Guava 很长时间了，Guava API 的身影遍及我写的生产代码的每个角落，但是我用到的功能只是 Guava 的功能集中一个少的可怜的真子集，更别说我一直没有时间认真的去挖掘 Guava 的功能，没有时间去学习 Guava 的实现。直到最近，我开始阅读 <em><a href="http://book.douban.com/subject/25710862/" target="_blank" rel="external">Getting Started with Google Guava</a></em>，感觉有必要将我学习和使用 Guava 的一些东西记录下来。</p>
+<h1 id="Charsets">Charsets</h1>
+<p>Charsets 是一个常量工厂，给出了 6 个Java 承诺了全平台支持的字符集，类似的静态工厂在 Apache 的类库中也有提供。如果没有静态变量，我们要么使用 Charset#forName 方法，传入一个字符串来获取指定的字符集，要么自己定义一个类似的工厂类。</p>
+<p>使用 Charset#forName 的问题就在于用户需要关注入参字符串的拼写，一旦拼写错误就会出现意料之外的事情。</p>
+<p>到了 Java 7 中，JDK 提供了一个官方的静态工厂类 java.nio.charset.StandardCharsets，Guava 也推荐使用 Java 7 及以上的用户使用 StandardCharsets。</p>
+<h1 id="Strings">Strings</h1>
+<p>在 Guava 中，以名词的复数形式命名的类，基本上都是静态工厂。Strings 就是这么一个用来操作字符串的方法工厂。</p>
+<p>Strings 提供了空指针、空字符串的判断和互换方法。</p>
+<pre><code class="java">Strings.isNullOrEmpty(&quot;&quot;);//true
+Strings.nullToEmpty(null);//&quot;&quot;
+Strings.nullToEmpty(&quot;a&quot;);//&quot;a&quot;
+Strings.emptyToNull(&quot;&quot;);//null
+Strings.emptyToNull(&quot;a&quot;);//&quot;a&quot;
+</code></pre>
+<p>对于防御式编程，可以在拿到字符串入参之后，调用一下 Strings#nullToEmpty 将可能的空指针变成空字符串，然后也就不用担心字符串引发的 NPE，或者字符串拼接时候出现的 “null” 了。</p>
+<p>Strings 还提供了常见的字符串前后拼接同一个字符直到达到某个长度，或者重复拼接自身 n 次。</p>
+<pre><code class="java">Strings.padStart(&quot;7&quot;, 3, &#39;0&#39;);//&quot;007&quot;
+Strings.padStart(&quot;2010&quot;, 3, &#39;0&#39;);//&quot;2010&quot;
+Strings.padEnd(&quot;4.&quot;, 5, &#39;0&#39;);//&quot;4.000&quot;
+Strings.padEnd(&quot;2010&quot;, 3, &#39;!&#39;);//&quot;2010&quot;
+Strings.repeat(&quot;hey&quot;, 3);//&quot;heyheyhey&quot;
+</code></pre>
+<p>Strings 的最后一组功能是查找两个字符串的公共前缀、后缀。</p>
+<pre><code class="java">Strings.commonPrefix(&quot;aaab&quot;, &quot;aac&quot;);//&quot;aa&quot;
+Strings.commonSuffix(&quot;aaac&quot;, &quot;aac&quot;);//&quot;aac&quot;
+</code></pre>
+<h2 id="源码分析">源码分析</h2>
+<p>源码来自 Guava 18.0。Strings 类的源码大约 240 行，大部分的函数实现中规中矩，值得关注的是 Strings#repeat。代码注释赫然写着，如果你修改了这里的代码，必须同步更新 Benchmark！看来这段代码是经过极致优化了的，让我不禁想起当年楼教主比赛时“我去上个厕所，不要动键盘”的霸气。</p>
+<pre><code class="java">public static String repeat(String string, int count) {
+  checkNotNull(string);  // eager for GWT.
+  if (count &lt;= 1) {
+    checkArgument(count &gt;= 0, &quot;invalid count: %s&quot;, count);
+    return (count == 0) ? &quot;&quot; : string;
+  }
+  // IF YOU MODIFY THE CODE HERE, you must update StringsRepeatBenchmark
+  final int len = string.length();
+  final long longSize = (long) len * (long) count;
+  final int size = (int) longSize;
+  if (size != longSize) {
+    throw new ArrayIndexOutOfBoundsException(&quot;Required array size too large: &quot; + longSize);
+  }
+  final char[] array = new char[size];
+  string.getChars(0, len, array, 0);
+  int n;
+  for (n = len; n &lt; size - n; n &lt;&lt;= 1) {
+    System.arraycopy(array, 0, array, n, n);
+  }
+  System.arraycopy(array, 0, array, n, size - n);
+  return new String(array);
+}
+</code></pre>
+<p>真正的代码从霸气注释开始。开头的 3 行代码，int 升级 long 然后降级 int，是为了确保字符串 repeat 之后没有超过 String 的长度限制，而先强制提升然后截断的方法，能够高效的判断溢出，这种手法在 C 语言中也是常见的。由于这里是判断 int 溢出，可以升级到 long，如果判断 long 溢出，就只能用除法了。</p>
+<p>然后这里没有用 StringBuilder，而是出于性能考虑用了 char[]，直接申请目标大小的数组。循环复制字符串的时候，复制源的长度指数增长，以最快的速度结束循环。System#arraycopy 是个 native 方法，也就是用 C 来实现的，性能上似乎更值得信赖一点。</p>
+<p>另外一段让我涨姿势的代码是查找相同前缀的。</p>
+<pre><code class="java">public static String commonPrefix(CharSequence a, CharSequence b) {
+  checkNotNull(a);
+  checkNotNull(b);
+  int maxPrefixLength = Math.min(a.length(), b.length());
+  int p = 0;
+  while (p &lt; maxPrefixLength &amp;&amp; a.charAt(p) == b.charAt(p)) {
+    p++;
+  }
+  if (validSurrogatePairAt(a, p - 1) || validSurrogatePairAt(b, p - 1)) {
+    p--;
+  }
+  return a.subSequence(0, p).toString();
+}
+
+static boolean validSurrogatePairAt(CharSequence string, int index) {
+  return index &gt;= 0 &amp;&amp; index &lt;= (string.length() - 2)
+      &amp;&amp; Character.isHighSurrogate(string.charAt(index))
+      &amp;&amp; Character.isLowSurrogate(string.charAt(index + 1));
+}
+</code></pre>
+<p>整个函数本来很简单的，但是 while 后面还跟着一个莫名其妙的 if，这是什么东西！函数名里面居然出现了我不认识的单词，英语水平暴露了！</p>
+<p>一番 Google 之后发现，这里其实是判断最后两个字符是不是合法的“<a href="http://www.oracle.com/technetwork/articles/javase/index-142761.html" target="_blank" rel="external">Java 平台增补字符</a>”。看起来这些增补字符占了 2 个字节，然后要用判断高位低位之类的。。仔细看了函数的头注释，里面也提到 taking care not to split surrogate pairs，然后就明了了。</p>
+<h1 id="CharMacher">CharMacher</h1>
+<p>一提起字符串操作，我们都会想起一个神奇的符号，StringUtil。不仅仅 Apache Common 有一个 StringUtil，Spring 也有一个类似的 StringUtils，然后各个公司、各个项目也会造个轮子，或者重写，或者继承来实现自己的一些特殊的字符串操作。</p>
+<blockquote>
+<p>随着 StringUtil 无节制的发展，StringUtil 里面充斥着 allAscii, collapse, collapseControlChars, collapseWhitespace, indexOfChars, lastIndexNotOf, numSharedChars, removeChars, removeCrLf, replaceChars, retainAllChars, strip, stripAndCollapse, stripNonDigits 等等函数。这些函数本质上是两个概念的点积：</p>
+<ol>
+<li>如何界定匹配的字符？</li>
+<li>要对匹配的字符做什么？</li>
+</ol>
+</blockquote>
+<p>为了解决这种野蛮增长，Guava 带来了 CharMacher。一个 CharMacher 实例本身，界定了一个匹配字符的集合，而 CharMacher 实例的方法，解决了要对匹配字符做什么的问题。然后我们就可以用最小化的 API 来处理字符匹配和字符操作，把 $M \times N$ 的复杂度下降到了 $M + N$。</p>
+<p>CharMacher 自带常量工厂，域定义了一系列常用的字符集合，比如 CharMatcher#ASCII 匹配 ASCII 码，CharMatcher#DIGIT 匹配 Unicode 的数字 0~9，还有其他常量如 JAVA_DIGIT、JAVA_LETTER 等。</p>
+<p>CharMacher 提供了一系列的静态方法用于构造自定义的字符集合。</p>
+<p>CharMatcher#is 得到界定单个匹配字符的实例，CharMatcher#isNot 正好与前者逻辑反。CharMatcher#anyOf 生成存在量词，CharMatcher#noneOf 生成否定全称量词。CharMatcher#inRange 范围量词，闭区间。</p>
+<p>本质上 CharMacher 继承自 Predicate，是专门字符对象的断言，因此 Predicate 享有的与或非等等操作，CharMacher 也有。我们可以用 CharMatcher#and、CharMatcher#or、CharMatcher#negate 来完成 CharMacher 的与或非，对于匹配字符集合来说就是交并补。</p>
+<p>如果上述两种构造 CharMacher 的手段还是太弱没法描述我们想要的匹配器，没关系，我们还有大招：初始化一个重载了 CharMatcher#matches 方法的匿名类实例，或者显式继承 CharMacher 然后实现 matches 方法。</p>
+<p>接下来我们看看 CharMacher 有哪些实例方法可用。根据函数的返回值和名称我们能够轻易将这些方法分为 3 类。</p>
+<p>第一类是判定型函数，判断 CharMacher 和入参字符串的匹配关系。</p>
+<pre><code class="java">CharMatcher.is(&#39;a&#39;).matchesAllOf(&quot;aaa&quot;);//true
+CharMatcher.is(&#39;a&#39;).matchesAnyOf(&quot;aba&quot;);//true
+CharMatcher.is(&#39;a&#39;).matchesNoneOf(&quot;aba&quot;);//true
+</code></pre>
+<p>第二类是计数型函数，查找入参字符串中第一次、最后一次出现目标字符的位置，或者目标字符出现的次数，比如 CharMatcher#indexIn，CharMatcher#lastIndexIn 和 CharMatcher#countIn。</p>
+<p>第三类就是对匹配字符的操作。我们能对字符串中的匹配字符做什么操作呢？基本上就是移除、仅保留、替换、前后修剪、collapse（不知道怎么翻译比较恰当） 等等，我们可以轻易地使用 CharMatcher#removeFrom、CharMatcher#retainFrom、CharMatcher#replaceFrom、CharMatcher#trimFrom、CharMatcher#collapseFrom 等等一系列正交的方法来实现。</p>
+<h2 id="源码分析-1">源码分析</h2>
+<p>源码来自 Guava 18.0。CharMatcher 类源码约 1400 行，大致上分为常量、内部类、静态工厂、非静态工厂以及文本处理例程。</p>
+<p>CharMatcher 整个类都被打上了 @Beta 注解，还有一句注释，Possibly change from chars to code points; decide constants vs. methods，看得我云里雾里的。不管怎么说，CharMatcher 自从 Guava 1.0 就一直存在了，虽然有着 Beta 注解，个人感觉被移除或者过时的可能性很小。</p>
+<h3 id="继承与组合">继承与组合</h3>
+<p>前不久我在一篇博文中看到这样一种说法（具体出处找不到了），那些可以直接实例化的类，应该被声明为 final，这样可以强制其他开发者使用组合而不是继承来复用代码。那些可以被继承的类，应该是抽象类，要么在实例化的时候补全虚函数的实现，要么通过继承实现虚函数。</p>
+<p>对照 Guava 的代码，还真有点类似的意思。那些工厂类，基本上都被声明为了 final，而 CharMatcher 则是一个抽象类，在实例化的时候覆盖实现各种虚函数，也被各种内部类、外部类继承。</p>
+<p>CharMatcher 中有 3 个私有静态类，CharMatcher\$And、CharMatcher\$Or、CharMatcher\$NegatedMatcher，用于描述 CharMatcher 的与或非关系。这 3 个类与 CharMatcher 之间既是继承，又是聚合。突然感觉 UML 好难画。</p>
+<p>其他 4 个静态类，则是为了实现某种匹配模式，而对 CharMatcher 作出了特化处理，比如 RangesMatcher 专门匹配一段连续的字符范围，FastMatcher 专门匹配那些无法通过预处理获得性能提升的字符（们）。</p>
+<h3 id="代码即文档">代码即文档</h3>
+<p>我在写代码的时候总是把“自注释”、“代码即文档”等等挂在嘴边，但是真正能做到的代码却不多。有的时候把自己的代码拿出来，一眼看去尽是 IDE 自动生成的毫无意义的变量名，真是惭愧。</p>
+<p>下面这段代码的参数命名比较有趣，值得借鉴。</p>
+<pre><code class="java">public static CharMatcher inRange(final char startInclusive, final char endInclusive) {
+  checkArgument(endInclusive &gt;= startInclusive);
+  String description = &quot;CharMatcher.inRange(&#39;&quot; +
+      showCharacter(startInclusive) + &quot;&#39;, &#39;&quot; +
+      showCharacter(endInclusive) + &quot;&#39;)&quot;;
+  return inRange(startInclusive, endInclusive, description);
+}
+</code></pre>
+<p>不需要任何文档，我们从函数名和参数名就能够看出，这段代码返回的 CharMatcher 匹配的是一个闭区间内的字符。如果换了别人来实现，能用 start 和 end 做参数名的已经算是很不错了，大部分估计用 c1、c2 敷衍了事，更不用说加上起到关键作用的 Inclusive 了。</p>
+<p>总体而言，CharMatcher 的代码虽然长，却没有特别深奥或者精彩的片段，less is more。</p>
+
+		
+<div align="center" style="background:#e6e6e6"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="知识共享授权条款" style="border-width:0" src="/blog/images/i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><a href="/blog/2015/03/01/guava-basic-utilities-3/">本著作</a>由<a xmlns:cc="http://creativecommons.org/ns#" href="/blog/about/" property="cc:attributionName" rel="cc:attributionURL">潘家邦</a>制作，以<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享 姓名标示-相同方式分享 4.0 国际 授权条款</a>释出。</div>
+
+
+		<div class="print-invisible">
+		
+<script type="text/javascript" id="wumiiRelatedItems"></script>
+
+<script type="text/javascript">
+    var wumiiPermaLink = "http://www.jamespan.me/blog/2015/03/01/guava-basic-utilities-3/";
+    var wumiiTitle = "Guava 是个风火轮之基础工具(3)";
+    
+    	
+    	var wumiiTags = "Java,Guava"; //请用代码生成文章标签，以英文逗号分隔，如："标签1,标签2"
+    
+    
+    	
+    	var wumiiCategories = ["Study"]; //请用代码生成文章分类，分类名放在 JSONArray 中，如: ["分类1", "分类2"]
+    
+    var wumiiSitePrefix = "http://www.jamespan.me/blog/";
+    var wumiiParams = "&num=5&mode=2&pf=JAVASCRIPT";
+    </script>
+
+    <script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+    <a href="http://www.wumii.com/widget/relatedItems" style="border:0;">
+    	<img src="http://static.wumii.cn/images/pixel.png" alt="无觅关联推荐，快速提升流量" style="border:0;padding:0;margin:0;" />
+    </a>
+
+
+		</div>
+	</div>
+		<footer class="article-footer clearfix print-invisible">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/blog/tags/Java/">Java</a><a href="/blog/tags/Guava/">Guava</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/blog/categories/Study/">Study</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://www.jamespan.me/blog/2015/03/01/guava-basic-utilities-3/" data-title="Guava 是个风火轮之基础工具(3) | James Pan&#39;s Blog" data-tsina="3877948399" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix print-invisible">
+ 
+ <div class="prev" >
+ <a href="/blog/2015/03/10/guava-basic-utilities-4/" title="Guava 是个风火轮之基础工具(4)">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Guava 是个风火轮之基础工具(4)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/blog/2015/02/09/guava-basic-utilities-2/"  title="Guava 是个风火轮之基础工具(2)">
+ <strong>NEXT:</strong><br/> 
+ <span>Guava 是个风火轮之基础工具(2)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment print-invisible">
+	<div class="ds-thread" data-thread-key="/blog/2015/03/01/guava-basic-utilities-3/" data-title="Guava 是个风火轮之基础工具(3)"></div>
+</section>
+
+
+</div>  
+      <div class="openaside print-invisible"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Charsets"><span class="toc-number">2.</span> <span class="toc-text">Charsets</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Strings"><span class="toc-number">3.</span> <span class="toc-text">Strings</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析"><span class="toc-number">3.1.</span> <span class="toc-text">源码分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CharMacher"><span class="toc-number">4.</span> <span class="toc-text">CharMacher</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析-1"><span class="toc-number">4.1.</span> <span class="toc-text">源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#继承与组合"><span class="toc-number">4.1.1.</span> <span class="toc-text">继承与组合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码即文档"><span class="toc-number">4.1.2.</span> <span class="toc-text">代码即文档</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+<div id="asidepart" class="print-invisible">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="tagslist">
+	<p class="asidetitle">Advertisement</p>
+		<ul>
+			<li>
+				<p><a href="mailto:jiabang.pjb@alibaba-inc.com">阿里集团-菜鸟网络面向社会招聘资深工程师、技术专家，有意者邮件发送简历至本人邮箱，长期有效</a></p>
+			</li>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">Tag Cloud</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/blog/tags/Cache/" style="font-size: 10.00px;">Cache</a><a href="/blog/tags/Concurrency/" style="font-size: 10.00px;">Concurrency</a><a href="/blog/tags/Data-Structure/" style="font-size: 10.00px;">Data Structure</a><a href="/blog/tags/Emacs/" style="font-size: 10.00px;">Emacs</a><a href="/blog/tags/Entertainment/" style="font-size: 10.00px;">Entertainment</a><a href="/blog/tags/Exercise/" style="font-size: 10.00px;">Exercise</a><a href="/blog/tags/Guava/" style="font-size: 16.67px;">Guava</a><a href="/blog/tags/Java/" style="font-size: 18.33px;">Java</a><a href="/blog/tags/JavaScript/" style="font-size: 15.00px;">JavaScript</a><a href="/blog/tags/Mac/" style="font-size: 11.67px;">Mac</a><a href="/blog/tags/MySQL/" style="font-size: 11.67px;">MySQL</a><a href="/blog/tags/OJ/" style="font-size: 10.00px;">OJ</a><a href="/blog/tags/OS-X/" style="font-size: 13.33px;">OS X</a><a href="/blog/tags/Python/" style="font-size: 10.00px;">Python</a><a href="/blog/tags/Reading/" style="font-size: 10.00px;">Reading</a><a href="/blog/tags/Sketch/" style="font-size: 13.33px;">Sketch</a><a href="/blog/tags/Tool/" style="font-size: 20.00px;">Tool</a>
+    </div>
+  </div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/blog/categories/Life/" title="Life">Life<sup>7</sup></a></li>
+		
+			<li><a href="/blog/categories/Study/" title="Study">Study<sup>16</sup></a></li>
+		
+			<li><a href="/blog/categories/Work/" title="Work">Work<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://www.jamespan.me/blog/" target="_blank" title="James Pan's Blog">The Blog</a></li>
+      <li><a href="http://jamespan.github.io/blog/" target="_blank" title="James Pan's Blog">The Blog via Github</a></li>
+      <li><a href="http://panjiabang.gitcafe.io/blog/" target="_blank" title="James Pan's Blog">The Blog via GitCafe</a></li>
+      <li><a href="http://ifeve.com" target="_blank" title="并发编程网">并发编程网</a></li>
+      <li><a href="http://blog.sina.com.cn/ld2254432" target="_blank" title="刘典的博客">刘典的博客</a></li>
+      <li><a href="http://news.dbanotes.net/news" target="_blank" title="Startup News">Startup News</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/blog/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer class="print-invisible"><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 情不知所起，一往而深， <br/>
+			再而衰，三而竭</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/3877948399" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/JamesPan" target="_blank" title="github"></a>
+		
+		
+		
+        <a href="https://www.linkedin.com/pub/jiabang-pan" target="_blank" title="linkedin"></a>
+        
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://www.jamespan.me" target="_blank" title="潘家邦">潘家邦</a>
+		 
+Analyse with <script src="http://s23.cnzz.com/z_stat.php?id=1000543904&web_id=1000543904" language="JavaScript"></script>
+
+		</p>
+
+</div>
+</footer>
+    <!--<script src="/blog/js/jquery-2.1.0.min.js"></script>-->
+<script src="http://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+$("span.heimu").attr("title", "你知道的太多了")
+</script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script src="http://cdn.bootcss.com/highlight.js/8.4/highlight.min.js"></script>
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/8.4/styles/github.min.css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h1'),
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(h.length<=1){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"jamespanblog"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<script async defer src="https://hypothes.is/embed.js"></script>
+
+
+  <!-- mathjax config similar to math.stackexchange -->
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script type="text/javascript" src="http://cdn.bootcss.com/mathjax/2.4.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+</body>
+</html>

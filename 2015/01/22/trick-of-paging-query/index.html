@@ -1,0 +1,498 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>分页查询的那些坑和各种技巧 | James Pan&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="潘家邦">
+    
+    <meta name="description" content="背景
+从上周开始我就一直在做数据清洗的工作，这次算是体会到了什么叫做“抛开数据量谈实现就是耍流氓”。
+我设计方案和调试代码连接的都是日常环境的数据库，里面的单表数据量在百级，无论我怎么实现都是瞬间洗完。到了性能测试的时候用的就是性能库，双 11 之前@W君做性能测试的时候，往里面写入了 2000W ">
+    
+    
+    
+    
+    <link rel="alternate" href="/blog/atom.xml" title="James Pan&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/blog/img/favicon.png">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/apple_icon.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/apple_icon.jpg">
+    
+    <link rel="stylesheet" href="/blog/css/style.css" type="text/css">
+
+
+    <style type="text/css">
+    @media only print
+    {
+      .print-invisible * { display: none !important; }
+      body > header { display: none !important; }
+      body { color: inherit;}
+      /*body:after { content: "Don't waste paper!"; }*/
+    }
+    </style>
+
+</head>
+
+  <body>
+    <header>
+      <div class="print-invisible">
+		
+			<div id="imglogo">
+				<a href="/blog/"><img src="/blog/img/apple_icon.jpg" alt="James Pan&#39;s Blog" title="James Pan&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="James Pan&#39;s Blog">James Pan&#39;s Blog</a></h1>
+				<h2 class="blog-motto">代码猴子，计算机科学爱好者</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/blog/">Home</a></li>
+					
+						<li><a href="/blog/timeline">Timeline</a></li>
+					
+						<li><a href="/blog/archives">Archives</a></li>
+					
+						<li><a href="/blog/resume">Resume</a></li>
+					
+						<li><a href="/blog/about">About</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com.hk/search" method="get" accept-charset="utf-8" target="_blank">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:www.jamespan.me/blog/">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2015/01/22/trick-of-paging-query/" title="分页查询的那些坑和各种技巧" itemprop="url">分页查询的那些坑和各种技巧</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://www.jamespan.me/blog/" title="潘家邦">潘家邦</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-01-22T01:53:19.000Z" itemprop="datePublished">Jan 22 2015</time>
+    Updated:<time datetime="2015-02-07T08:31:32.000Z" itemprop="dateModified">Feb 7 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#深坑"><span class="toc-number">2.</span> <span class="toc-text">深坑</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#挣扎"><span class="toc-number">3.</span> <span class="toc-text">挣扎</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#灵光"><span class="toc-number">4.</span> <span class="toc-text">灵光</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#扩展"><span class="toc-number">5.</span> <span class="toc-text">扩展</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#现实"><span class="toc-number">6.</span> <span class="toc-text">现实</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
+		</div>
+		
+		<h1 id="背景">背景</h1>
+<p>从上周开始我就一直在做数据清洗的工作，这次算是体会到了什么叫做“抛开数据量谈实现就是耍流氓”。</p>
+<p>我设计方案和调试代码连接的都是日常环境的数据库，里面的单表数据量在百级，无论我怎么实现都是瞬间洗完。到了性能测试的时候用的就是性能库，双 11 之前@W君做性能测试的时候，往里面写入了 2000W 的数据，足够我战个痛快。</p>
+<h1 id="深坑">深坑</h1>
+<p>一开始的时候，分页查询用的是 limit 子句，SQL 语句形态如下。</p>
+<pre><code class="sql">select * from table where xxx in (1,2,3) order by id limit #offset#, 200
+</code></pre>
+<p>limit 子句的优点很明显，简单好用。缺点平时不显著，数据量一大就暴露了。数据库会完整扫描 offset 的行，然后继续扫描 200 行之后才把结果集返回。 offset 在 400W 的时候，这样的 SQL 做一次分页查询就已经至少耗时 5s 了。</p>
+<h1 id="挣扎">挣扎</h1>
+<p>顿时感觉自己陷入了一个泥水坑，赶紧找老司机请教。@Y君给了我一个方案，不使用 limit，直接使用主键索引 + 左右范围查找，SQL 语句形态如下。</p>
+<pre><code class="sql">select * from table where xxx in (1,2,3) and id &gt;= #minId# and id &lt; #maxId#
+</code></pre>
+<p>其中 minId 和 maxId 由我的代码给出，启动时先算出当前表的 id 范围，然后在此范围内以 200 为步长分页读取，即 maxId - minId = 200，有可能读不到数据，有可能读到 200 条。</p>
+<p>在数据库里面试着跑了几条这样的查询，果然效率高了很多。赶紧吭哧吭哧在代码中实现这种分页逻辑，信心满满想要性能飙升，结果。。。</p>
+<p>在日常数据库测试的时候就发现问题了。我的数据库的 id 不是由 MySQL 自动生成的连续的自增主键，而是通过其他中间件产生的，从整体来看，整个 id 的分布比较离散，步长 200 的时候，一次查询根本查不出几条数据。如果整张表的 maxId 比 minId 大出很多很多，会产生很多次无意义的查询。要想有比较好的命中率，还需要关心表里面 id 的分布，根据分布情况调整步长。</p>
+<p>接下来我就在 limit 和 min-max-id 两种分页方案之间纠结，开始去分析线上表的数据分布，然后考虑把大表和小表区分对待，使用不同的分页策略等等。</p>
+<h1 id="灵光">灵光</h1>
+<p>白天被分页查询的性能泥潭弄得心力憔悴，晚上回家的路上冷风吹着头脑稍微清醒一些，想到一个条似乎可行的 SQL 语句。</p>
+<pre><code class="sql">select * from table where id &gt;= #minId# and xxx in (1,2,3) limit 200
+</code></pre>
+<p>回到家之后迫不及待开始写代码，先把这条 SQL 换着参数在数据库里面一遍遍执行，感觉这种分页方式完全符合我的要求，查询使用的主键索引，虽然从执行计划看影响行数在百万级，但是实际执行的时候影响行数不过百级，还不需要考虑 id 的分布，每次都能实打实的给我捞出 200 条数据。</p>
+<p>不过使用这样的 SQL 语句做分页，需要注意调整 minId 的值，扫表过程中需要做到不重不漏。一种可行的方案是将本次查出的结果集中的最大的 id，自增 1 后作为下次查询的 minId。</p>
+<pre><code class="python">max_id, min_id = select min(id), max(id) from table
+while min_id &lt;= max_id:
+    objs = select * from table where id &gt;= min_id and xxx in (1,2,3) limit 200
+    max_id_in_page = max(map(lambda x: x.id, objs))
+    min_id = max_id_in_page + 1
+</code></pre>
+<p>整体来说，这种分页方式避免了使用 limit 时候遍历 offset 带来的无谓的性能开销，避免了对 id 使用左右范围查询时候 id 的离散分布对命中率的影响，代价是需要在内存中遍历结果集获取当前分页中 id 的最大值，局限是只能在对全表唯一的字段做分页时使用。</p>
+<h1 id="扩展">扩展</h1>
+<p>关于分页查询，不同的数据库在做 offset 的时候语法也不太一样，比如 M$ 家的语法就是 TOP n，MySQL 的语法就是 limit n。</p>
+<p>网上的很多博客都提到一种利用子查询来提高性能的做法，大体的意思是先使用普通的 offset 语法获取目标分页的记录的 id 集合，再根据 id 集合去获取完整的目标数据，SQL 语句形态如下。</p>
+<pre><code class="sql">select * from table where id in (select id from table order by id limit #offset#, #size#)
+</code></pre>
+<p>其实有些版本尤其低版本的 MySQL 是不支持直接对带 limit 的子查询的结果做 in 子句的，执行的时候会报错，信息如下。</p>
+<blockquote>
+<p>This version of MySQL doesn’t yet support ‘LIMIT &amp; IN/ALL/ANY/SOME subquery’ </p>
+</blockquote>
+<p>针对这个问题，他们就有了一个改进之后的子查询版本。</p>
+<pre><code class="sql">select * from table where id &gt;= (select id from table order by id limit #offset#, 1)
+</code></pre>
+<p>其实是先取出目标分页的第一条记录的id， 然后根据 id 做范围查找和条数限制。这条 SQL 语句的效率在 offset 达到百万级时相比直接 limit 有数倍的提升，但是注意到 MySQL 子查询其实是一个坑，这条语句不但没有避免遍历 offset，还做了大量的无用重复工作。</p>
+<p>本质上，我最终使用的分页方案是对这条 SQL 语句的优化，借助 id 的有序性和唯一性，使用 <code>max(map(lambda x: x.id, objs)) + 1</code> 替代了子查询。</p>
+<p>有人为了绕过 MySQL 不支持对子查询结果做 in 子句的限制，脑洞大开写出了如下查询。</p>
+<pre><code class="sql">select * from table where id in (select id from (select id from table order by id limit #offset#, #size#) as tmp)
+</code></pre>
+<p>既然不允许直接对带 limit 的子查询做 in，那么干脆用子查询套子查询，也是醉了。这条 SQL 语句的效率还不如直接 limit。</p>
+<p>还有一种改进方案就是传说中的“查两次”。第一次先查出目标分页的 id 集合，因为只查 id，大部分情况可以直接命中索引然后返回，速度还是可以接受的。然后第二次直接根据 id 集合做 in 子句查询，走的主键索引，这次就是秒出了。</p>
+<p>其实查两次对性能的影响需要具体到情景来分析，不能当做是万金油。</p>
+<p>我在最终使用的分页方案，在我的应用场景下，性能是超过上面其余几种分页方案的。</p>
+<h1 id="现实">现实</h1>
+<p>在现实世界的开发中，分页远比预料的要复杂得多。</p>
+<p>如果 Web 页面通过记录的创建时间来分页，那么很可能我最终使用的分页方案就不能套用了，因为时间不是一个全表唯一的值，很难在不使用 limit 的情况下做到不重不漏。如果运气不错，使用的是数据库的自增主键，那么可以认为主键的变化趋势和创建时间的变化趋势是等价的，可以将对时间的分页映射成对主键的分页。</p>
+<p>在分页的交互逻辑上，天朝的产品经理似乎偏好于电梯式的分页控件。其实还是“抛开数据量谈实现就是耍流氓”，在数据量小的时候，使用什么样的分页方式对系统性能都没什么影响，但是在数据量大到一定程度的时候，电梯式的分页对系统性能的大量消耗反而会伤害所谓的用户体验。</p>
+<p>关于大数据量下的分页实现，业界其实已经有了好几种策略，基于不同的假设。</p>
+<p>假设随着时间的推移，越早产生的数据，价值越小。如果假设成立，我们可以认为绝大多数用户是没有这样一个需求要去查看他在系统中产生的第一条数据的。如果第一条数据对用户真的很重要，即使再困难他也会想办法得到。</p>
+<p>基于这样的假设，在数据量足够大的情况下，我们就可以对系统实现和交互体验做出很多优化，比如不再提供精确的电梯式分页，取而代之的是下一页、上一页；不再提供精确的总页数，而是提供一个大概的条目总数，可以通过查看 SQL 的执行计划得到。</p>
+<p>之前看过一个关于上一页、下一页的实现技巧。假如每页显示 20 条数据，那么查询数据库的时候，用 <code>limit #offset#, 21</code> 取出 21 条记录，页面展现20条。如果取到了 21 条，说明下一页还有数据，在页面展示下一页按钮。如果结果集数量不足 21，说明已经到了最后一页，无需显示下一页按钮了。这种方式完全避免了在分页查询时对总条目数量的查询。</p>
+<p>还有一种策略是基于这样的假设：用户比较关心的是最近产生的一小部分数据。在用户查询的时候，我们可以一次性从数据库查询符合条件的 N 条数据缓存起来，足够用户翻个几页，这样哪怕是使用电梯式分页，在计算总页数时也无需查询数据库了。</p>
+<h1 id="总结">总结</h1>
+<p>被分页问题坑了，其实还是说明一个问题：图样图森破，姿势水平有待提高。这次写洗数据的代码经历好几次方案变换和代码重写，才得到一个勉强拿得出手的版本，期间各种涨姿势，好有收获。</p>
+
+		
+<div align="center" style="background:#e6e6e6"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="知识共享授权条款" style="border-width:0" src="/blog/images/i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><a href="/blog/2015/01/22/trick-of-paging-query/">本著作</a>由<a xmlns:cc="http://creativecommons.org/ns#" href="/blog/about/" property="cc:attributionName" rel="cc:attributionURL">潘家邦</a>制作，以<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享 姓名标示-相同方式分享 4.0 国际 授权条款</a>释出。</div>
+
+
+		<div class="print-invisible">
+		
+<script type="text/javascript" id="wumiiRelatedItems"></script>
+
+<script type="text/javascript">
+    var wumiiPermaLink = "http://www.jamespan.me/blog/2015/01/22/trick-of-paging-query/";
+    var wumiiTitle = "分页查询的那些坑和各种技巧";
+    
+    	
+    	var wumiiTags = "MySQL"; //请用代码生成文章标签，以英文逗号分隔，如："标签1,标签2"
+    
+    
+    	
+    	var wumiiCategories = ["Work"]; //请用代码生成文章分类，分类名放在 JSONArray 中，如: ["分类1", "分类2"]
+    
+    var wumiiSitePrefix = "http://www.jamespan.me/blog/";
+    var wumiiParams = "&num=5&mode=2&pf=JAVASCRIPT";
+    </script>
+
+    <script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+    <a href="http://www.wumii.com/widget/relatedItems" style="border:0;">
+    	<img src="http://static.wumii.cn/images/pixel.png" alt="无觅关联推荐，快速提升流量" style="border:0;padding:0;margin:0;" />
+    </a>
+
+
+		</div>
+	</div>
+		<footer class="article-footer clearfix print-invisible">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/blog/tags/MySQL/">MySQL</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/blog/categories/Work/">Work</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://www.jamespan.me/blog/2015/01/22/trick-of-paging-query/" data-title="分页查询的那些坑和各种技巧 | James Pan&#39;s Blog" data-tsina="3877948399" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix print-invisible">
+ 
+ <div class="prev" >
+ <a href="/blog/2015/01/24/missuse-of-cache/" title="一种错误的缓存使用方式">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  一种错误的缓存使用方式</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/blog/2015/01/19/timestamp-the-light-app/"  title="Timestamp - 一个关于时间戳的轻应用">
+ <strong>NEXT:</strong><br/> 
+ <span>Timestamp - 一个关于时间戳的轻应用
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment print-invisible">
+	<div class="ds-thread" data-thread-key="/blog/2015/01/22/trick-of-paging-query/" data-title="分页查询的那些坑和各种技巧"></div>
+</section>
+
+
+</div>  
+      <div class="openaside print-invisible"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#深坑"><span class="toc-number">2.</span> <span class="toc-text">深坑</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#挣扎"><span class="toc-number">3.</span> <span class="toc-text">挣扎</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#灵光"><span class="toc-number">4.</span> <span class="toc-text">灵光</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#扩展"><span class="toc-number">5.</span> <span class="toc-text">扩展</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#现实"><span class="toc-number">6.</span> <span class="toc-text">现实</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
+  </div>
+
+<div id="asidepart" class="print-invisible">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="tagslist">
+	<p class="asidetitle">Advertisement</p>
+		<ul>
+			<li>
+				<p><a href="mailto:jiabang.pjb@alibaba-inc.com">阿里集团-菜鸟网络面向社会招聘资深工程师、技术专家，有意者邮件发送简历至本人邮箱，长期有效</a></p>
+			</li>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">Tag Cloud</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/blog/tags/Cache/" style="font-size: 10.00px;">Cache</a><a href="/blog/tags/Concurrency/" style="font-size: 10.00px;">Concurrency</a><a href="/blog/tags/Data-Structure/" style="font-size: 10.00px;">Data Structure</a><a href="/blog/tags/Emacs/" style="font-size: 10.00px;">Emacs</a><a href="/blog/tags/Entertainment/" style="font-size: 10.00px;">Entertainment</a><a href="/blog/tags/Exercise/" style="font-size: 10.00px;">Exercise</a><a href="/blog/tags/Guava/" style="font-size: 16.67px;">Guava</a><a href="/blog/tags/Java/" style="font-size: 18.33px;">Java</a><a href="/blog/tags/JavaScript/" style="font-size: 15.00px;">JavaScript</a><a href="/blog/tags/Mac/" style="font-size: 11.67px;">Mac</a><a href="/blog/tags/MySQL/" style="font-size: 11.67px;">MySQL</a><a href="/blog/tags/OJ/" style="font-size: 10.00px;">OJ</a><a href="/blog/tags/OS-X/" style="font-size: 13.33px;">OS X</a><a href="/blog/tags/Python/" style="font-size: 10.00px;">Python</a><a href="/blog/tags/Reading/" style="font-size: 10.00px;">Reading</a><a href="/blog/tags/Sketch/" style="font-size: 13.33px;">Sketch</a><a href="/blog/tags/Tool/" style="font-size: 20.00px;">Tool</a>
+    </div>
+  </div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/blog/categories/Life/" title="Life">Life<sup>7</sup></a></li>
+		
+			<li><a href="/blog/categories/Study/" title="Study">Study<sup>16</sup></a></li>
+		
+			<li><a href="/blog/categories/Work/" title="Work">Work<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://www.jamespan.me/blog/" target="_blank" title="James Pan's Blog">The Blog</a></li>
+      <li><a href="http://jamespan.github.io/blog/" target="_blank" title="James Pan's Blog">The Blog via Github</a></li>
+      <li><a href="http://panjiabang.gitcafe.io/blog/" target="_blank" title="James Pan's Blog">The Blog via GitCafe</a></li>
+      <li><a href="http://ifeve.com" target="_blank" title="并发编程网">并发编程网</a></li>
+      <li><a href="http://blog.sina.com.cn/ld2254432" target="_blank" title="刘典的博客">刘典的博客</a></li>
+      <li><a href="http://news.dbanotes.net/news" target="_blank" title="Startup News">Startup News</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/blog/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer class="print-invisible"><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 情不知所起，一往而深， <br/>
+			再而衰，三而竭</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/3877948399" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/JamesPan" target="_blank" title="github"></a>
+		
+		
+		
+        <a href="https://www.linkedin.com/pub/jiabang-pan" target="_blank" title="linkedin"></a>
+        
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://www.jamespan.me" target="_blank" title="潘家邦">潘家邦</a>
+		 
+Analyse with <script src="http://s23.cnzz.com/z_stat.php?id=1000543904&web_id=1000543904" language="JavaScript"></script>
+
+		</p>
+
+</div>
+</footer>
+    <!--<script src="/blog/js/jquery-2.1.0.min.js"></script>-->
+<script src="http://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+$("span.heimu").attr("title", "你知道的太多了")
+</script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script src="http://cdn.bootcss.com/highlight.js/8.4/highlight.min.js"></script>
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/8.4/styles/github.min.css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h1'),
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(h.length<=1){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"jamespanblog"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<script async defer src="https://hypothes.is/embed.js"></script>
+
+
+  <!-- mathjax config similar to math.stackexchange -->
+
+
+</body>
+</html>

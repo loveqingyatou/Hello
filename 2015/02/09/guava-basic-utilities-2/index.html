@@ -1,0 +1,662 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Guava 是个风火轮之基础工具(2) | James Pan&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="潘家邦">
+    
+    <meta name="description" content="前言
+Guava 是 Java 开发者的好朋友。虽然我在开发中使用 Guava 很长时间了，Guava API 的身影遍及我写的生产代码的每个角落，但是我用到的功能只是 Guava 的功能集中一个少的可怜的真子集，更别说我一直没有时间认真的去挖掘 Guava 的功能，没有时间去学习 Guava 的实">
+    
+    
+    
+    
+    <link rel="alternate" href="/blog/atom.xml" title="James Pan&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/blog/img/favicon.png">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/apple_icon.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/apple_icon.jpg">
+    
+    <link rel="stylesheet" href="/blog/css/style.css" type="text/css">
+
+
+    <style type="text/css">
+    @media only print
+    {
+      .print-invisible * { display: none !important; }
+      body > header { display: none !important; }
+      body { color: inherit;}
+      /*body:after { content: "Don't waste paper!"; }*/
+    }
+    </style>
+
+</head>
+
+  <body>
+    <header>
+      <div class="print-invisible">
+		
+			<div id="imglogo">
+				<a href="/blog/"><img src="/blog/img/apple_icon.jpg" alt="James Pan&#39;s Blog" title="James Pan&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="James Pan&#39;s Blog">James Pan&#39;s Blog</a></h1>
+				<h2 class="blog-motto">代码猴子，计算机科学爱好者</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/blog/">Home</a></li>
+					
+						<li><a href="/blog/timeline">Timeline</a></li>
+					
+						<li><a href="/blog/archives">Archives</a></li>
+					
+						<li><a href="/blog/resume">Resume</a></li>
+					
+						<li><a href="/blog/about">About</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com.hk/search" method="get" accept-charset="utf-8" target="_blank">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:www.jamespan.me/blog/">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2015/02/09/guava-basic-utilities-2/" title="Guava 是个风火轮之基础工具(2)" itemprop="url">Guava 是个风火轮之基础工具(2)</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://www.jamespan.me/blog/" title="潘家邦">潘家邦</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-02-08T23:43:38.000Z" itemprop="datePublished">Feb 9 2015</time>
+    Updated:<time datetime="2015-02-28T16:42:03.000Z" itemprop="dateModified">Mar 1 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Splitter"><span class="toc-number">2.</span> <span class="toc-text">Splitter</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Splitter-MapSplitter"><span class="toc-number">2.1.</span> <span class="toc-text">Splitter.MapSplitter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析"><span class="toc-number">2.2.</span> <span class="toc-text">源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#成员变量"><span class="toc-number">2.2.1.</span> <span class="toc-text">成员变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#策略模式"><span class="toc-number">2.2.2.</span> <span class="toc-text">策略模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#惰性迭代器与模板模式"><span class="toc-number">2.2.3.</span> <span class="toc-text">惰性迭代器与模板模式</span></a></li></ol></li></ol></li></ol>
+		</div>
+		
+		<h1 id="前言">前言</h1>
+<p>Guava 是 Java 开发者的好朋友。虽然我在开发中使用 Guava 很长时间了，Guava API 的身影遍及我写的生产代码的每个角落，但是我用到的功能只是 Guava 的功能集中一个少的可怜的真子集，更别说我一直没有时间认真的去挖掘 Guava 的功能，没有时间去学习 Guava 的实现。直到最近，我开始阅读 <em><a href="http://book.douban.com/subject/25710862/" target="_blank" rel="external">Getting Started with Google Guava</a></em>，感觉有必要将我学习和使用 Guava 的一些东西记录下来。</p>
+<h1 id="Splitter">Splitter</h1>
+<p>Guava 提供了 Joiner 类用于将多个对象拼接成字符串，如果我们需要一个反向的操作，就要用到 Splitter 类。Splitter 能够将一个字符串按照指定的分隔符拆分成可迭代遍历的字符串集合，<code>Iterable&lt;String&gt;</code>。</p>
+<p>Splitter 的 API 和 Joiner 类似，使用 Splitter#on 指定分隔符，使用 Splitter#split 完成拆分。</p>
+<pre><code class="java">Splitter.on(&#39; &#39;).split(&quot;1 2 3&quot;);//[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]
+</code></pre>
+<p>Splitter 还支持使用正则表达式来描述分隔符。</p>
+<pre><code class="java">Splitter.onPattern(&quot;\\s+&quot;).split(&quot;1 \t   2 3&quot;);//[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]
+</code></pre>
+<p>Splitter 还支持根据长度来拆分字符串。</p>
+<pre><code class="java">Splitter.fixedLength(3).split(&quot;1 2 3&quot;);//[&quot;1 2&quot;, &quot; 3&quot;]
+</code></pre>
+<h2 id="Splitter-MapSplitter">Splitter.MapSplitter</h2>
+<p>与 Joiner.MapJoiner 相对，Splitter.MapSplitter 用来拆分被拼接了的 Map 对象，返回 <code>Map&lt;String, String&gt;</code>。</p>
+<pre><code class="java">Splitter.on(&quot;#&quot;).withKeyValueSeparator(&quot;:&quot;).split(&quot;1:2#3:4&quot;);//{&quot;1&quot;:&quot;2&quot;, &quot;3&quot;:&quot;4&quot;}
+</code></pre>
+<p>需要注意的是，不是所有由 MapJoiner 拼接出来的字符串，都能够被 MapSplitter 拆分，MapSplitter 对键值对个格式有着严格的校验。比如下面的拆分会抛出异常。</p>
+<pre><code class="java">Splitter.on(&quot;#&quot;).withKeyValueSeparator(&quot;:&quot;).split(&quot;1:2#3:4:5&quot;);
+//java.lang.IllegalArgumentException: Chunk [3:4:5] is not a valid entry
+</code></pre>
+<p>因此，如果希望使用 MapSplitter 来拆分 KV 结构的字符串，需要保证键-值分隔符和键值对之间的分隔符不会称为键或值的一部分。也许是出于类似方面的考虑，MapSplitter 被加上了 @Beta 注解，也许在不久的将来它会被移除，或者有大的变化。如果在应用中有可能用到 KV 结构的字符串，我一般推荐使用 JSON 而不是 MapJoiner + MapSplitter。</p>
+<h2 id="源码分析">源码分析</h2>
+<p>源码来自 Guava 18.0。Splitter 类源码约 600 行，依旧大部分是注释和函数重载。Splitter 的实现中有十分明显的策略模式和模板模式，有各种神乎其技的方法覆盖，还有 Guava 久负盛名的迭代技巧和惰性计算。</p>
+<p>不得不说，平时翻阅一些基础类库，总是感觉 “这种代码我也能写”，“这代码写的还没我好”，“在工具类中强依赖日志组件，人干事？”，如果 IDE 配上弹幕恐怕全是吐槽，难有让人精神为之一振的代码。阅读 Guava 的代码，每次都有新的惊喜，各种神技巧黑科技让我五体投地，写代码的脑洞半径屡次被 Guava 撑大。 </p>
+<h3 id="成员变量">成员变量</h3>
+<p>Splitter 类有 4 个成员变量，strategy 用于帮助实现策略模式，omitEmptyStrings 用于控制是否删除拆分结果中的空字符串，通过 Splitter#omitEmptyStrings 设置，trimmer 用于描述删除拆分结果的前后空白符的策略，通过 Splitter#trimResults 设置，limit 用于控制拆分的结果个数，通过 Splitter#limit 设置。</p>
+<h3 id="策略模式">策略模式</h3>
+<p>Splitter 支持根据字符、字符串、正则、长度还有 Guava 自己的字符匹配器 CharMatcher 来拆分字符串，基本上每种匹配模式的查找方法都不太一样，但是字符拆分的基本框架又是不变的，策略模式正好合用。</p>
+<p>策略接口的定义很简单，就是传入一个 Splitter 和一个待拆分的字符串，返回一个迭代器。</p>
+<pre><code class="java">private interface Strategy {
+  Iterator&lt;String&gt; iterator(Splitter splitter, CharSequence toSplit);
+}
+</code></pre>
+<p>然后在重载入参为 CharMatcher 的 Splitter#on 的时候，传入一个覆盖了 Strategy#iterator 方法的策略实例，返回值是 SplittingIterator 这个专用的迭代器。然后 SplittingIterator 是个抽象类，需要覆盖实现 separatorStart 和 separatorEnd 两个方法才能实例化。这两个方法是 SplittingIterator 用到的模板模式的重要组成。</p>
+<pre><code class="java">public static Splitter on(final CharMatcher separatorMatcher) {
+  checkNotNull(separatorMatcher);
+  return new Splitter(new Strategy() {
+    @Override public SplittingIterator iterator(Splitter splitter, final CharSequence toSplit) {
+      return new SplittingIterator(splitter, toSplit) {
+        @Override int separatorStart(int start) {
+          return separatorMatcher.indexIn(toSplit, start);
+        }
+        @Override int separatorEnd(int separatorPosition) {
+          return separatorPosition + 1;
+        }
+      };
+    }
+  });
+}
+</code></pre>
+<p>阅读源码的过程在，一个神奇的 continue 的用法让我震惊了，赶紧 Google 一番之后发现这种用法一直都有，只是我不知道而已。这段代码出自 Splitter#on 的字符串重载。</p>
+<pre><code class="java">return new SplittingIterator(splitter, toSplit) {
+  @Override public int separatorStart(int start) {
+    int separatorLength = separator.length();
+    positions:
+    for (int p = start, last = toSplit.length() - separatorLength; p &lt;= last; p++) {
+      for (int i = 0; i &lt; separatorLength; i++) {
+        if (toSplit.charAt(i + p) != separator.charAt(i)) {
+          continue positions;
+        }
+      }
+      return p;
+    }
+    return -1;
+  }
+  @Override public int separatorEnd(int separatorPosition) {
+    return separatorPosition + separator.length();
+  }
+};
+</code></pre>
+<p>这里的 continue 可以直接跳出内循环，然后继续执行与 positions 标签平级的循环。如果是 break，就会直接跳出 positions 标签平级的循环。以前用 C 的时候在跳出多重循环的时候都是用 goto 的，没想到 Java 也提供了类似的功能。</p>
+<p>这段 for 循环如果我来实现，估计会写成这样，虽然功能差不多，大家的内循环都不紧凑，但是明显没有 Guava 的实现那么高贵冷艳，而且我的代码的计算量要大一些。</p>
+<pre><code class="java">for (int p = start, last = toSplit.length() - separatorLength; p &lt;= last; p++) {
+  boolean match = true;
+  for (int i = 0; i &lt; separatorLength; i++) {
+    match &amp;= (toSplit.charAt(i + p) == separator.charAt(i))
+  }
+  if (match) {
+    return p;
+  }
+}
+</code></pre>
+<h3 id="惰性迭代器与模板模式">惰性迭代器与模板模式</h3>
+<p>惰性求值是函数式编程中的常见概念，它的目的是要最小化计算机要做的工作，即把计算推迟到不得不算的时候进行。Java 虽然没有原生支持惰性计算，但是我们依然可以通过一些手段享受惰性计算的好处。</p>
+<p>Guava 中的迭代器使用了惰性计算的技巧，它不是一开始就算好结果放在列表或集合中，而是在调用 hasNext 方法判断迭代是否结束时才去计算下一个元素。为了看懂 Guava 的惰性迭代器实现，我们要从 AbstractIterator 开始。</p>
+<p>AbstractIterator 使用一个私有的枚举变量 state 来记录当前的迭代进度，比如是否找到了下一个元素，迭代是否结束等等。</p>
+<pre><code class="java">private enum State {
+  READY, NOT_READY, DONE, FAILED,
+}
+</code></pre>
+<p>AbstractIterator 给出了一个抽象方法 computeNext，计算下一个元素。由于 state 是私有变量，而迭代是否结束只有在调用 computeNext 的过程中才知道，于是我们有了一个保护的 endOfData 方法，允许 AbstractIterator 的子类将 state 设置为 State#DONE。</p>
+<p>AbstractIterator 实现了迭代器最重要的两个方法，hasNext 和 next。</p>
+<pre><code class="java">@Override
+public final boolean hasNext() {
+  checkState(state != State.FAILED);
+  switch (state) {
+    case DONE:
+      return false;
+    case READY:
+      return true;
+    default:
+  }
+  return tryToComputeNext();
+}
+
+@Override
+public final T next() {
+  if (!hasNext()) {
+    throw new NoSuchElementException();
+  }
+  state = State.NOT_READY;
+  T result = next;
+  next = null;
+  return result;
+}
+</code></pre>
+<p>hasNext 很容易理解，一上来先判断迭代器当前状态，如果已经结束，就返回 false；如果已经找到下一个元素，就返回true，不然就试着找找下一个元素。</p>
+<p>next 则是先判断是否还有下一个元素，属于防御式编程，先对自己做保护；然后把状态复原到还没找到下一个元素，然后返回结果。至于为什么先把 next 赋值给 result，然后把 next 置为 null，最后才返回 result，我想这可能是个面向 GC 的优化，减少无意义的对象引用。</p>
+<pre><code>private boolean tryToComputeNext() {
+  state = State.FAILED; // temporary pessimism
+  next = computeNext();
+  if (state != State.DONE) {
+    state = State.READY;
+    return true;
+  }
+  return false;
+}
+</code></pre><p>tryToComputeNext 可以认为是对模板方法 computeNext 的包装调用，首先把状态置为失败，然后才调用 computeNext。这样一来，如果计算下一个元素的过程中发生 RTE，整个迭代器的状态就是 State#FAILED，一旦收到任何调用都会抛出异常。</p>
+<p>AbstractIterator 的代码就这些，我们现在知道了它的子类需要覆盖实现 computeNext 方法，然后在迭代结束时调用 endOfData。接下来看看 SplittingIterator 的实现。</p>
+<p>SplittingIterator 还是一个抽象类，虽然实现了 computeNext 方法，但是它又定义了两个虚函数 separatorStart 和 separatorEnd，分别返回分隔符在指定下标之后第一次出现的下标，和指定下标后面第一个不包含分隔符的下标。之前的策略模式中我们可以看到，这两个函数在不同的策略中有各自不同的覆盖实现，在 SplittingIterator 中，这两个函数就是模板函数。</p>
+<p>接下来我们看看 SplittingIterator 的核心函数 computeNext，注意这个函数一直在维护的两个内部全局变量，offset 和 limit。</p>
+<pre><code class="java">@Override protected String computeNext() {
+  /*
+   * The returned string will be from the end of the last match to the
+   * beginning of the next one. nextStart is the start position of the
+   * returned substring, while offset is the place to start looking for a
+   * separator.
+   */
+  int nextStart = offset;
+  while (offset != -1) {
+    int start = nextStart;
+    int end;
+
+    int separatorPosition = separatorStart(offset);
+    if (separatorPosition == -1) {
+      end = toSplit.length();
+      offset = -1;
+    } else {
+      end = separatorPosition;
+      offset = separatorEnd(separatorPosition);
+    }
+    if (offset == nextStart) {
+      /*
+       * This occurs when some pattern has an empty match, even if it
+       * doesn&#39;t match the empty string -- for example, if it requires
+       * lookahead or the like. The offset must be increased to look for
+       * separators beyond this point, without changing the start position
+       * of the next returned substring -- so nextStart stays the same.
+       */
+      offset++;
+      if (offset &gt;= toSplit.length()) {
+        offset = -1;
+      }
+      continue;
+    }
+    while (start &lt; end &amp;&amp; trimmer.matches(toSplit.charAt(start))) {
+      start++;
+    }
+    while (end &gt; start &amp;&amp; trimmer.matches(toSplit.charAt(end - 1))) {
+      end--;
+    }
+    if (omitEmptyStrings &amp;&amp; start == end) {
+      // Don&#39;t include the (unused) separator in next split string.
+      nextStart = offset;
+      continue;
+    }
+    if (limit == 1) {
+      // The limit has been reached, return the rest of the string as the
+      // final item.  This is tested after empty string removal so that
+      // empty strings do not count towards the limit.
+      end = toSplit.length();
+      offset = -1;
+      // Since we may have changed the end, we need to trim it again.
+      while (end &gt; start &amp;&amp; trimmer.matches(toSplit.charAt(end - 1))) {
+        end--;
+      }
+    } else {
+      limit--;
+    }
+    return toSplit.subSequence(start, end).toString();
+  }
+  return endOfData();
+}
+</code></pre>
+<p>进入 while 循环之后，先找找 offset 之后第一个分隔符出现的位置，if 分支处理没找到的情况，else 分支处理找到了的情况。然后下一个 if 处理的是第一个字符就是分隔符的特殊情况。然后接下来的两个 while 就开始根据 trimmer 来对找到的元素做前后处理，比如去除空白符之类的。再然后就是根据需要去除那些是空字符串的元素，trim完之后变成空字符串的也会被去除。最后一步操作就是判断 limit，如果还没到 limit 的极限，就让 limit 自减，否则就要调整 end 指针的位置标记 offset 为 -1 然后重新 trim 一下。下一次再调用 computeNext 的时候就发现 offset 已经是 -1 了，然后就返回 endOfData 表示迭代结束。</p>
+<p>整个 Splitter 最有意思的部分基本上就是这些了，至于 split 函数，其实就是用匿名类函数覆盖技巧调用了一下策略模式中被花样覆盖实现了的 Strategy#iterator 而已。</p>
+<pre><code class="java">public Iterable&lt;String&gt; split(final CharSequence sequence) {
+  checkNotNull(sequence);
+  return new Iterable&lt;String&gt;() {
+    @Override public Iterator&lt;String&gt; iterator() {
+      return splittingIterator(sequence);
+    }
+    @Override public String toString() {
+      return Joiner.on(&quot;, &quot;)
+          .appendTo(new StringBuilder().append(&#39;[&#39;), this)
+          .append(&#39;]&#39;)
+          .toString();
+    }
+  };
+}
+</code></pre>
+<p>按理说实例化 Iterable 接口只需要实现 iterator 函数即可，这里覆盖了 toString 想必是为了方便打印吧？</p>
+<p>MapSplitter 的实现中规中矩，使用 outerSplitter 拆分键值对，使用 entrySplitter 拆分键和值，拆分键和值前中后各种校验，然后返回一个不可修改的 Map。</p>
+<p>最后说一下 Splitter 中一个略显画蛇添足的 API，Splitter#splitToList。</p>
+<pre><code class="java">public List&lt;String&gt; splitToList(CharSequence sequence) {
+  checkNotNull(sequence);
+  Iterator&lt;String&gt; iterator = splittingIterator(sequence);
+  List&lt;String&gt; result = new ArrayList&lt;String&gt;();
+  while (iterator.hasNext()) {
+    result.add(iterator.next());
+  }
+  return Collections.unmodifiableList(result);
+}
+</code></pre>
+<p>这个函数其实就是吭哧吭哧把惰性迭代器跑了一遍生成完整数据存放到 ArrayList 中，然后又用 Collections 把这个列表变成不可修改列表返回出去，一点都不酷。</p>
+
+		
+<div align="center" style="background:#e6e6e6"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="知识共享授权条款" style="border-width:0" src="/blog/images/i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><a href="/blog/2015/02/09/guava-basic-utilities-2/">本著作</a>由<a xmlns:cc="http://creativecommons.org/ns#" href="/blog/about/" property="cc:attributionName" rel="cc:attributionURL">潘家邦</a>制作，以<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享 姓名标示-相同方式分享 4.0 国际 授权条款</a>释出。</div>
+
+
+		<div class="print-invisible">
+		
+<script type="text/javascript" id="wumiiRelatedItems"></script>
+
+<script type="text/javascript">
+    var wumiiPermaLink = "http://www.jamespan.me/blog/2015/02/09/guava-basic-utilities-2/";
+    var wumiiTitle = "Guava 是个风火轮之基础工具(2)";
+    
+    	
+    	var wumiiTags = "Java,Guava"; //请用代码生成文章标签，以英文逗号分隔，如："标签1,标签2"
+    
+    
+    	
+    	var wumiiCategories = ["Study"]; //请用代码生成文章分类，分类名放在 JSONArray 中，如: ["分类1", "分类2"]
+    
+    var wumiiSitePrefix = "http://www.jamespan.me/blog/";
+    var wumiiParams = "&num=5&mode=2&pf=JAVASCRIPT";
+    </script>
+
+    <script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+    <a href="http://www.wumii.com/widget/relatedItems" style="border:0;">
+    	<img src="http://static.wumii.cn/images/pixel.png" alt="无觅关联推荐，快速提升流量" style="border:0;padding:0;margin:0;" />
+    </a>
+
+
+		</div>
+	</div>
+		<footer class="article-footer clearfix print-invisible">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/blog/tags/Java/">Java</a><a href="/blog/tags/Guava/">Guava</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/blog/categories/Study/">Study</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://www.jamespan.me/blog/2015/02/09/guava-basic-utilities-2/" data-title="Guava 是个风火轮之基础工具(2) | James Pan&#39;s Blog" data-tsina="3877948399" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix print-invisible">
+ 
+ <div class="prev" >
+ <a href="/blog/2015/03/01/guava-basic-utilities-3/" title="Guava 是个风火轮之基础工具(3)">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Guava 是个风火轮之基础工具(3)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/blog/2015/02/08/guava-basic-utilities-1/"  title="Guava 是个风火轮之基础工具(1)">
+ <strong>NEXT:</strong><br/> 
+ <span>Guava 是个风火轮之基础工具(1)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment print-invisible">
+	<div class="ds-thread" data-thread-key="/blog/2015/02/09/guava-basic-utilities-2/" data-title="Guava 是个风火轮之基础工具(2)"></div>
+</section>
+
+
+</div>  
+      <div class="openaside print-invisible"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Splitter"><span class="toc-number">2.</span> <span class="toc-text">Splitter</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Splitter-MapSplitter"><span class="toc-number">2.1.</span> <span class="toc-text">Splitter.MapSplitter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析"><span class="toc-number">2.2.</span> <span class="toc-text">源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#成员变量"><span class="toc-number">2.2.1.</span> <span class="toc-text">成员变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#策略模式"><span class="toc-number">2.2.2.</span> <span class="toc-text">策略模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#惰性迭代器与模板模式"><span class="toc-number">2.2.3.</span> <span class="toc-text">惰性迭代器与模板模式</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+<div id="asidepart" class="print-invisible">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="tagslist">
+	<p class="asidetitle">Advertisement</p>
+		<ul>
+			<li>
+				<p><a href="mailto:jiabang.pjb@alibaba-inc.com">阿里集团-菜鸟网络面向社会招聘资深工程师、技术专家，有意者邮件发送简历至本人邮箱，长期有效</a></p>
+			</li>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">Tag Cloud</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/blog/tags/Cache/" style="font-size: 10.00px;">Cache</a><a href="/blog/tags/Concurrency/" style="font-size: 10.00px;">Concurrency</a><a href="/blog/tags/Data-Structure/" style="font-size: 10.00px;">Data Structure</a><a href="/blog/tags/Emacs/" style="font-size: 10.00px;">Emacs</a><a href="/blog/tags/Entertainment/" style="font-size: 10.00px;">Entertainment</a><a href="/blog/tags/Exercise/" style="font-size: 10.00px;">Exercise</a><a href="/blog/tags/Guava/" style="font-size: 16.67px;">Guava</a><a href="/blog/tags/Java/" style="font-size: 18.33px;">Java</a><a href="/blog/tags/JavaScript/" style="font-size: 15.00px;">JavaScript</a><a href="/blog/tags/Mac/" style="font-size: 11.67px;">Mac</a><a href="/blog/tags/MySQL/" style="font-size: 11.67px;">MySQL</a><a href="/blog/tags/OJ/" style="font-size: 10.00px;">OJ</a><a href="/blog/tags/OS-X/" style="font-size: 13.33px;">OS X</a><a href="/blog/tags/Python/" style="font-size: 10.00px;">Python</a><a href="/blog/tags/Reading/" style="font-size: 10.00px;">Reading</a><a href="/blog/tags/Sketch/" style="font-size: 13.33px;">Sketch</a><a href="/blog/tags/Tool/" style="font-size: 20.00px;">Tool</a>
+    </div>
+  </div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/blog/categories/Life/" title="Life">Life<sup>7</sup></a></li>
+		
+			<li><a href="/blog/categories/Study/" title="Study">Study<sup>16</sup></a></li>
+		
+			<li><a href="/blog/categories/Work/" title="Work">Work<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://www.jamespan.me/blog/" target="_blank" title="James Pan's Blog">The Blog</a></li>
+      <li><a href="http://jamespan.github.io/blog/" target="_blank" title="James Pan's Blog">The Blog via Github</a></li>
+      <li><a href="http://panjiabang.gitcafe.io/blog/" target="_blank" title="James Pan's Blog">The Blog via GitCafe</a></li>
+      <li><a href="http://ifeve.com" target="_blank" title="并发编程网">并发编程网</a></li>
+      <li><a href="http://blog.sina.com.cn/ld2254432" target="_blank" title="刘典的博客">刘典的博客</a></li>
+      <li><a href="http://news.dbanotes.net/news" target="_blank" title="Startup News">Startup News</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/blog/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer class="print-invisible"><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 情不知所起，一往而深， <br/>
+			再而衰，三而竭</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/3877948399" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/JamesPan" target="_blank" title="github"></a>
+		
+		
+		
+        <a href="https://www.linkedin.com/pub/jiabang-pan" target="_blank" title="linkedin"></a>
+        
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://www.jamespan.me" target="_blank" title="潘家邦">潘家邦</a>
+		 
+Analyse with <script src="http://s23.cnzz.com/z_stat.php?id=1000543904&web_id=1000543904" language="JavaScript"></script>
+
+		</p>
+
+</div>
+</footer>
+    <!--<script src="/blog/js/jquery-2.1.0.min.js"></script>-->
+<script src="http://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+$("span.heimu").attr("title", "你知道的太多了")
+</script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script src="http://cdn.bootcss.com/highlight.js/8.4/highlight.min.js"></script>
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/8.4/styles/github.min.css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h1'),
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(h.length<=1){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"jamespanblog"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<script async defer src="https://hypothes.is/embed.js"></script>
+
+
+  <!-- mathjax config similar to math.stackexchange -->
+
+
+</body>
+</html>

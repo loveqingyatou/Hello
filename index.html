@@ -1,0 +1,680 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>James Pan&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="潘家邦">
+    
+    
+    
+    
+    <link rel="alternate" href="/blog/atom.xml" title="James Pan&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/blog/img/favicon.png">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/apple_icon.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/apple_icon.jpg">
+    
+    <link rel="stylesheet" href="/blog/css/style.css" type="text/css">
+
+
+    <style type="text/css">
+    @media only print
+    {
+      .print-invisible * { display: none !important; }
+      body > header { display: none !important; }
+      body { color: inherit;}
+      /*body:after { content: "Don't waste paper!"; }*/
+    }
+    </style>
+
+</head>
+
+  <body>
+    <header>
+      <div class="print-invisible">
+		
+			<div id="imglogo">
+				<a href="/blog/"><img src="/blog/img/apple_icon.jpg" alt="James Pan&#39;s Blog" title="James Pan&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="James Pan&#39;s Blog">James Pan&#39;s Blog</a></h1>
+				<h2 class="blog-motto">代码猴子，计算机科学爱好者</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/blog/">Home</a></li>
+					
+						<li><a href="/blog/timeline">Timeline</a></li>
+					
+						<li><a href="/blog/archives">Archives</a></li>
+					
+						<li><a href="/blog/resume">Resume</a></li>
+					
+						<li><a href="/blog/about">About</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com.hk/search" method="get" accept-charset="utf-8" target="_blank">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:www.jamespan.me/blog/">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main">
+<!--
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/04/06/seven-concurrency-models-threads-and-lock/" title="七周七并发模型之线程与锁" itemprop="url">
+  
+  <h1 itemprop="name">七周七并发模型之线程与锁
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >前言
+最近我在读 Seven Concurrency Models in Seven Weeks，这本书使用不同的语言介绍不同的并发模型，深入浅出，让我获益匪浅。
+这本书让人有一种 Talk is cheap, show me the code 的感觉。作者不会巴拉巴拉讲一大堆理</p>
+        
+    
+    <time datetime="2015-04-05T23:52:07.000Z" itemprop="datePublished">Apr 6 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/04/05/the-return-of-the-emacs/" title="Emacs 归来记" itemprop="url">
+  
+  <h1 itemprop="name">Emacs 归来记
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >归去来兮，田园将芜胡不归？
+
+背景
+从一开始我就知道，有一个编辑器，被称为神的编辑器，另一个编辑器，被称为编辑器之神。那是大一的时候，我刚开始系统的学习计算机科学，需要一个趁手的编辑器。
+最开始的尝试，是从 Vim 开始的。图书馆里我借到一本叫《学习vi和Vim编辑器》的书，开始</p>
+        
+    
+    <time datetime="2015-04-04T18:08:47.000Z" itemprop="datePublished">Apr 5 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/04/03/a-repair-of-the-retina/" title="Macbook Pro 换屏记" itemprop="url">
+  
+  <h1 itemprop="name">Macbook Pro 换屏记
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >背景
+2015 年 4 月 2 日，这是一个值得纪念的日子，好消息坏消息都在这天到来。好消息是什么这里就不说了，坏消息倒是让人痛彻心扉：陪伴我将近一年的 Macbook Pro 的屏幕，被我弄坏了。
+事情是这样的，下午到了团队周会的时间，我收拾电脑准备起身去会议室，顺手把电脑一合</p>
+        
+    
+    <time datetime="2015-04-03T00:57:38.000Z" itemprop="datePublished">Apr 3 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/30/guava-functional-programing-2/" title="Guava 是个风火轮之函数式编程(2)" itemprop="url">
+  
+  <h1 itemprop="name">Guava 是个风火轮之函数式编程(2)
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >前言
+函数式编程是一种历久弥新的编程范式，比起命令式编程，它更加关注程序的执行结果而不是执行过程。Guava 做了一些很棒的工作，搭建了在 Java 中模拟函数式编程的基础设施，让我们不用多费手脚就能享受部分函数式编程带来的便利。
+Java 始终是一个面向对象（命令式）的语言，在</p>
+        
+    
+    <time datetime="2015-03-29T20:25:06.000Z" itemprop="datePublished">Mar 30 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/28/a-world-full-of-malice/" title="这是一个充满恶意的世界" itemprop="url">
+  
+  <h1 itemprop="name">这是一个充满恶意的世界
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >不知从什么时候开始，起床之后的第一件事就是打开知乎日报看瞎扯。常在河边走，哪有不湿鞋。就在这周三，我一起床就遭遇了强烈的精神攻击，整个人都不好了。
+
+尼玛，这是什么鬼啊！我顿时感觉到了来自世界的满满恶意。然后我就想起了不久前在 B 站看过的一个一本正经胡说八道的视频。
+
+
+作为一</p>
+        
+    
+    <time datetime="2015-03-28T14:15:25.000Z" itemprop="datePublished">Mar 28 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/25/play-seo-with-jianshu/" title="大开脑洞用简书之SEO" itemprop="url">
+  
+  <h1 itemprop="name">大开脑洞用简书之SEO
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >背景
+前些日子，我每写完一篇新的博文之后，会找个良辰吉日，把链接投稿到小道消息和开发者头条。
+就目前来说，虽然整体流量很低，但是从小道消息跳转到我的博客的流量是开发者头条的好几倍。
+昨天晚上我突然想到了一个方法，或许能够帮助提升博客文章在搜索引擎的排名。当然，我主要关注的搜索引擎</p>
+        
+    
+    <time datetime="2015-03-24T20:41:48.000Z" itemprop="datePublished">Mar 25 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/22/guava-functional-programing-1/" title="Guava 是个风火轮之函数式编程(1)" itemprop="url">
+  
+  <h1 itemprop="name">Guava 是个风火轮之函数式编程(1)
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >前言
+函数式编程是一种历久弥新的编程范式，比起命令式编程，它更加关注程序的执行结果而不是执行过程。Guava 做了一些很棒的工作，搭建了在 Java 中模拟函数式编程的基础设施，让我们不用多费手脚就能享受部分函数式编程带来的便利。
+Java 始终是一个面向对象（命令式）的语言，在</p>
+        
+    
+    <time datetime="2015-03-22T00:10:21.000Z" itemprop="datePublished">Mar 22 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/20/recruiting-on-blog/" title="谈谈在独立博客发布招聘信息那些事" itemprop="url">
+  
+  <h1 itemprop="name">谈谈在独立博客发布招聘信息那些事
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >背景
+最近我在博客的侧栏挂上了招聘信息，一条关于社招，一条关于校招。
+
+刚把招聘信息挂到博客上的时候，为了让更多的人看到，我找了之前写的一篇博文，投稿到小道消息和开发者头条，然后坐等访问量一点一点爬升。
+有些不好意思的是，我这个博客，其实没多少访问量。挂上招聘信息那几天，我接连把</p>
+        
+    
+    <time datetime="2015-03-20T10:39:45.000Z" itemprop="datePublished">Mar 20 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/18/donate-nice-try/" title="想要捐赠？想得美！" itemprop="url">
+  
+  <h1 itemprop="name">想要捐赠？想得美！
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >前些日子，我在浏览简书上的文字的时候，注意到了文章的最下方，有一个可以让读者点赞的地方。比如垠神新作对的人，短短几个小时，收获了 61 个喜欢。
+
+简书是我觉得很赞的一个内容分享社区。从“找回文字的力量”，到“交流故事，沟通想法”，虽然格调日趋下降，但是也因为用户基数的增加，这个</p>
+        
+    
+    <time datetime="2015-03-18T01:48:26.000Z" itemprop="datePublished">Mar 18 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/16/annotate-the-web-with-hypothesis/" title="用 Hypothes.is 为你喜欢的文字添加评论" itemprop="url">
+  
+  <h1 itemprop="name">用 Hypothes.is 为你喜欢的文字添加评论
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >2015 年 3 月 15 日深夜，我刚从公司回到宿舍。不是加班，是去蹭饭。整整花了一个周末，我才把书的提纲写出来发给编辑。
+坐在床边落寞的刷着人人，发现网友@邵成=undefined分享了一个链接，https://hypothes.is/。
+点进去一看，发现这个果然是一个高贵冷</p>
+        
+    
+    <time datetime="2015-03-16T02:59:20.000Z" itemprop="datePublished">Mar 16 2015</time>
+  </a>
+</section>
+-->
+
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/04/06/seven-concurrency-models-threads-and-lock/" title="七周七并发模型之线程与锁" itemprop="url">
+  
+  <h1 itemprop="name">七周七并发模型之线程与锁
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >前言
+最近我在读 Seven Concurrency Models in Seven Weeks，这本书使用不同的语言介绍不同的并发模型，深入浅出，让我获益匪浅。
+这本书让人有一种 Talk is cheap, show me the code 的感觉。作者不会巴拉巴拉讲一大堆理</p>
+        
+    
+    <time datetime="2015-04-05T23:52:07.000Z" itemprop="datePublished">Apr 6 2015</time>
+  </a>
+</section>
+
+	
+	<section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/04/05/the-return-of-the-emacs/" title="Emacs 归来记" itemprop="url">
+  
+  <h1 itemprop="name">Emacs 归来记
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >归去来兮，田园将芜胡不归？
+
+背景
+从一开始我就知道，有一个编辑器，被称为神的编辑器，另一个编辑器，被称为编辑器之神。那是大一的时候，我刚开始系统的学习计算机科学，需要一个趁手的编辑器。
+最开始的尝试，是从 Vim 开始的。图书馆里我借到一本叫《学习vi和Vim编辑器》的书，开始</p>
+        
+    
+    <time datetime="2015-04-04T18:08:47.000Z" itemprop="datePublished">Apr 5 2015</time>
+  </a>
+</section>
+
+	
+	<section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/04/03/a-repair-of-the-retina/" title="Macbook Pro 换屏记" itemprop="url">
+  
+  <h1 itemprop="name">Macbook Pro 换屏记
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >背景
+2015 年 4 月 2 日，这是一个值得纪念的日子，好消息坏消息都在这天到来。好消息是什么这里就不说了，坏消息倒是让人痛彻心扉：陪伴我将近一年的 Macbook Pro 的屏幕，被我弄坏了。
+事情是这样的，下午到了团队周会的时间，我收拾电脑准备起身去会议室，顺手把电脑一合</p>
+        
+    
+    <time datetime="2015-04-03T00:57:38.000Z" itemprop="datePublished">Apr 3 2015</time>
+  </a>
+</section>
+
+	
+	<section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/30/guava-functional-programing-2/" title="Guava 是个风火轮之函数式编程(2)" itemprop="url">
+  
+  <h1 itemprop="name">Guava 是个风火轮之函数式编程(2)
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >前言
+函数式编程是一种历久弥新的编程范式，比起命令式编程，它更加关注程序的执行结果而不是执行过程。Guava 做了一些很棒的工作，搭建了在 Java 中模拟函数式编程的基础设施，让我们不用多费手脚就能享受部分函数式编程带来的便利。
+Java 始终是一个面向对象（命令式）的语言，在</p>
+        
+    
+    <time datetime="2015-03-29T20:25:06.000Z" itemprop="datePublished">Mar 30 2015</time>
+  </a>
+</section>
+
+	
+	<section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/28/a-world-full-of-malice/" title="这是一个充满恶意的世界" itemprop="url">
+  
+  <h1 itemprop="name">这是一个充满恶意的世界
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >不知从什么时候开始，起床之后的第一件事就是打开知乎日报看瞎扯。常在河边走，哪有不湿鞋。就在这周三，我一起床就遭遇了强烈的精神攻击，整个人都不好了。
+
+尼玛，这是什么鬼啊！我顿时感觉到了来自世界的满满恶意。然后我就想起了不久前在 B 站看过的一个一本正经胡说八道的视频。
+
+
+作为一</p>
+        
+    
+    <time datetime="2015-03-28T14:15:25.000Z" itemprop="datePublished">Mar 28 2015</time>
+  </a>
+</section>
+
+	
+	<section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/25/play-seo-with-jianshu/" title="大开脑洞用简书之SEO" itemprop="url">
+  
+  <h1 itemprop="name">大开脑洞用简书之SEO
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >背景
+前些日子，我每写完一篇新的博文之后，会找个良辰吉日，把链接投稿到小道消息和开发者头条。
+就目前来说，虽然整体流量很低，但是从小道消息跳转到我的博客的流量是开发者头条的好几倍。
+昨天晚上我突然想到了一个方法，或许能够帮助提升博客文章在搜索引擎的排名。当然，我主要关注的搜索引擎</p>
+        
+    
+    <time datetime="2015-03-24T20:41:48.000Z" itemprop="datePublished">Mar 25 2015</time>
+  </a>
+</section>
+
+	
+	<section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/22/guava-functional-programing-1/" title="Guava 是个风火轮之函数式编程(1)" itemprop="url">
+  
+  <h1 itemprop="name">Guava 是个风火轮之函数式编程(1)
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >前言
+函数式编程是一种历久弥新的编程范式，比起命令式编程，它更加关注程序的执行结果而不是执行过程。Guava 做了一些很棒的工作，搭建了在 Java 中模拟函数式编程的基础设施，让我们不用多费手脚就能享受部分函数式编程带来的便利。
+Java 始终是一个面向对象（命令式）的语言，在</p>
+        
+    
+    <time datetime="2015-03-22T00:10:21.000Z" itemprop="datePublished">Mar 22 2015</time>
+  </a>
+</section>
+
+	
+	<section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/20/recruiting-on-blog/" title="谈谈在独立博客发布招聘信息那些事" itemprop="url">
+  
+  <h1 itemprop="name">谈谈在独立博客发布招聘信息那些事
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >背景
+最近我在博客的侧栏挂上了招聘信息，一条关于社招，一条关于校招。
+
+刚把招聘信息挂到博客上的时候，为了让更多的人看到，我找了之前写的一篇博文，投稿到小道消息和开发者头条，然后坐等访问量一点一点爬升。
+有些不好意思的是，我这个博客，其实没多少访问量。挂上招聘信息那几天，我接连把</p>
+        
+    
+    <time datetime="2015-03-20T10:39:45.000Z" itemprop="datePublished">Mar 20 2015</time>
+  </a>
+</section>
+
+	
+	<section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/18/donate-nice-try/" title="想要捐赠？想得美！" itemprop="url">
+  
+  <h1 itemprop="name">想要捐赠？想得美！
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >前些日子，我在浏览简书上的文字的时候，注意到了文章的最下方，有一个可以让读者点赞的地方。比如垠神新作对的人，短短几个小时，收获了 61 个喜欢。
+
+简书是我觉得很赞的一个内容分享社区。从“找回文字的力量”，到“交流故事，沟通想法”，虽然格调日趋下降，但是也因为用户基数的增加，这个</p>
+        
+    
+    <time datetime="2015-03-18T01:48:26.000Z" itemprop="datePublished">Mar 18 2015</time>
+  </a>
+</section>
+
+	
+	<section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/blog/2015/03/16/annotate-the-web-with-hypothesis/" title="用 Hypothes.is 为你喜欢的文字添加评论" itemprop="url">
+  
+  <h1 itemprop="name">用 Hypothes.is 为你喜欢的文字添加评论
+    
+  </h1>
+
+    
+     
+           <p itemprop="description" >2015 年 3 月 15 日深夜，我刚从公司回到宿舍。不是加班，是去蹭饭。整整花了一个周末，我才把书的提纲写出来发给编辑。
+坐在床边落寞的刷着人人，发现网友@邵成=undefined分享了一个链接，https://hypothes.is/。
+点进去一看，发现这个果然是一个高贵冷</p>
+        
+    
+    <time datetime="2015-03-16T02:59:20.000Z" itemprop="datePublished">Mar 16 2015</time>
+  </a>
+</section>
+
+
+  <nav id="page-nav" class="clearfix">
+    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><a class="page-number" href="/blog/page/3/">3</a><a class="extend next" rel="next" href="/blog/page/2/">Next &raquo;</a>
+  </nav>
+
+</div>
+
+
+
+
+      <div class="openaside print-invisible"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart" class="print-invisible">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="tagslist">
+	<p class="asidetitle">Advertisement</p>
+		<ul>
+			<li>
+				<p><a href="mailto:jiabang.pjb@alibaba-inc.com">阿里集团-菜鸟网络面向社会招聘资深工程师、技术专家，有意者邮件发送简历至本人邮箱，长期有效</a></p>
+			</li>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">Tag Cloud</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/blog/tags/Cache/" style="font-size: 10.00px;">Cache</a><a href="/blog/tags/Concurrency/" style="font-size: 10.00px;">Concurrency</a><a href="/blog/tags/Data-Structure/" style="font-size: 10.00px;">Data Structure</a><a href="/blog/tags/Emacs/" style="font-size: 10.00px;">Emacs</a><a href="/blog/tags/Entertainment/" style="font-size: 10.00px;">Entertainment</a><a href="/blog/tags/Exercise/" style="font-size: 10.00px;">Exercise</a><a href="/blog/tags/Guava/" style="font-size: 16.67px;">Guava</a><a href="/blog/tags/Java/" style="font-size: 18.33px;">Java</a><a href="/blog/tags/JavaScript/" style="font-size: 15.00px;">JavaScript</a><a href="/blog/tags/Mac/" style="font-size: 11.67px;">Mac</a><a href="/blog/tags/MySQL/" style="font-size: 11.67px;">MySQL</a><a href="/blog/tags/OJ/" style="font-size: 10.00px;">OJ</a><a href="/blog/tags/OS-X/" style="font-size: 13.33px;">OS X</a><a href="/blog/tags/Python/" style="font-size: 10.00px;">Python</a><a href="/blog/tags/Reading/" style="font-size: 10.00px;">Reading</a><a href="/blog/tags/Sketch/" style="font-size: 13.33px;">Sketch</a><a href="/blog/tags/Tool/" style="font-size: 20.00px;">Tool</a>
+    </div>
+  </div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/blog/categories/Life/" title="Life">Life<sup>7</sup></a></li>
+		
+			<li><a href="/blog/categories/Study/" title="Study">Study<sup>16</sup></a></li>
+		
+			<li><a href="/blog/categories/Work/" title="Work">Work<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://www.jamespan.me/blog/" target="_blank" title="James Pan's Blog">The Blog</a></li>
+      <li><a href="http://jamespan.github.io/blog/" target="_blank" title="James Pan's Blog">The Blog via Github</a></li>
+      <li><a href="http://panjiabang.gitcafe.io/blog/" target="_blank" title="James Pan's Blog">The Blog via GitCafe</a></li>
+      <li><a href="http://ifeve.com" target="_blank" title="并发编程网">并发编程网</a></li>
+      <li><a href="http://blog.sina.com.cn/ld2254432" target="_blank" title="刘典的博客">刘典的博客</a></li>
+      <li><a href="http://news.dbanotes.net/news" target="_blank" title="Startup News">Startup News</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/blog/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer class="print-invisible"><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 情不知所起，一往而深， <br/>
+			再而衰，三而竭</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/3877948399" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/JamesPan" target="_blank" title="github"></a>
+		
+		
+		
+        <a href="https://www.linkedin.com/pub/jiabang-pan" target="_blank" title="linkedin"></a>
+        
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://www.jamespan.me" target="_blank" title="潘家邦">潘家邦</a>
+		 
+Analyse with <script src="http://s23.cnzz.com/z_stat.php?id=1000543904&web_id=1000543904" language="JavaScript"></script>
+
+		</p>
+
+</div>
+</footer>
+    <!--<script src="/blog/js/jquery-2.1.0.min.js"></script>-->
+<script src="http://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+$("span.heimu").attr("title", "你知道的太多了")
+</script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+
+
+
+<script async defer src="https://hypothes.is/embed.js"></script>
+
+
+  <!-- mathjax config similar to math.stackexchange -->
+
+
+</body>
+ </html>
